@@ -1,0 +1,32 @@
+name: "优化建议/Optimization suggestions"
+description: "对已有功能的小幅度优化或改进建议/Minor optimization or improvement suggestions for existing functions"
+labels: [优化/optimize, 新反馈/new issue]
+body:
+- type: checkboxes
+  id: "yml-1"
+  attributes:
+    label: "检查项/Check list"
+    description: "逐个检查下列项目并勾选确认。\nCheck the following items one by one and tick them."
+    options:
+    - label: "我已知晓 issue 必须使用**中英双语**或**纯英文**编写，并且**自愿承担**因语言问题导致问题无法解决所引发的后果。\nI know that the issue must be written in **Chinese and English** or **only English**, and **voluntarily assumes** the consequences caused by the inability to solve the problem due to language problems."
+      required: true
+    - label: "EMCLauncher 是**最新版**且**新版本没有实现你所描述述的内容**。\EMCLauncher is the **latest** version and the latest version does not implement the feature you described."
+      required: true
+    - label: "我已在 [Issues 页面](https://github.com/SALTWOOD/EMCLauncher/issues) 中搜索，确认了这一请求**未被提交过**。\nI have searched on the [Issues page](https://github.com/SALTWOOD/EMCLauncher/issues) and confirmed that this request has not been submitted yet."
+      required: true
+- type: textarea
+  id: "yml-2"
+  attributes:
+    label: 描述/Description.
+    description: "详细描述具体需要优化哪些地方。\nProvide a detailed description of the specific areas that need to be optimized."
+  validations:
+    required: true
+- type: textarea
+  id: "yml-3"
+  attributes:
+    label: 原因/Reason
+    description: "详细描述你为什么需要这项优化。\nDescribe in detail why you need this optimization."
+    value: |
+      It can help me to...
+  validations:
+    required: true

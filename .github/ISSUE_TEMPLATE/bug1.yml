@@ -1,0 +1,33 @@
+name: "程序崩溃/Program crashed"
+description: "启动器提示崩溃，或游戏崩溃/The server console prompts crash, or the game crashes"
+labels: [问题/Bug, 新反馈/new issue]
+body:
+- type: checkboxes
+  id: "yml-1"
+  attributes:
+    label: "检查项/Check list"
+    description: "逐个检查下列项目并勾选确认。\nCheck the following items one by one and tick them."
+    options:
+    - label: "我已知晓 issue 必须使用**中英双语**或**纯英文**编写，并且**自愿承担**因语言问题导致问题无法解决所引发的后果。\nI know that the issue must be written in **Chinese and English** or **only English**, and **voluntarily assumes** the consequences caused by the inability to solve the problem due to language problems."
+      required: true
+    - label: "我已确认是 EMCLauncher 的崩溃**而不是**客户端的崩溃。如果你无法确认是否是客户端的问题或已经确认是客户端的问题，请到 [Discussions](https://github.com/SALTWOOD/EMCLauncher/discussions) 进行讨论。\nI have confirmed that the EMCLauncher crash is **not the client crash**. If you are unable to confirm whether it is a client problem or it has been confirmed to be a client problem, please go to [Discussions](https://github.com/SALTWOOD/EMCLauncher/discussions) to have a discussion."
+      required: true
+    - label: "EMCLauncher 是**最新版**且**没有使用第三方插件**。\nEMCLauncher is the **latest** version and does **not use any third-party plugins**."
+      required: true
+    - label: "我已在 [Issues 页面](https://github.com/SALTWOOD/EMCLauncher/issues) 中搜索，确认了这一 Bug **未被提交过**。\nI have searched on the [Issues page](https://github.com/SALTWOOD/EMCLauncher/issues) and confirmed that this bug has not been submitted."
+      required: true
+- type: textarea
+  id: "yml-2"
+  attributes:
+    label: 描述/Description
+    description: "详细描述具体表现。\nProvide a detailed description of the specific performance."
+  validations:
+    required: true
+- type: textarea
+  id: "yml-3"
+  attributes:
+    label: 错误报告、日志等附件/Crash reports, logs, and other attachments
+    description: "上传由 EMCLauncher 提供的崩溃报告。\nUpload the crash reports provided by EMCLauncher."
+    placeholder: "将文件直接拖拽到这里上传。请等待文件上传完毕再提交！\nDrag and drop the file directly here to upload. Please wait for the file to be uploaded before submitting!"
+  validations:
+    required: true

@@ -1,0 +1,34 @@
+name: "新功能/New feature"
+description: "添加一个新内容或选项。/Significant modifications to existing features or addition of a new content or option."
+labels: [新功能/new feature, 新反馈/new issue]
+body:
+- type: checkboxes
+  id: "yml-1"
+  attributes:
+    label: "检查项/Check list"
+    description: "逐个检查下列项目并勾选确认。\nCheck the following items one by one and tick them."
+    options:
+    - label: "我已知晓 issue 必须使用**中英双语**或**纯英文**编写，并且**自愿承担**因语言问题导致问题无法解决所引发的后果。\nI know that the issue must be written in **Chinese and English** or **only English**, and **voluntarily assumes** the consequences caused by the inability to solve the problem due to language problems."
+      required: true
+    - label: "EMCLauncher 是**最新版**且**新版本没有实现你所描述述的内容**。\nEMCLauncher is the **latest** version and the latest version does not implement the feature you described."
+      required: true
+    - label: "我已在 [Issues 页面](https://github.com/SALTWOOD/EMCLauncher/issues) 中搜索，确认了这一请求**未被提交过**。\nI have searched on the [Issues page](https://github.com/SALTWOOD/EMCLauncher/issues) and confirmed that this request has not been submitted yet."
+      required: true
+    - label: "我知道开发者很忙，可能**无法及时响应**添加新功能的请求。\nI know developers are busy and may not be able to respond to requests to add new features in a timely manner."
+    - label: "如果这个功能很重要，请勾选此项；如果只是一些小功能，请不要勾选。\nIf this feature is important, please check this option; If it's just a less important feature, please do not check it."
+- type: textarea
+  id: "yml-2"
+  attributes:
+    label: 描述/Description
+    description: "详细描述你想添加的功能具体是怎样的。\nProvide a detailed description of the specific features you want to add."
+  validations:
+    required: true
+- type: textarea
+  id: "yml-3"
+  attributes:
+    label: 原因/Reason
+    description: "详细描述你为什么需要这项功能。\nDescribe in detail why you need this feature."
+    value: |
+      I need this feature to...
+  validations:
+    required: true
