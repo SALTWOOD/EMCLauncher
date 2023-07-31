@@ -1,0 +1,41 @@
+name: "异常捕捉/Exception capture"
+description: "程序未能正确处理异常而是弹出提示/The program failed to handle the exception correctly and instead displayed a prompt"
+labels: [问题/Bug, 新反馈/new issue]
+body:
+- type: checkboxes
+  id: "yml-1"
+  attributes:
+    label: "检查项/Check list"
+    description: "逐个检查下列项目并勾选确认。\nCheck the following items one by one and tick them."
+    options:
+    - label: "我已知晓 issue 至少使用**中文和英语中的一种**编写，且大 Bug 应该尽量使用双语。\nI know that the issue should be written in at least one of Chinese and English, and for major bugs, it should be written in both languages as much as possible."
+      required: true
+    - label: "EMCLauncher 是**最新版**且**没有使用第三方插件**。\nEMCLauncher is the **latest** version and does **not use any third-party plugins**."
+      required: true
+    - label: "我已在 [Issues 页面](https://github.com/SALTWOOD/EMCLauncher/issues) 中搜索，确认了这一 Bug **未被提交过**。\nI have searched on the [Issues page](https://github.com/SALTWOOD/EMCLauncher/issues) and confirmed that this bug has not been submitted."
+      required: true
+- type: textarea
+  id: "yml-2"
+  attributes:
+    label: 异常信息/Exception message
+    description: "弹出窗口的截图或内容（可在logs/emcl.log找到）/Screenshot or content of pop-up window (content can be found in logs/emcl. log)"
+  validations:
+    required: true
+- type: textarea
+  id: "yml-3"
+  attributes:
+    label: 重现步骤/How to trigger this again?
+    description: "详细描述要怎么操作才能再次触发它。\nProvide a detailed description of how to trigger it again."
+    value: |
+      1. do something
+      2. do something
+  validations:
+    required: true
+- type: textarea
+  id: "yml-4"
+  attributes:
+    label: 错误报告、日志等附件/Crash reports, logs, and other attachments
+    description: "上传由 EMCLauncher 提供的崩溃报告。\nUpload the crash reports provided by EMCLauncher."
+    placeholder: "将文件直接拖拽到这里上传。请等待文件上传完毕再提交！\nDrag and drop the file directly here to upload. Please wait for the file to be uploaded before submitting!"
+  validations:
+    required: true
