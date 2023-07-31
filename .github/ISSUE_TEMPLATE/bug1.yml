@@ -1,6 +1,6 @@
 name: "程序崩溃/Program crashed"
 description: "启动器提示崩溃，或游戏崩溃/The server console prompts crash, or the game crashes"
-labels: [问题/Bug, 新反馈/new issue]
+labels: [问题/bug, 新反馈/new issue]
 body:
 - type: checkboxes
   id: "yml-1"
