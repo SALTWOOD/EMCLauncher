@@ -1,6 +1,6 @@
 name: "综合 Bug 反馈/Other bug feedback"
 description: "遇见了没有细分选项的其他 Bug/Discovered other bugs that were not specifically categorized"
-labels: [问题/Bug, 新反馈/new issue]
+labels: [问题/bug, 新反馈/new issue]
 body:
 - type: checkboxes
   id: "yml-1"
