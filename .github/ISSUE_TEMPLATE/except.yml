@@ -1,6 +1,6 @@
 name: "异常捕捉/Exception capture"
 description: "程序未能正确处理异常而是弹出提示/The program failed to handle the exception correctly and instead displayed a prompt"
-labels: [问题/Bug, 新反馈/new issue]
+labels: [问题/bug, 新反馈/new issue]
 body:
 - type: checkboxes
   id: "yml-1"
