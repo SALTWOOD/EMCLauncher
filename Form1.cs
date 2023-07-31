@@ -36,7 +36,8 @@ namespace EMCL
             }
             catch (Exception ex)
             {
-                if (MessageBox.Show($"{ex.Message}\n{ex.StackTrace}\n\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！","无法处理的异常",MessageBoxButtons.YesNoCancel,MessageBoxIcon.Error) == DialogResult.Yes)
+                Console.WriteLine($"{ex.GetType()}\n{ex.Message}\n{ex.StackTrace}\n\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！");
+                if (MessageBox.Show($"{ex.GetType()}\n{ex.Message}\n{ex.StackTrace}\n\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！","无法处理的异常",MessageBoxButtons.YesNoCancel,MessageBoxIcon.Error) == DialogResult.Yes)
                 {
                     System.Diagnostics.Process.Start("https://github.com/SALTWOOD/EMCLauncher/issues/new/choose");
                 }
