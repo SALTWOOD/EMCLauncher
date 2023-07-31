@@ -22,10 +22,25 @@ namespace EMCL
 
         private void btnLaunch_Click(object sender, EventArgs e)
         {
-            StreamReader sr = new StreamReader("./args.txt");//目前直接读取程序目录下args.txt内的内容
-            string args = sr.ReadToEnd();
-            Thread t = new Thread(() => launchGame("C:\\Program Files\\Java\\jdk-17.0.5\\bin\\javaw.exe",args));//创建MC启动线程
-            t.Start();
+            try
+            {
+                StreamReader sr = new StreamReader("./args.txt");//目前直接读取程序目录下args.txt内的内容
+                string args = sr.ReadToEnd();
+                StreamReader jr = new StreamReader("./java.txt");//目前直接读取程序目录下args.txt内的内容
+                string java = jr.ReadToEnd();
+                sr.Close();
+                jr.Close();
+                Thread t = new Thread(() => launchGame(java,args));//创建MC启动线程
+                t.Start();
+                MessageBox.Show("启动成功","提示",MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                if (MessageBox.Show($"{ex.Message}\n{ex.StackTrace}\n\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！","无法处理的异常",MessageBoxButtons.YesNoCancel,MessageBoxIcon.Error) == DialogResult.Yes)
+                {
+                    System.Diagnostics.Process.Start("https://github.com/SALTWOOD/EMCLauncher/issues/new/choose");
+                }
+            }
         }
         
         public int launchGame(string javaPath, string launchArgs)
