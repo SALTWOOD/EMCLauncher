@@ -8,7 +8,7 @@ body:
     label: "检查项/Check list"
     description: "逐个检查下列项目并勾选确认。\nCheck the following items one by one and tick them."
     options:
-    - label: "我已知晓 issue 至少使用**中文和英语中的一种**编写，且大 Bug 应该尽量使用双语。\nI know that the issue should be written in at least one of Chinese and English, and for major bugs, it should be written in both languages as much as possible."
+    - label: "我已知晓 issue 至少使用**中文和英语中的一种**编写，且重要 issue 应该尽量使用双语。\nI know that the issue should be written in at least one of Chinese and English, and for important issue, it should be written in both languages as much as possible."
       required: true
     - label: "EMCLauncher 是**最新版**且**新版本没有实现你所描述述的内容**。\EMCLauncher is the **latest** version and the latest version does not implement the feature you described."
       required: true

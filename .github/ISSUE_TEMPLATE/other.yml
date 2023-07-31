@@ -1,0 +1,23 @@
+name: "其他/Other"
+description: "其他类型的反馈/Other types of feedback"
+labels: [新反馈/new issue]
+body:
+- type: checkboxes
+  id: "yml-1"
+  attributes:
+    label: "检查项/Check list"
+    description: "逐个检查下列项目并勾选确认。\nCheck the following items one by one and tick them."
+    options:
+    - label: "我已知晓 issue 至少使用**中文和英语中的一种**编写，且大 Bug 应该尽量使用双语。\nI know that the issue should be written in at least one of Chinese and English, and for major bugs, it should be written in both languages as much as possible."
+      required: true
+    - label: "我已在右侧选择合适的标签。/I have selected the appropriate label on the right side."
+      required: true
+    - label: "我已在 [Issues 页面](https://github.com/SALTWOOD/EMCLauncher/issues) 中搜索，确认了这一请求**未被提交过**。\nI have searched on the [Issues page](https://github.com/SALTWOOD/EMCLauncher/issues) and confirmed that this request has not been submitted yet."
+      required: true
+- type: textarea
+  id: "yml-2"
+  attributes:
+    label: 描述/Description.
+    description: "详细描述。\nProvide a detailed description."
+  validations:
+    required: true
