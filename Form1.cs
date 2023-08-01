@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting;
+using System.Security.AccessControl;
 using System.Threading;
 using System.Windows.Forms;
 using static EMCL.Utils;
@@ -13,6 +16,30 @@ namespace EMCL
 {
     public partial class Form1 : Form
     {
+        string path = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+        string pathMCFolder = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}.minecraft";
+        //string path = "";
+        //string path = "";
+        private string _pathEnv = null;
+        private string _pathJavaHome = null;
+
+        public string pathEnv
+        {
+            get
+            {
+                if (_pathEnv is null) { _pathEnv = Environment.GetEnvironmentVariable("Path") != null? Environment.GetEnvironmentVariable("Path"):""; }
+                return _pathEnv;
+            }
+        }
+        public string pathJavaHome
+        {
+            get
+            {
+                if (_pathJavaHome is null) { _pathJavaHome = Environment.GetEnvironmentVariable("JAVA_HOME") != null? Environment.GetEnvironmentVariable("JAVA_HOME"):""; }
+                return _pathJavaHome;
+            }
+        }
+
         public Form1()
         {
             InitializeComponent();
@@ -56,62 +83,97 @@ namespace EMCL
             }
         }
 
-        public Dictionary<string,bool> javaSearch()
+        public void Log(string info)
         {
-            /*
-            foreach (string pathInEnv in Split((PathEnv & ";" & PathJavaHome).Replace("\\", "\").Replace(" / ", "\"), "; ")
-                PathInEnv = PathInEnv.Trim(" """.ToCharArray())
-                If PathInEnv = "" Then Continue For
-                If Not PathInEnv.EndsWith("\") Then PathInEnv += "\"
-                '粗略检查有效性
-                If File.Exists(PathInEnv & "javaw.exe") Then JavaPreList(PathInEnv) = False
-            Next
-            '查找磁盘中的 Java
-            For Each Disk As DriveInfo In DriveInfo.GetDrives()
-                JavaSearchFolder(Disk.Name, JavaPreList, False)
-            Next
-            '查找 APPDATA 文件夹中的 Java
-            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\", JavaPreList, False)
-            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\", JavaPreList, False)
-            '查找启动器目录中的 Java
-            JavaSearchFolder(Path, JavaPreList, False, IsFullSearch:= True)
-            '查找所选 Minecraft 文件夹中的 Java
-            If Not String.IsNullOrWhiteSpace(PathMcFolder) AndAlso Path <> PathMcFolder Then
-                JavaSearchFolder(PathMcFolder, JavaPreList, False, IsFullSearch:= True)
-            End If
 
-            '若不全为符号链接，则清除符号链接的地址
-            Dim JavaWithoutReparse As New Dictionary(Of String, Boolean)
-            For Each Pair In JavaPreList
-                Dim Folder As String = Pair.Key.Replace("\\", "\").Replace(" / ", "\")
-                Dim Info As FileSystemInfo = New FileInfo(Folder & "javaw.exe")
-                Do
-                    If Info.Attributes.HasFlag(FileAttributes.ReparsePoint) Then
-                        Log("[Java] 位于 " & Folder & " 的 Java 包含符号链接")
-                        Continue For
-                    End If
-                    Info = If(TypeOf Info Is FileInfo, CType(Info, FileInfo).Directory, CType(Info, DirectoryInfo).Parent)
-                Loop While Info IsNot Nothing
-                Log("[Java] 位于 " & Folder & " 的 Java 不含符号链接")
-                JavaWithoutReparse.Add(Pair.Key, Pair.Value)
-            Next
-            If JavaWithoutReparse.Count > 0 Then JavaPreList = JavaWithoutReparse
-
-            '若不全为特殊引用，则清除特殊引用的地址
-            Dim JavaWithoutInherit As New Dictionary(Of String, Boolean)
-            For Each Pair In JavaPreList
-                If Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") Then
-                    Log("[Java] 位于 " & Pair.Key & " 的 Java 包含特殊引用")
-                Else
-                    Log("[Java] 位于 " & Pair.Key & " 的 Java 不含特殊引用")
-                    JavaWithoutInherit.Add(Pair.Key, Pair.Value)
-                End If
-            Next
-            If JavaWithoutInherit.Count > 0 Then JavaPreList = JavaWithoutInherit*/
-            return null;
         }
 
-        public Dictionary<string,bool> JavaSearchFolder(DirectoryInfo originPath, Dictionary<string,bool> result, bool isFullSearch = false)
+        public void Log(Exception ex,string info)
+        {
+
+        }
+
+        public Dictionary<string, bool> javaSearch()
+        {
+            Dictionary<string, bool> javaDic = new Dictionary<string, bool>();
+            foreach (string i in Split(($"{pathEnv};{pathJavaHome}").Replace("\\\\", "\\").Replace(" \\ ", "/"), ";"))
+            {
+                string pathInEnv = i.Trim("\"\"".ToCharArray());
+                if (pathInEnv == "") { continue; }
+                if (!pathInEnv.EndsWith("/")) { pathInEnv += "/"; }
+                //粗略检查有效性
+                if (System.IO.File.Exists($"{pathInEnv} javaw.exe")) { javaDic[pathInEnv] = false; }
+            }
+            //查找磁盘中的 Java
+            foreach (DriveInfo disk in DriveInfo.GetDrives())
+            {
+                JavaSearchFolder(disk.Name, javaDic, false);
+            }
+            //查找 APPDATA 文件夹中的 Java
+            JavaSearchFolder($"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/", javaDic, false);
+            JavaSearchFolder($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}/", javaDic, false);
+            //查找启动器目录中的 Java
+            JavaSearchFolder(path, javaDic, false, isFullSearch: true);
+            //查找所选 Minecraft 文件夹中的 Java
+            if (!(string.IsNullOrWhiteSpace(pathMCFolder) && (path == pathMCFolder))){ JavaSearchFolder(pathMCFolder, javaDic, false, isFullSearch: true); }
+            //若不全为符号链接，则清除符号链接的地址
+            Dictionary<string, bool> JavaWithoutReparse = new Dictionary<string, bool>();
+            foreach (KeyValuePair<string,bool> pair in javaDic)
+            {
+                string folder = pair.Key.Replace("\\\\", "\\").Replace("\\", "/");
+                FileSystemInfo info = new FileInfo($"{folder}javaw.exe");
+                do
+                {
+                    if (info.Attributes.HasFlag(FileAttributes.ReparsePoint))
+                    {
+                        Log($"[Java] 位于 {folder} 的 Java 包含符号链接");
+                        continue;
+                    }
+                    info = (info is FileInfo)?((FileInfo)info).Directory:((DirectoryInfo)info).Parent;
+                }
+                while (info != null);
+                Log($"[Java] 位于 {folder} 的 Java 不含符号链接");
+                JavaWithoutReparse.Add(pair.Key, pair.Value);
+            }
+            if (JavaWithoutReparse.Count > 0) { javaDic = JavaWithoutReparse; }
+            //若不全为特殊引用，则清除特殊引用的地址
+            Dictionary<string,bool> JavaWithoutInherit = new Dictionary<string,bool>();
+            foreach (KeyValuePair<string,bool> pair in javaDic)
+            {
+                if (pair.Key.Contains("javapath_target_") || pair.Key.Contains("javatmp"))
+                {
+                    Log($"[Java] 位于 {pair.Key} 的 Java 包含特殊引用");
+                }
+                else
+                {
+                    Log($"[Java] 位于 {pair.Key} 的 Java 不含特殊引用");
+                    JavaWithoutInherit.Add(pair.Key, pair.Value);
+                }
+            }
+            if (JavaWithoutInherit.Count > 0) { javaDic = JavaWithoutInherit; }
+            return javaDic;
+        }
+
+        //public Dictionary<string, bool> JavaSearchFolder(string originalPath, ref Dictionary<string, bool> results, bool source, bool isFullSearch = false)
+        public void JavaSearchFolder(string originalPath, Dictionary<string, bool> results, bool source, bool isFullSearch = false)
+        {
+            try
+            {
+                Log($@"[Java] 开始{(isFullSearch ? """完全""" : """部分""")}遍历查找：{originalPath}");
+                JavaSearchFolder(new DirectoryInfo(originalPath), results, source, isFullSearch);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Log($"[Java] 遍历查找 Java 时遭遇无权限的文件夹：{originalPath}");
+            }
+            catch (Exception ex)
+            {
+                Log(ex, $"遍历查找 Java 时出错（{originalPath}）");
+            }
+        }
+
+        //public Dictionary<string,bool> JavaSearchFolder(DirectoryInfo originPath, Dictionary<string,bool> result, bool source, bool isFullSearch = false)
+        public void JavaSearchFolder(DirectoryInfo originPath, Dictionary<string,bool> result, bool source, bool isFullSearch = false)
         {
             try
             {
@@ -120,7 +182,7 @@ namespace EMCL
                 {
                     string path = originPath.FullName.Replace("\\\\", "\\").Replace("\\", "/");
                     if (!path.EndsWith("/")) path += "/";
-                    if (System.IO.File.Exists($"{path}javaw.exe")) { result[path] = true; }
+                    if (System.IO.File.Exists($"{path}javaw.exe")) { result[path] = source; }
                     foreach (DirectoryInfo folder in originPath.EnumerateDirectories())
                     {
                         if (!folder.Exists) continue;
@@ -150,10 +212,10 @@ namespace EMCL
                             searchEntry.Contains("国服") || searchEntry.Contains("网易") || searchEntry.Contains("ext") ||
                             searchEntry.Contains("netease") || searchEntry.Contains("1.") || searchEntry.Contains("启动"))
                         {
-                            JavaSearchFolder(folder, result);
+                            JavaSearchFolder(folder, result, false);
                         }
                     }
-                    return result;
+                    //return result;
                 }
                 else
                 {
@@ -166,28 +228,13 @@ namespace EMCL
             {
                 //Console.WriteLine(ex.Message);
             }
-            return result;
+            //return result;
         }
 
         public int launchGame(string javaPath, string launchArgs)
         {
             //Console.WriteLine(GetFileNameFromPath("C:\\Program Files\\Java\\jdk-17.0.5\\bin"));
             //Console.WriteLine(JavaSearchFolder(new DirectoryInfo("C:\\Program Files\\Java\\jdk-17.0.5\\bin"))[0]);
-            foreach (DriveInfo j in DriveInfo.GetDrives())
-            {
-                try
-                {
-                    foreach (KeyValuePair<string, bool> i in JavaSearchFolder(new DirectoryInfo(j.Name), new Dictionary<string, bool>()))
-                    {
-                        Console.WriteLine(i.Key);
-                    }
-                }
-                catch (FileNotFoundException ex) { Console.WriteLine($"{j.Name} failed."); }
-                finally
-                {
-                    Console.WriteLine($"{j.Name} succeeded");
-                }
-            }
             Process mc = new Process();
             mc.StartInfo.FileName = javaPath;//使用传入的Java Path
             mc.StartInfo.Arguments = launchArgs;//使用传入的参数
@@ -195,7 +242,7 @@ namespace EMCL
             mc.StartInfo.RedirectStandardOutput = true;
             mc.StartInfo.RedirectStandardError = true;
             mc.StartInfo.RedirectStandardInput = true;
-            //mc.Start();//MC，启动！
+           mc.Start();//MC，启动！
             return 0;
         }
 
