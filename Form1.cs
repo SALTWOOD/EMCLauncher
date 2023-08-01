@@ -427,54 +427,64 @@ namespace EMCL
             Log("[Main] 主程序窗口框架加载完毕！");
             try
             {
-                if (System.IO.File.Exists($"{path}EMCL/settings.json"))
+                if (Directory.Exists($"{path}EMCL/"))
                 {
-                    Log($"[Config] 正在加载配置文件 {path}EMCL/settings.json");
-                    Log($"[Java] 开始读取 Java 缓存");
-                    config = ReadConfig();
-                    if (!(DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 > config.tempTime))
+                    if (System.IO.File.Exists($"{path}EMCL/settings.json"))
                     {
-                        foreach (List<object> i in config.java)
+                        Log($"[Config] 正在加载配置文件 {path}EMCL/settings.json");
+                        Log($"[Java] 开始读取 Java 缓存");
+                        config = ReadConfig();
+                        if (!(DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 > config.tempTime))
                         {
-                            cmbJavaList.Items.Clear();
-                            javaList.Add((string)i[0], (bool)i[1]);
-                            cmbJavaList.Items.Add(i[0]);
+                            foreach (List<object> i in config.java)
+                            {
+                                cmbJavaList.Items.Clear();
+                                javaList.Add((string)i[0], (bool)i[1]);
+                                cmbJavaList.Items.Add(i[0]);
+                            }
+                            Log($"[Java] Java 缓存读取完毕！");
                         }
-                        Log($"[Java] Java 缓存读取完毕！");
+                        else
+                        {
+                            Log($"[Java] Java 缓存已过期，开始重新生成缓存！");
+                            javaList = javaSearch();
+                            cmbJavaList.Items.Clear();
+                            List<List<object>> json = new List<List<object>>();
+                            foreach (KeyValuePair<string, bool> i in javaList)
+                            {
+                                cmbJavaList.Items.Add(i.Key);
+                                json.Add(new List<object>() { i.Key, i.Value });
+                            }
+                            config.java = json;
+                            Log($"[Java] Java 缓存生成完毕！");
+                            StreamWriter sw = new StreamWriter($"{path}EMCL/settings.json");
+                            sw.Write(JsonConvert.SerializeObject(config));
+                            sw.Close();
+                            Log($"[Java] Java 缓存写入完毕！");
+                        }
                     }
                     else
                     {
-                        Log($"[Java] Java 缓存已过期，开始重新生成缓存！");
+                        Log($"[Config] 没有找到配置文件，开始生成默认配置文件！");
                         javaList = javaSearch();
                         cmbJavaList.Items.Clear();
-                        List<List<object>> json = new List<List<object>>();
+                        config.java = new List<List<object>>();
+                        config.tempTime = DateTimeOffset.Now.ToUnixTimeSeconds();
                         foreach (KeyValuePair<string, bool> i in javaList)
                         {
                             cmbJavaList.Items.Add(i.Key);
-                            json.Add(new List<object>() { i.Key, i.Value });
+                            config.java.Add(new List<object> { i.Key, i.Value });
                         }
-                        config.java = json;
-                        Log($"[Java] Java 缓存生成完毕！");
-                        StreamWriter sw = new StreamWriter($"{path}EMCL/settings.json");
-                        sw.Write(JsonConvert.SerializeObject(config));
-                        sw.Close();
-                        Log($"[Java] Java 缓存写入完毕！");
+                        WriteConfig(config);
+                        Log($"[Config] 默认配置文件生成完毕！");
                     }
                 }
                 else
                 {
-                    Log($"[Config] 没有找到配置文件，开始生成默认配置文件！");
-                    javaList = javaSearch();
-                    cmbJavaList.Items.Clear();
-                    config.java = new List<List<object>>();
-                    config.tempTime = DateTimeOffset.Now.ToUnixTimeSeconds();
-                    foreach (KeyValuePair<string, bool> i in javaList)
-                    {
-                        cmbJavaList.Items.Add(i.Key);
-                        config.java.Add(new List<object> { i.Key, i.Value });
-                    }
-                    WriteConfig(config);
-                    Log($"[Config] 默认配置文件生成完毕！");
+                    Log($"[Main] 未找到EMCL 文件夹，自动创建！！");
+                    Directory.CreateDirectory($"{path}EMCL/");
+                    Directory.CreateDirectory($"{path}EMCL/Logs/");
+                    winMain_Load(sender, e);
                 }
             }
             catch (Exception ex)
