@@ -545,5 +545,17 @@ namespace EMCL
             Log("[Main] 程序已关闭！", LogLevel.Normal);
             System.Windows.Forms.Application.Exit();
         }
+
+        private void btnChooseJava_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Multiselect = false;//该值确定是否可以选择多个文件
+            dialog.Title = "请选择文件";
+            dialog.Filter = "Java Executable File (javaw.exe)|javaw.exe";
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                cmbJavaList.Text = new FileInfo(dialog.FileName).DirectoryName.Replace("\\\\","\\").Replace("\\","/");
+            }
+        }
     }
 }

@@ -31,6 +31,7 @@
             this.btnLaunch = new System.Windows.Forms.Button();
             this.btnJavaSearch = new System.Windows.Forms.Button();
             this.cmbJavaList = new System.Windows.Forms.ComboBox();
+            this.btnChooseJava = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnLaunch
@@ -63,11 +64,22 @@
             this.cmbJavaList.Text = "Java 列表";
             this.cmbJavaList.SelectedIndexChanged += new System.EventHandler(this.cmbJavaList_SelectedIndexChanged);
             // 
+            // btnChooseJava
+            // 
+            this.btnChooseJava.Location = new System.Drawing.Point(169, 367);
+            this.btnChooseJava.Name = "btnChooseJava";
+            this.btnChooseJava.Size = new System.Drawing.Size(112, 42);
+            this.btnChooseJava.TabIndex = 3;
+            this.btnChooseJava.Text = "手动选择";
+            this.btnChooseJava.UseVisualStyleBackColor = true;
+            this.btnChooseJava.Click += new System.EventHandler(this.btnChooseJava_Click);
+            // 
             // winMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnChooseJava);
             this.Controls.Add(this.cmbJavaList);
             this.Controls.Add(this.btnJavaSearch);
             this.Controls.Add(this.btnLaunch);
@@ -85,6 +97,7 @@
         private System.Windows.Forms.Button btnLaunch;
         private System.Windows.Forms.Button btnJavaSearch;
         private System.Windows.Forms.ComboBox cmbJavaList;
+        private System.Windows.Forms.Button btnChooseJava;
     }
 }
 
