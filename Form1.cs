@@ -375,7 +375,6 @@ namespace EMCL
                 //现在可以自己选择 Java 了
                 string java = cmbJavaList.Text;
                 sr.Close();
-                jr.Close();
                 Thread t = new Thread(() => launchGame(java, args));//创建MC启动线程
                 t.Start();
                 Log("[Launcher]启动 Minecraft 成功！");
