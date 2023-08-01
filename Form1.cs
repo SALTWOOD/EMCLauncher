@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Remoting;
 using System.Security.AccessControl;
 using System.Text;
+using Newtonsoft.Json;
 using System.Threading;
 using System.Windows.Forms;
 using static EMCL.Utils;
@@ -16,10 +17,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace EMCL
 {
-    public partial class Form1 : Form
+    public partial class winMain : Form
     {
-
-
+        Dictionary<string, bool> javaList = new Dictionary<string, bool>();
         string path = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
         string pathMCFolder = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}.minecraft";
         //string path = "";
@@ -33,6 +33,8 @@ namespace EMCL
         public object loggerLock = new object();
         public object loggerFlushLock = new object();
         private List<Thread> threads = new List<Thread>();
+        public bool isExited = false;
+        public Config config = new Config();
 
         public string pathEnv
         {
@@ -51,16 +53,9 @@ namespace EMCL
             }
         }
 
-        public Form1()
-        {
-            InitializeComponent();
-            LoggerStart();
-            Console.WriteLine($"{path}EMCL/Logs/{DateTime.Now.ToString("yy-MM-dd_HH-mm-ss")}.log");
-        }
-
         public void LoggerStart()
         {
-            threads.Add(RunThread(() =>
+            RunThread(() =>
             {
                 string loggerName = $"{path}EMCL/Logs/{DateTime.Now.ToString("yy-MM-dd_HH-mm-ss")}.log";
                 bool isSuccess = true;
@@ -89,19 +84,35 @@ namespace EMCL
                     logger = null;
                     Log(ex, "日志写入失败", LogLevel.Hint);
                 }
-                while (true)
+                try
                 {
-                    if (isSuccess)
+                    while (true)
                     {
-                        LoggerFlush();
+                        if (isExited)
+                        {
+                            Log("[Thread]<LoggerThread> 日志记录线程关闭中！");
+                            LoggerFlush();
+                            logs = new StringBuilder();
+                            Log("[Thread]<LoggerThread> 日志记录线程关闭成功！");
+                            LoggerFlush();
+                            return;
+                        }
+                        if (isSuccess)
+                        {
+                            LoggerFlush();
+                        }
+                        else
+                        {
+                            logs = new StringBuilder();//清空 LogList 避免内存爆炸
+                        }
+                        Thread.Sleep(50);
                     }
-                    else
-                    {
-                        logs = new StringBuilder();//清空 LogList 避免内存爆炸
-                    }
-                    Thread.Sleep(50);
                 }
-            }, "Logger", ThreadPriority.BelowNormal));
+                catch (Exception ex)
+                {
+                    Log(ex, "LoggerThread 异常退出", LogLevel.Fatal);
+                }
+            }, "Logger", ThreadPriority.BelowNormal);
         }
 
         public void LoggerFlush()
@@ -123,7 +134,7 @@ namespace EMCL
             }
         }
 
-        public Thread RunThread(Action action, string name, ThreadPriority priority = ThreadPriority.Normal)
+        public Thread RunThread(Action action, string name, ThreadPriority priority = ThreadPriority.Normal, bool addToPool = true)
         {
             Thread th = new Thread(() =>
             {
@@ -135,6 +146,10 @@ namespace EMCL
                 {
                     Log(ex, $"{name}：线程执行失败");
                 }
+                catch (ThreadAbortException ex)
+                {
+                    Log($"[Thread]<{name}> 线程 {name} 被迫终止！");
+                }
                 catch (Exception ex)
                 {
                     Log(ex, $"{name}：线程执行失败", LogLevel.Error);
@@ -142,6 +157,7 @@ namespace EMCL
             })
             { Name = name, Priority = priority };
             th.Start();
+            if (addToPool) { threads.Add(th); }
             return th;
         }
 
@@ -191,11 +207,12 @@ namespace EMCL
 
         public void Log(Exception ex, string info, LogLevel level = LogLevel.Normal, string title = "出现错误")
         {
-            Log($"出现错误！{info}{newLine}{ex.GetType()}:{ex.Message}{newLine}{ex.StackTrace}", LogLevel.Error);
+            Log($"[Main] 出现错误！{info}{newLine}{ex.GetType()}:{ex.Message}{newLine}{ex.StackTrace}", LogLevel.Error);
         }
 
         public Dictionary<string, bool> javaSearch()
         {
+            Log($"[Java] 开始搜索 Java");
             Dictionary<string, bool> javaDic = new Dictionary<string, bool>();
             foreach (string i in Split(($"{pathEnv};{pathJavaHome}").Replace("\\\\", "\\").Replace(" \\ ", "/"), ";"))
             {
@@ -252,6 +269,7 @@ namespace EMCL
                 }
             }
             if (JavaWithoutInherit.Count > 0) { javaDic = JavaWithoutInherit; }
+            Log($"[Java] Java 扫描完毕！");
             return javaDic;
         }
 
@@ -283,7 +301,7 @@ namespace EMCL
                 {
                     string path = originPath.FullName.Replace("\\\\", "\\").Replace("\\", "/");
                     if (!path.EndsWith("/")) path += "/";
-                    if (System.IO.File.Exists($"{path}javaw.exe")) { result[path] = source; }
+                    if (System.IO.File.Exists($"{path}javaw.exe")) { result[path] = source; Log($"[Java] 找到一个 Java: {path}"); }
                     foreach (DirectoryInfo folder in originPath.EnumerateDirectories())
                     {
                         if (!folder.Exists) continue;
@@ -341,15 +359,23 @@ namespace EMCL
 
         public int launchGame(string javaPath, string launchArgs)
         {
-            Process mc = new Process();
-            mc.StartInfo.FileName = $"{javaPath}javaw.exe";//使用传入的Java Path
-            mc.StartInfo.Arguments = launchArgs;//使用传入的参数
-            mc.StartInfo.UseShellExecute = false;//不使用命令行启动
-            mc.StartInfo.RedirectStandardOutput = true;
-            mc.StartInfo.RedirectStandardError = true;
-            mc.StartInfo.RedirectStandardInput = true;
-            mc.Start();//MC，启动！
-            return 0;
+            try
+            {
+                Process mc = new Process();
+                mc.StartInfo.FileName = javaPath;//使用传入的Java Path
+                mc.StartInfo.Arguments = launchArgs;//使用传入的参数
+                mc.StartInfo.UseShellExecute = false;//不使用命令行启动
+                mc.StartInfo.RedirectStandardOutput = true;
+                mc.StartInfo.RedirectStandardError = true;
+                mc.StartInfo.RedirectStandardInput = true;
+                mc.Start();//MC，启动！
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Log(ex, "Minecraft 启动失败", LogLevel.Normal);
+                return -1;
+            }
         }
 
         public string GetFileNameFromPath(string filePath)
@@ -362,6 +388,15 @@ namespace EMCL
             return name;
         }
 
+        public winMain()
+        {
+            Log("[Main] 主程序启动中！");
+            InitializeComponent();
+            Log("[Main] InitializeComponent() 执行完毕！");
+            Log("[Main] 主程序组件成功加载！");
+            LoggerStart();
+        }
+
         private void btnLaunch_Click(object sender, EventArgs e)
         {
             //Person laiya = new Person("Łaiya",Person.HasDick.No);
@@ -371,11 +406,10 @@ namespace EMCL
                 StreamReader sr = new StreamReader("./args.txt");//目前直接读取程序目录下args.txt内的内容
                 string args = sr.ReadToEnd();
                 //现在可以自己选择 Java 了
-                string java = cmbJavaList.Text;
+                string java = $"{cmbJavaList.Text}javaw.exe";
                 sr.Close();
-                Thread t = new Thread(() => launchGame(java, args));//创建MC启动线程
-                t.Start();
-                Log("[Launcher]启动 Minecraft 成功！");
+                Thread t = RunThread(() => launchGame(java, args), "MinecraftLaunchThread", ThreadPriority.AboveNormal);//创建MC启动线程
+                Log("[Launcher] 启动 Minecraft 成功！");
                 MessageBox.Show("启动成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (OutOfMemoryException ex)
@@ -388,15 +422,90 @@ namespace EMCL
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void winMain_Load(object sender, EventArgs e)
         {
-
+            Log("[Main] 主程序窗口框架加载完毕！");
+            try
+            {
+                if (System.IO.File.Exists($"{path}EMCL/settings.json"))
+                {
+                    Log($"[Config] 正在加载配置文件 {path}EMCL/settings.json");
+                    Log($"[Java] 开始读取 Java 缓存");
+                    config = ReadConfig();
+                    if (!(DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 > config.tempTime))
+                    {
+                        foreach (List<object> i in config.java)
+                        {
+                            cmbJavaList.Items.Clear();
+                            javaList.Add((string)i[0], (bool)i[1]);
+                            cmbJavaList.Items.Add(i[0]);
+                        }
+                        Log($"[Java] Java 缓存读取完毕！");
+                    }
+                    else
+                    {
+                        Log($"[Java] Java 缓存已过期，开始重新生成缓存！");
+                        javaList = javaSearch();
+                        cmbJavaList.Items.Clear();
+                        List<List<object>> json = new List<List<object>>();
+                        foreach (KeyValuePair<string, bool> i in javaList)
+                        {
+                            cmbJavaList.Items.Add(i.Key);
+                            json.Add(new List<object>() { i.Key, i.Value });
+                        }
+                        config.java = json;
+                        Log($"[Java] Java 缓存生成完毕！");
+                        StreamWriter sw = new StreamWriter($"{path}EMCL/settings.json");
+                        sw.Write(JsonConvert.SerializeObject(config));
+                        sw.Close();
+                        Log($"[Java] Java 缓存写入完毕！");
+                    }
+                }
+                else
+                {
+                    Log($"[Config] 没有找到配置文件，开始生成默认配置文件！");
+                    javaList = javaSearch();
+                    cmbJavaList.Items.Clear();
+                    config.java = new List<List<object>>();
+                    config.tempTime = DateTimeOffset.Now.ToUnixTimeSeconds();
+                    foreach (KeyValuePair<string, bool> i in javaList)
+                    {
+                        cmbJavaList.Items.Add(i.Key);
+                        config.java.Add(new List<object> { i.Key, i.Value });
+                    }
+                    WriteConfig(config);
+                    Log($"[Config] 默认配置文件生成完毕！");
+                }
+            }
+            catch (Exception ex)
+            {
+                handleException(ex);
+            }
         }
+
+        public void WriteConfig(Config config)
+        {
+            StreamWriter sw = new StreamWriter($"{path}EMCL/settings.json");
+            sw.Write(JsonConvert.SerializeObject(config));
+            sw.Close();
+        }
+
+        public Config ReadConfig()
+        {
+            Config result;
+            using (StreamReader sr = new StreamReader($"{path}EMCL/settings.json"))
+            {
+                result = JsonConvert.DeserializeObject<Config>(sr.ReadToEnd());
+            }
+            return result;
+        }
+
 
         private void btnJavaSearch_Click(object sender, EventArgs e)
         {
             cmbJavaList.Items.Clear();
-            foreach (KeyValuePair<string, bool> i in javaSearch())
+            javaList = javaSearch();
+            foreach (KeyValuePair<string, bool> i in javaList)
             {
                 cmbJavaList.Items.Add(i.Key);
             }
@@ -404,28 +513,27 @@ namespace EMCL
 
         private void cmbJavaList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Log($"[Java] 选择的 Java 更改为 {cmbJavaList.Text}");
+        }
 
+        private void winMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Log("[Main] 程序正在关闭！",LogLevel.Normal);
+        }
+
+        private void winMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Log("[Main] 准备开始关闭其他线程", LogLevel.Normal);
+            isExited = true;
+            Log("[Option] isExited 状态被设为 true", LogLevel.Normal);
+            Log("[Thread]<Main> 开始关闭其他线程", LogLevel.Normal);
+            foreach (Thread t in threads)
+            {
+                t.Join();
+            }
+            Log("[Thread]<Main> 其他线程已关闭！", LogLevel.Normal);
+            Log("[Main] 程序已关闭！", LogLevel.Normal);
+            System.Windows.Forms.Application.Exit();
         }
     }
-
-    /*
-    public class Person
-    {
-        public string name;
-        private HasDick sex;
-        private bool isDead;
-        public enum HasDick{Yes, No};
-        public Person(string name,HasDick sex)
-        {
-            this.name = name;
-            this.sex = sex;
-        }
-
-        public void Kill()
-        {
-            if (this.isDead) return;
-            Console.WriteLine($"{this.name}:awsl");
-            this.isDead = true;
-        }
-    }*/
 }

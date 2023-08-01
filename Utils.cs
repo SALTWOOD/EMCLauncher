@@ -5,13 +5,22 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using static EMCL.Form1;
+using static EMCL.winMain;
 using System.Xml.Linq;
+using System.Security.Cryptography;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace EMCL
 {
-    internal static class Utils
+    public static class Utils
     {
+        public class Config
+        {
+            public List<List<object>> java;
+            public long tempTime;
+        }
+
         public class UnknownException : Exception
         {
             public UnknownException(string message = "Unknown error occurred.")

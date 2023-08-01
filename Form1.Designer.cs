@@ -1,6 +1,6 @@
 ﻿namespace EMCL
 {
-    partial class Form1
+    partial class winMain
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -63,7 +63,7 @@
             this.cmbJavaList.Text = "Java 列表";
             this.cmbJavaList.SelectedIndexChanged += new System.EventHandler(this.cmbJavaList_SelectedIndexChanged);
             // 
-            // Form1
+            // winMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -71,9 +71,11 @@
             this.Controls.Add(this.cmbJavaList);
             this.Controls.Add(this.btnJavaSearch);
             this.Controls.Add(this.btnLaunch);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Name = "winMain";
+            this.Text = "EMCL 启动器";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.winMain_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.winMain_FormClosed);
+            this.Load += new System.EventHandler(this.winMain_Load);
             this.ResumeLayout(false);
 
         }
