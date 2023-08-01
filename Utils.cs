@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static EMCL.Form1;
+using System.Xml.Linq;
 
 namespace EMCL
 {
@@ -23,5 +26,7 @@ namespace EMCL
             }
         }
         public static string GetTimeNow() { return DateTime.Now.ToString("HH:mm:ss.fff"); }
+
+        public static string RegexReplace(string input, string replacement, string regex, RegexOptions options = RegexOptions.None) { return Regex.Replace(input, regex, replacement, options); }
     }
 }

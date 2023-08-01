@@ -12,11 +12,14 @@ using System.Windows.Forms;
 using static EMCL.Utils;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Net.WebRequestMethods;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace EMCL
 {
     public partial class Form1 : Form
     {
+
+
         string path = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
         string pathMCFolder = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}.minecraft";
         //string path = "";
@@ -25,7 +28,11 @@ namespace EMCL
         private string _pathJavaHome = null;
         public string newLine = "\r\n";
         private bool DEBUG = false;
-        public StringBuilder logger = new StringBuilder();
+        public StringBuilder logs = new StringBuilder();
+        public StreamWriter logger = null;
+        public object loggerLock = new object();
+        public object loggerFlushLock = new object();
+        private List<Thread> threads = new List<Thread>();
 
         public string pathEnv
         {
@@ -47,36 +54,104 @@ namespace EMCL
         public Form1()
         {
             InitializeComponent();
+            LoggerStart();
+            Console.WriteLine($"{path}EMCL/Logs/{DateTime.Now.ToString("yy-MM-dd_HH-mm-ss")}.log");
+        }
+
+        public void LoggerStart()
+        {
+            threads.Add(RunThread(() =>
+            {
+                string loggerName = $"{path}EMCL/Logs/{DateTime.Now.ToString("yy-MM-dd_HH-mm-ss")}.log";
+                bool isSuccess = true;
+                try
+                {
+                    System.IO.File.Create(loggerName).Dispose();
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine(ex);
+                    isSuccess = false;
+                    //Hint("可能同时开启了多个 EMCL，程序可能会出现问题！", HintType.Critical)
+                    Log(ex, "日志初始化失败（疑似文件占用问题）");
+                }
+                catch (Exception ex)
+                {
+                    isSuccess = false;
+                    Log(ex, "日志初始化失败", LogLevel.Hint);
+                }
+                try
+                {
+                    logger = new StreamWriter(loggerName, true) { AutoFlush = true };
+                }
+                catch (Exception ex)
+                {
+                    logger = null;
+                    Log(ex, "日志写入失败", LogLevel.Hint);
+                }
+                while (true)
+                {
+                    if (isSuccess)
+                    {
+                        LoggerFlush();
+                    }
+                    else
+                    {
+                        logs = new StringBuilder();//清空 LogList 避免内存爆炸
+                    }
+                    Thread.Sleep(50);
+                }
+            }, "Logger", ThreadPriority.BelowNormal));
+        }
+
+        public void LoggerFlush()
+        {
+            if (logger == null) return;
+            string log = null;
+            lock (loggerFlushLock)
+            {
+                if (logs.Length > 0) { }
+                StringBuilder cache = new StringBuilder();
+                cache = logs;
+                logs = new StringBuilder();
+                log = cache.ToString();
+            }
+
+            if (log != null)
+            {
+                logger.Write(log);
+            }
+        }
+
+        public Thread RunThread(Action action, string name, ThreadPriority priority = ThreadPriority.Normal)
+        {
+            Thread th = new Thread(() =>
+            {
+                try
+                {
+                    action();
+                }
+                catch (ThreadInterruptedException ex)
+                {
+                    Log(ex, $"{name}：线程执行失败");
+                }
+                catch (Exception ex)
+                {
+                    Log(ex, $"{name}：线程执行失败", LogLevel.Error);
+                }
+            })
+            { Name = name, Priority = priority };
+            th.Start();
+            return th;
         }
 
         public void handleException(Exception ex)
         {
-            Console.WriteLine($"{ex.GetType()}\n{ex.Message}\n{ex.StackTrace}\n\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！");
-            if (MessageBox.Show($"{ex.GetType()}\n{ex.Message}\n{ex.StackTrace}\n\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！", "无法处理的异常", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Error) == DialogResult.Yes)
+            Log(ex, "未知错误", LogLevel.Fatal);
+            Console.WriteLine($"{ex.GetType()}{newLine}{ex.Message}{newLine}{ex.StackTrace}{newLine}{newLine}现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！");
+            if (MessageBox.Show($"{ex.GetType()}{newLine}{ex.Message}{newLine}{ex.StackTrace}{newLine}{newLine}现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！", "无法处理的异常", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Error) == DialogResult.Yes)
             {
                 Process.Start("https://github.com/SALTWOOD/EMCLauncher/issues/new/choose");
-            }
-        }
-
-        private void btnLaunch_Click(object sender, EventArgs e)
-        {
-            //Person laiya = new Person("Łaiya",Person.HasDick.No);
-            //laiya.Kill();
-            try
-            {
-                StreamReader sr = new StreamReader("./args.txt");//目前直接读取程序目录下args.txt内的内容
-                string args = sr.ReadToEnd();
-                StreamReader jr = new StreamReader("./java.txt");//目前直接读取程序目录下args.txt内的内容
-                string java = jr.ReadToEnd();
-                sr.Close();
-                jr.Close();
-                Thread t = new Thread(() => launchGame(java, args));//创建MC启动线程
-                t.Start();
-                MessageBox.Show("启动成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                handleException(ex);
             }
         }
 
@@ -92,7 +167,6 @@ namespace EMCL
             }
         }
 
-        public object loggerLock = new object();
         public enum LogLevel
         {
             Normal = 1,
@@ -109,15 +183,15 @@ namespace EMCL
             string text = $"[{Utils.GetTimeNow()}] {info}{newLine}";
             lock (loggerLock)
             {
-                logger.Append(text);
+                logs.Append(text);
             }
             if (DEBUG) { Console.Write(text); }
             string repText = RegexReplace(info, "", "\\[[^\\]]+?\\] ");
         }
 
-        public void Log(Exception ex, string info)
+        public void Log(Exception ex, string info, LogLevel level = LogLevel.Normal, string title = "出现错误")
         {
-
+            Log($"出现错误！{info}{newLine}{ex.GetType()}:{ex.Message}{newLine}{ex.StackTrace}", LogLevel.Error);
         }
 
         public Dictionary<string, bool> javaSearch()
@@ -246,9 +320,16 @@ namespace EMCL
                 }
                 else
                 {
-                    if (originPath == null) { throw new ArgumentNullException("Expected a non null value, but received a null value as a parameter."); }
-                    else if (!originPath.Exists) { throw new FileNotFoundException($"The specified file ({originPath.Name}) does not exist."); }
-                    else { throw new UnknownException(); }
+                    try
+                    {
+                        if (originPath == null) { throw new ArgumentNullException("Expected a non null value, but received a null value as a parameter."); }
+                        else if (!originPath.Exists) { throw new FileNotFoundException($"The specified file ({originPath.Name}) does not exist."); }
+                        else { throw new UnknownException(); }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log(ex, ex.Message, LogLevel.Normal);
+                    }
                 }
             }
             catch (UnauthorizedAccessException ex)
@@ -283,7 +364,48 @@ namespace EMCL
             return name;
         }
 
+        private void btnLaunch_Click(object sender, EventArgs e)
+        {
+            //Person laiya = new Person("Łaiya",Person.HasDick.No);
+            //laiya.Kill();
+            try
+            {
+                StreamReader sr = new StreamReader("./args.txt");//目前直接读取程序目录下args.txt内的内容
+                string args = sr.ReadToEnd();
+                //现在可以自己选择 Java 了
+                string java = cmbJavaList.Text;
+                sr.Close();
+                jr.Close();
+                Thread t = new Thread(() => launchGame(java, args));//创建MC启动线程
+                t.Start();
+                Log("[Launcher]启动 Minecraft 成功！");
+                MessageBox.Show("启动成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (OutOfMemoryException ex)
+            {
+                Log(ex, "内存不足", LogLevel.Message);
+            }
+            catch (Exception ex)
+            {
+                handleException(ex);
+            }
+        }
+
         private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnJavaSearch_Click(object sender, EventArgs e)
+        {
+            cmbJavaList.Items.Clear();
+            foreach (KeyValuePair<string, bool> i in javaSearch())
+            {
+                cmbJavaList.Items.Add(i.Key);
+            }
+        }
+
+        private void cmbJavaList_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

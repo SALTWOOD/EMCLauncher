@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.btnLaunch = new System.Windows.Forms.Button();
+            this.btnJavaSearch = new System.Windows.Forms.Button();
+            this.cmbJavaList = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // btnLaunch
@@ -41,11 +43,33 @@
             this.btnLaunch.UseVisualStyleBackColor = true;
             this.btnLaunch.Click += new System.EventHandler(this.btnLaunch_Click);
             // 
+            // btnJavaSearch
+            // 
+            this.btnJavaSearch.Location = new System.Drawing.Point(12, 290);
+            this.btnJavaSearch.Name = "btnJavaSearch";
+            this.btnJavaSearch.Size = new System.Drawing.Size(142, 71);
+            this.btnJavaSearch.TabIndex = 1;
+            this.btnJavaSearch.Text = "扫描 Java";
+            this.btnJavaSearch.UseVisualStyleBackColor = true;
+            this.btnJavaSearch.Click += new System.EventHandler(this.btnJavaSearch_Click);
+            // 
+            // cmbJavaList
+            // 
+            this.cmbJavaList.FormattingEnabled = true;
+            this.cmbJavaList.Location = new System.Drawing.Point(169, 415);
+            this.cmbJavaList.Name = "cmbJavaList";
+            this.cmbJavaList.Size = new System.Drawing.Size(619, 23);
+            this.cmbJavaList.TabIndex = 2;
+            this.cmbJavaList.Text = "Java 列表";
+            this.cmbJavaList.SelectedIndexChanged += new System.EventHandler(this.cmbJavaList_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.cmbJavaList);
+            this.Controls.Add(this.btnJavaSearch);
             this.Controls.Add(this.btnLaunch);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -57,6 +81,8 @@
         #endregion
 
         private System.Windows.Forms.Button btnLaunch;
+        private System.Windows.Forms.Button btnJavaSearch;
+        private System.Windows.Forms.ComboBox cmbJavaList;
     }
 }
 
