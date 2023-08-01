@@ -28,11 +28,9 @@ jobs:
         env:
           Configuration: ${{ matrix.configuration }}
       - name: Release
-        uses: marvinpinto/action-automatic-releases@latest
+        uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: ${{ env.ReleaseVersion }}
-          title: ${{ env.ReleaseVersion }}
-          prerelease: false
-          files: |
-            artifacts/packages/*
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          draft: true
+          prerelease: false
+          title: ${{ env.ReleaseVersion}}
