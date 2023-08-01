@@ -341,10 +341,8 @@ namespace EMCL
 
         public int launchGame(string javaPath, string launchArgs)
         {
-            //Console.WriteLine(GetFileNameFromPath("C:\\Program Files\\Java\\jdk-17.0.5\\bin"));
-            //Console.WriteLine(JavaSearchFolder(new DirectoryInfo("C:\\Program Files\\Java\\jdk-17.0.5\\bin"))[0]);
             Process mc = new Process();
-            mc.StartInfo.FileName = javaPath;//使用传入的Java Path
+            mc.StartInfo.FileName = $"{javaPath}javaw.exe";//使用传入的Java Path
             mc.StartInfo.Arguments = launchArgs;//使用传入的参数
             mc.StartInfo.UseShellExecute = false;//不使用命令行启动
             mc.StartInfo.RedirectStandardOutput = true;
