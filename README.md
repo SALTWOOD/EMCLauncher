@@ -7,8 +7,11 @@
 - [GitHub](https://github.com/Hex-Dragon/PCL2)
 - [爱发电](https://afdian.net/a/LTCat)
 
-**@JamesNK** - 使用了 Newtonsoft Json 进行 JSON 配置的读取。
+**@JamesNK** - 使用了 Newtonsoft Json 进行 JSON 配置的读写。
 - [GitHub](https://github.com/JamesNK/Newtonsoft.Json)
+
+**@LitJson** - 曾经使用 LitJson 进行 JSON 配置的读写。
+- [GitHub](https://github.com/LitJson/litjson)
 
 # 附加信息
 ## Newtonsoft Json
