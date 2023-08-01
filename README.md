@@ -6,6 +6,7 @@
 **@LTCatt** - 借鉴了 Plain Craft Launcher 2 的 Java 搜索代码以及其 GitHub 仓库的 Issue 模板。
 - [GitHub](https://github.com/Hex-Dragon/PCL2)
 - [爱发电](https://afdian.net/a/LTCat)
+- [Bilibili](https://space.bilibili.com/11343203)
 
 **@JamesNK** - 使用了 Newtonsoft Json 进行 JSON 配置的读写。
 - [GitHub](https://github.com/JamesNK/Newtonsoft.Json)
