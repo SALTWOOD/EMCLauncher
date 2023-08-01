@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Remoting;
 using System.Security.AccessControl;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using static EMCL.Utils;
@@ -22,12 +23,15 @@ namespace EMCL
         //string path = "";
         private string _pathEnv = null;
         private string _pathJavaHome = null;
+        public string newLine = "\r\n";
+        private bool DEBUG = false;
+        public StringBuilder logger = new StringBuilder();
 
         public string pathEnv
         {
             get
             {
-                if (_pathEnv is null) { _pathEnv = Environment.GetEnvironmentVariable("Path") != null? Environment.GetEnvironmentVariable("Path"):""; }
+                if (_pathEnv is null) { _pathEnv = Environment.GetEnvironmentVariable("Path") != null ? Environment.GetEnvironmentVariable("Path") : ""; }
                 return _pathEnv;
             }
         }
@@ -35,7 +39,7 @@ namespace EMCL
         {
             get
             {
-                if (_pathJavaHome is null) { _pathJavaHome = Environment.GetEnvironmentVariable("JAVA_HOME") != null? Environment.GetEnvironmentVariable("JAVA_HOME"):""; }
+                if (_pathJavaHome is null) { _pathJavaHome = Environment.GetEnvironmentVariable("JAVA_HOME") != null ? Environment.GetEnvironmentVariable("JAVA_HOME") : ""; }
                 return _pathJavaHome;
             }
         }
@@ -43,6 +47,15 @@ namespace EMCL
         public Form1()
         {
             InitializeComponent();
+        }
+
+        public void handleException(Exception ex)
+        {
+            Console.WriteLine($"{ex.GetType()}\n{ex.Message}\n{ex.StackTrace}\n\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！");
+            if (MessageBox.Show($"{ex.GetType()}\n{ex.Message}\n{ex.StackTrace}\n\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！", "无法处理的异常", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Error) == DialogResult.Yes)
+            {
+                Process.Start("https://github.com/SALTWOOD/EMCLauncher/issues/new/choose");
+            }
         }
 
         private void btnLaunch_Click(object sender, EventArgs e)
@@ -57,17 +70,13 @@ namespace EMCL
                 string java = jr.ReadToEnd();
                 sr.Close();
                 jr.Close();
-                Thread t = new Thread(() => launchGame(java,args));//创建MC启动线程
+                Thread t = new Thread(() => launchGame(java, args));//创建MC启动线程
                 t.Start();
-                MessageBox.Show("启动成功","提示",MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("启动成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ex.GetType()}\n{ex.Message}\n{ex.StackTrace}\n\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！");
-                if (MessageBox.Show($"{ex.GetType()}\n{ex.Message}\n{ex.StackTrace}\n\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！","无法处理的异常",MessageBoxButtons.YesNoCancel,MessageBoxIcon.Error) == DialogResult.Yes)
-                {
-                    Process.Start("https://github.com/SALTWOOD/EMCLauncher/issues/new/choose");
-                }
+                handleException(ex);
             }
         }
 
@@ -79,16 +88,34 @@ namespace EMCL
             }
             else
             {
-                return fullStr.Split(new string[] { splitStr },StringSplitOptions.None);
+                return fullStr.Split(new string[] { splitStr }, StringSplitOptions.None);
             }
         }
 
-        public void Log(string info)
+        public object loggerLock = new object();
+        public enum LogLevel
         {
+            Normal = 1,
+            Debug = 2,
+            Information = 3,
+            Hint = 4,
+            Message = 5,
+            Error = 6,
+            Fatal = 7
+        };
 
+        public void Log(string info, LogLevel level = LogLevel.Normal, string title = "出现错误")
+        {
+            string text = $"[{Utils.GetTimeNow()}] {info}{newLine}";
+            lock (loggerLock)
+            {
+                logger.Append(text);
+            }
+            if (DEBUG) { Console.Write(text); }
+            string repText = RegexReplace(info, "", "\\[[^\\]]+?\\] ");
         }
 
-        public void Log(Exception ex,string info)
+        public void Log(Exception ex, string info)
         {
 
         }
@@ -115,10 +142,10 @@ namespace EMCL
             //查找启动器目录中的 Java
             JavaSearchFolder(path, javaDic, false, isFullSearch: true);
             //查找所选 Minecraft 文件夹中的 Java
-            if (!(string.IsNullOrWhiteSpace(pathMCFolder) && (path == pathMCFolder))){ JavaSearchFolder(pathMCFolder, javaDic, false, isFullSearch: true); }
+            if (!(string.IsNullOrWhiteSpace(pathMCFolder) && (path == pathMCFolder))) { JavaSearchFolder(pathMCFolder, javaDic, false, isFullSearch: true); }
             //若不全为符号链接，则清除符号链接的地址
             Dictionary<string, bool> JavaWithoutReparse = new Dictionary<string, bool>();
-            foreach (KeyValuePair<string,bool> pair in javaDic)
+            foreach (KeyValuePair<string, bool> pair in javaDic)
             {
                 string folder = pair.Key.Replace("\\\\", "\\").Replace("\\", "/");
                 FileSystemInfo info = new FileInfo($"{folder}javaw.exe");
@@ -129,7 +156,7 @@ namespace EMCL
                         Log($"[Java] 位于 {folder} 的 Java 包含符号链接");
                         continue;
                     }
-                    info = (info is FileInfo)?((FileInfo)info).Directory:((DirectoryInfo)info).Parent;
+                    info = (info is FileInfo) ? ((FileInfo)info).Directory : ((DirectoryInfo)info).Parent;
                 }
                 while (info != null);
                 Log($"[Java] 位于 {folder} 的 Java 不含符号链接");
@@ -137,8 +164,8 @@ namespace EMCL
             }
             if (JavaWithoutReparse.Count > 0) { javaDic = JavaWithoutReparse; }
             //若不全为特殊引用，则清除特殊引用的地址
-            Dictionary<string,bool> JavaWithoutInherit = new Dictionary<string,bool>();
-            foreach (KeyValuePair<string,bool> pair in javaDic)
+            Dictionary<string, bool> JavaWithoutInherit = new Dictionary<string, bool>();
+            foreach (KeyValuePair<string, bool> pair in javaDic)
             {
                 if (pair.Key.Contains("javapath_target_") || pair.Key.Contains("javatmp"))
                 {
@@ -173,7 +200,7 @@ namespace EMCL
         }
 
         //public Dictionary<string,bool> JavaSearchFolder(DirectoryInfo originPath, Dictionary<string,bool> result, bool source, bool isFullSearch = false)
-        public void JavaSearchFolder(DirectoryInfo originPath, Dictionary<string,bool> result, bool source, bool isFullSearch = false)
+        public void JavaSearchFolder(DirectoryInfo originPath, Dictionary<string, bool> result, bool source, bool isFullSearch = false)
         {
             try
             {
@@ -249,7 +276,7 @@ namespace EMCL
         public string GetFileNameFromPath(string filePath)
         {
             string path = filePath.Replace("\\", "/");
-            if (path.EndsWith("/")){ throw new Exception($"不包含文件名：{filePath}"); }
+            if (path.EndsWith("/")) { throw new Exception($"不包含文件名：{filePath}"); }
             string name = filePath.Split('/').Last().Split('?').First();
             if (name.Length == 0) { throw new Exception($"不包含文件名：{filePath}"); }
             if (name.Length > 250) { throw new PathTooLongException($"文件名过长：{filePath}"); }

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EMCL
 {
-    internal class Utils
+    internal static class Utils
     {
         public class UnknownException : Exception
         {
@@ -21,6 +22,6 @@ namespace EMCL
 
             }
         }
-
+        public static string GetTimeNow() { return DateTime.Now.ToString("HH:mm:ss.fff"); }
     }
 }
