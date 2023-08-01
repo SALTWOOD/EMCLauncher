@@ -242,7 +242,7 @@ namespace EMCL
             mc.StartInfo.RedirectStandardOutput = true;
             mc.StartInfo.RedirectStandardError = true;
             mc.StartInfo.RedirectStandardInput = true;
-           mc.Start();//MC，启动！
+            mc.Start();//MC，启动！
             return 0;
         }
 
