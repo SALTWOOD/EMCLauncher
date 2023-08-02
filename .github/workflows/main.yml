@@ -28,10 +28,10 @@ jobs:
         env:
           Configuration: ${{ matrix.configuration }}
       - name: Release
-        uses: marvinpinto/action-automatic-releases@v1.2.1
+        uses: marvinpinto/action-automatic-releases@latest
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          automatic_release_tag: "latest"
+          repo_token: ${{ secrets.RELEASE_TOKEN }}
+          automatic_release_tag: ${{ env.ReleaseVersion }}
           draft: true
           prerelease: false
-          title: ${{ env.ReleaseVersion}}
+          title: ${{ env.ReleaseVersion }}
