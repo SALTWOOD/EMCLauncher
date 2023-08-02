@@ -28,9 +28,11 @@ jobs:
         env:
           Configuration: ${{ matrix.configuration }}
       - name: Release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        uses: CupOfTea696/gh-action-auto-release@v1.0.0
         with:
-          files: /*
-    
+          title: "Release: $version"
+          tag: "v$semver"
+          draft: true
+          regex: "/^Release: #{semver}$/i"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
