@@ -27,12 +27,8 @@ jobs:
         run: dotnet test --configuration $env:Configuration
         env:
           Configuration: ${{ matrix.configuration }}
-      - name: Release
-        uses: CupOfTea696/gh-action-auto-release@v1.0.0
+      - name: Create draft
+        id: create-release-draft
+        uses: ecampidoglio/auto-release-draft@v1
         with:
-          title: "Release: $version"
-          tag: "v$semver"
-          draft: true
-          regex: "/^Release: #{semver}$/i"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.RELEASE_TOKEN }}
