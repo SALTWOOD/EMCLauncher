@@ -27,6 +27,6 @@ jobs:
           Configuration: ${{ matrix.configuration }}
       - name: Create draft
         id: create-release-draft
-        uses: ecampidoglio/auto-release-draft@v
+        uses: ecampidoglio/auto-release-draft@v1
         with:
           repo-token: ${{ secrets.RELEASE_TOKEN }}
