@@ -25,3 +25,8 @@ jobs:
         run: dotnet test --configuration $env:Configuration
         env:
           Configuration: ${{ matrix.configuration }}
+      - name: Create draft
+        id: create-release-draft
+        uses: ecampidoglio/auto-release-draft@latest
+        with:
+          repo-token: ${{ secrets.RELEASE_TOKEN }}
