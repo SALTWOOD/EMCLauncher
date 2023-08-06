@@ -1,0 +1,31 @@
+name: "代码错误/Error in code"
+description: "程序出现了代码级别的错误（表现为条件判断错误等）/The program encountered code level errors (manifested as condition judgment errors, etc.)"
+labels: [问题/bug, 新反馈/new issue]
+body:
+- type: checkboxes
+  id: "yml-1"
+  attributes:
+    label: "检查项/Check list"
+    description: "逐个检查下列项目并勾选确认。\nCheck the following items one by one and tick them."
+    options:
+    - label: "我已知晓 issue 至少使用**中文和英语中的一种**编写，且大 Bug 应该尽量使用双语。\nI know that the issue should be written in at least one of Chinese and English, and for major bugs, it should be written in both languages as much as possible."
+      required: true
+    - label: "我已确认此问题出现在 EMCL 代码中并且能够表现出来\nI have confirmed that this issue occurs in the EMCL code and can be manifested"
+      required: true
+    - label: "我已在 [Issues 页面](https://github.com/SALTWOOD/EMCLauncher/issues) 中搜索，确认了这一 Bug **未被提交过**。\nI have searched on the [Issues page](https://github.com/SALTWOOD/EMCLauncher/issues) and confirmed that this bug has not been submitted."
+      required: true
+- type: textarea
+  id: "yml-2"
+  attributes:
+    label: 描述/Description
+    description: "详细描述具体表现。\nProvide a detailed description of the specific performance."
+  validations:
+    required: true
+- type: textarea
+  id: "yml-3"
+  attributes:
+    label: 位置/Position
+    description: "描述此问题存在于源码的哪个文件以及其具体行号\nDescribe which file in the source code this problem exists in and its specific line number."
+    placeholder: "(Example)\nFile: Form1.cs\nLine: 124~125"
+  validations:
+    required: true
