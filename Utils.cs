@@ -19,6 +19,7 @@ namespace EMCL
         {
             public List<List<object>> java;
             public long tempTime;
+            public bool forceDisableJavaAutoSearch;
         }
 
         public class UnknownException : Exception

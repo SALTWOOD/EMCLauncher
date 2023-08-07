@@ -457,9 +457,7 @@ namespace EMCL
                             }
                             config.java = json;
                             Log($"[Java] Java 缓存生成完毕！");
-                            StreamWriter sw = new StreamWriter($"{path}EMCL/settings.json");
-                            sw.Write(JsonConvert.SerializeObject(config));
-                            sw.Close();
+                            WriteConfig(config);
                             Log($"[Java] Java 缓存写入完毕！");
                         }
                     }
@@ -470,6 +468,7 @@ namespace EMCL
                         cmbJavaList.Items.Clear();
                         config.java = new List<List<object>>();
                         config.tempTime = DateTimeOffset.Now.ToUnixTimeSeconds();
+                        config.forceDisableJavaAutoSearch = false;
                         foreach (KeyValuePair<string, bool> i in javaList)
                         {
                             cmbJavaList.Items.Add(i.Key);
@@ -550,7 +549,7 @@ namespace EMCL
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Multiselect = false;//该值确定是否可以选择多个文件
-            dialog.Title = "请选择文件";
+            dialog.Title = "请选择 Java";
             dialog.Filter = "Java Executable File (javaw.exe)|javaw.exe";
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
