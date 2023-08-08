@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        configuration: [Debug, Release]
+        configuration: [Debug]
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -31,4 +31,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app-debug
-          path: bin/Debug/*
+          path: bin/Debug/EMCL.exe
