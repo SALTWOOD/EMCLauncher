@@ -3,7 +3,7 @@
 
 # 获取 EMCL
 ## 测试版
-打开 [Actions 页面](https://github.com/SALTWOOD/EMCLauncher/actions)，点击右侧的".NET Build & Test"，在右侧的条目中选择一个带有蓝色或绿色对勾的条目，然后在下方的 Artifacts 中下载"app-debug"
+打开 [Actions 页面](https://github.com/SALTWOOD/EMCLauncher/actions)，点击左侧的".NET Build & Test"，在右侧的条目中选择一个带有蓝色或绿色对勾的条目，然后在下方的 Artifacts 中下载"app-debug"
 
 # 特别鸣谢
 
