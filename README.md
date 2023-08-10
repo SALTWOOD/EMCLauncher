@@ -5,6 +5,9 @@
 ## 测试版
 打开 [Actions 页面](https://github.com/SALTWOOD/EMCLauncher/actions)，点击左侧的".NET Build & Test"，在右侧的条目中选择一个带有蓝色或绿色对勾的条目，然后在下方的 Artifacts 中下载"app-debug"
 
+## 正式版
+打开 [Releases 页面](https://github.com/SALTWOOD/EMCLauncher/releases)，在 Assets 中下载对应的版本。
+
 # 特别鸣谢
 
 **@Hex-Dragon**(**@LTCatt**) - 借鉴了 Plain Craft Launcher 2 的 Java 搜索代码以及其 GitHub 仓库的 Issue 模板。
