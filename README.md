@@ -2,6 +2,7 @@
 一个简洁、轻量、免安装的新生代Minecraft启动器
 
 # 获取 EMCL
+**提示：由于 EMCL 还处在早期开发阶段（不是一个确定会长期开发的项目），所以其更新速度、质量以及其开发的连续性无法得到保证。**
 ## 测试版
 打开 [Actions 页面](https://github.com/SALTWOOD/EMCLauncher/actions)，点击左侧的".NET Build & Test"，在右侧的条目中选择一个带有蓝色或绿色对勾的条目，然后在下方的 Artifacts 中下载"app-debug"
 
