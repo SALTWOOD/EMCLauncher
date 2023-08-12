@@ -121,11 +121,13 @@ namespace EMCL
             string log = null;
             lock (loggerFlushLock)
             {
-                if (logs.Length > 0) { }
-                StringBuilder cache = new StringBuilder();
-                cache = logs;
-                logs = new StringBuilder();
-                log = cache.ToString();
+                if (logs.Length > 0)
+                {
+                    StringBuilder cache = new StringBuilder();
+                    cache = logs;
+                    logs = new StringBuilder();
+                    log = cache.ToString();
+                }
             }
 
             if (log != null)

@@ -5,12 +5,13 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     strategy:
       matrix:
-        configuration: [Debug, Release]
+        configuration: [Debug]
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -27,8 +28,8 @@ jobs:
         run: dotnet test --configuration $env:Configuration
         env:
           Configuration: ${{ matrix.configuration }}
-      - name: Create draft
-        id: create-release-draft
-        uses: ecampidoglio/auto-release-draft@v1
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
-          repo-token: ${{ secrets.RELEASE_TOKEN }}
+          name: app-debug
+          path: bin/Debug/*
