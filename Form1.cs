@@ -192,7 +192,7 @@ namespace EMCL
             Message = 5,
             Error = 6,
             Fatal = 7
-        };
+        }
 
         public void Log(string info, LogLevel level = LogLevel.Normal, string title = "出现错误")
         {
@@ -508,7 +508,6 @@ namespace EMCL
             }
             return result;
         }
-
 
         private void btnJavaSearch_Click(object sender, EventArgs e)
         {
