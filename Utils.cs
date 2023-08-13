@@ -15,6 +15,16 @@ namespace EMCL
 {
     public static class Utils
     {
+        public static Random random = new Random();
+        public static List<string> tips = new List<string>()
+        { 
+            "636 lines of code!",
+            "Not PCL2!",
+            "Try our sister game, Minceraft!",
+            $"Today is {DateTime.Now.ToString("yyyy-MM-dd")}!",
+            $"{random.Next(0,114514)}!",
+            "EMCL '͟͝͞Ⅱ́̕!"
+        };
         public class Config
         {
             public List<List<object>> java;

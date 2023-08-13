@@ -32,6 +32,7 @@
             this.btnJavaSearch = new System.Windows.Forms.Button();
             this.cmbJavaList = new System.Windows.Forms.ComboBox();
             this.btnChooseJava = new System.Windows.Forms.Button();
+            this.lblTips = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnLaunch
@@ -74,11 +75,22 @@
             this.btnChooseJava.UseVisualStyleBackColor = true;
             this.btnChooseJava.Click += new System.EventHandler(this.btnChooseJava_Click);
             // 
+            // lblTips
+            // 
+            this.lblTips.AutoSize = true;
+            this.lblTips.Location = new System.Drawing.Point(13, 13);
+            this.lblTips.Name = "lblTips";
+            this.lblTips.Size = new System.Drawing.Size(55, 15);
+            this.lblTips.TabIndex = 4;
+            this.lblTips.Text = "label1";
+            this.lblTips.Visible = false;
+            // 
             // winMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.lblTips);
             this.Controls.Add(this.btnChooseJava);
             this.Controls.Add(this.cmbJavaList);
             this.Controls.Add(this.btnJavaSearch);
@@ -89,6 +101,7 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.winMain_FormClosed);
             this.Load += new System.EventHandler(this.winMain_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -98,6 +111,7 @@
         private System.Windows.Forms.Button btnJavaSearch;
         private System.Windows.Forms.ComboBox cmbJavaList;
         private System.Windows.Forms.Button btnChooseJava;
+        private System.Windows.Forms.Label lblTips;
     }
 }
 

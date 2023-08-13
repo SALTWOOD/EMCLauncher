@@ -447,73 +447,95 @@ namespace EMCL
             }
         }
 
+        public void LoadApp()
+        {
+            if (Directory.Exists($"{path}EMCL/"))
+            {
+                if (System.IO.File.Exists($"{path}EMCL/settings.json"))
+                {
+                    Log($"[Config] 正在加载配置文件 {path}EMCL/settings.json");
+                    Log($"[Java] 开始读取 Java 缓存");
+                    config = ReadConfig();
+                    if (!(DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 > config.tempTime))
+                    {
+                        foreach (List<object> i in config.java)
+                        {
+                            cmbJavaList.Items.Clear();
+                            javaList.Add((string)i[0], (bool)i[1]);
+                            cmbJavaList.Items.Add(i[0]);
+                        }
+                        Log($"[Java] Java 缓存读取完毕！");
+                    }
+                    else
+                    {
+                        Log($"[Java] Java 缓存已过期，开始重新生成缓存！");
+                        javaList = javaSearch();
+                        cmbJavaList.Items.Clear();
+                        List<List<object>> json = new List<List<object>>();
+                        foreach (KeyValuePair<string, bool> i in javaList)
+                        {
+                            cmbJavaList.Items.Add(i.Key);
+                            json.Add(new List<object>() { i.Key, i.Value });
+                        }
+                        config.java = json;
+                        Log($"[Java] Java 缓存生成完毕！");
+                        WriteConfig(config);
+                        Log($"[Java] Java 缓存写入完毕！");
+                    }
+                }
+                else
+                {
+                    Log($"[Config] 没有找到配置文件，开始生成默认配置文件！");
+                    javaList = javaSearch();
+                    cmbJavaList.Items.Clear();
+                    config.java = new List<List<object>>();
+                    config.tempTime = DateTimeOffset.Now.ToUnixTimeSeconds();
+                    config.forceDisableJavaAutoSearch = false;
+                    foreach (KeyValuePair<string, bool> i in javaList)
+                    {
+                        cmbJavaList.Items.Add(i.Key);
+                        config.java.Add(new List<object> { i.Key, i.Value });
+                    }
+                    WriteConfig(config);
+                    Log($"[Config] 默认配置文件生成完毕！");
+                }
+            }
+            else
+            {
+                Log($"[Main] 未找到EMCL 文件夹，自动创建！！");
+                Directory.CreateDirectory($"{path}EMCL/");
+                Directory.CreateDirectory($"{path}EMCL/Logs/");
+                LoadApp();
+            }
+        }
+
         private void winMain_Load(object sender, EventArgs e)
         {
             Log("[Main] 主程序窗口框架加载完毕！");
             try
             {
-                if (Directory.Exists($"{path}EMCL/"))
+                LoadApp();
+                lblTips.Text = tips[random.Next(tips.Count)];
+                IsAprilFool(() =>
                 {
-                    if (System.IO.File.Exists($"{path}EMCL/settings.json"))
-                    {
-                        Log($"[Config] 正在加载配置文件 {path}EMCL/settings.json");
-                        Log($"[Java] 开始读取 Java 缓存");
-                        config = ReadConfig();
-                        if (!(DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 > config.tempTime))
-                        {
-                            foreach (List<object> i in config.java)
-                            {
-                                cmbJavaList.Items.Clear();
-                                javaList.Add((string)i[0], (bool)i[1]);
-                                cmbJavaList.Items.Add(i[0]);
-                            }
-                            Log($"[Java] Java 缓存读取完毕！");
-                        }
-                        else
-                        {
-                            Log($"[Java] Java 缓存已过期，开始重新生成缓存！");
-                            javaList = javaSearch();
-                            cmbJavaList.Items.Clear();
-                            List<List<object>> json = new List<List<object>>();
-                            foreach (KeyValuePair<string, bool> i in javaList)
-                            {
-                                cmbJavaList.Items.Add(i.Key);
-                                json.Add(new List<object>() { i.Key, i.Value });
-                            }
-                            config.java = json;
-                            Log($"[Java] Java 缓存生成完毕！");
-                            WriteConfig(config);
-                            Log($"[Java] Java 缓存写入完毕！");
-                        }
-                    }
-                    else
-                    {
-                        Log($"[Config] 没有找到配置文件，开始生成默认配置文件！");
-                        javaList = javaSearch();
-                        cmbJavaList.Items.Clear();
-                        config.java = new List<List<object>>();
-                        config.tempTime = DateTimeOffset.Now.ToUnixTimeSeconds();
-                        config.forceDisableJavaAutoSearch = false;
-                        foreach (KeyValuePair<string, bool> i in javaList)
-                        {
-                            cmbJavaList.Items.Add(i.Key);
-                            config.java.Add(new List<object> { i.Key, i.Value });
-                        }
-                        WriteConfig(config);
-                        Log($"[Config] 默认配置文件生成完毕！");
-                    }
-                }
-                else
-                {
-                    Log($"[Main] 未找到EMCL 文件夹，自动创建！！");
-                    Directory.CreateDirectory($"{path}EMCL/");
-                    Directory.CreateDirectory($"{path}EMCL/Logs/");
-                    winMain_Load(sender, e);
-                }
+                    lblTips.Visible = true;
+                });
             }
             catch (Exception ex)
             {
                 handleException(ex);
+            }
+        }
+
+        private void IsAprilFool(Action func,Action defaultFunc = null)
+        {
+            if (func != null && DateTime.Now.ToString("MM-dd") == "04-01")
+            {
+                func();
+            }
+            else if (defaultFunc != null)
+            {
+                defaultFunc();
             }
         }
 
@@ -551,15 +573,12 @@ namespace EMCL
 
         private void winMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (DateTime.Now.ToString("MM-dd") == "04-01")
+            IsAprilFool(() =>
             {
                 //愚人节彩蛋罢了（
                 Log("[2YHLrd] 有人在关掉我！", LogLevel.Normal);
-            }
-            else
-            {
-                Log("[Main] 程序正在关闭！", LogLevel.Normal);
-            }
+            });
+            Log("[Main] 程序正在关闭！", LogLevel.Normal);
         }
 
         private void winMain_FormClosed(object sender, FormClosedEventArgs e)
