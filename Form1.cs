@@ -11,25 +11,21 @@ using Newtonsoft.Json;
 using System.Threading;
 using System.Windows.Forms;
 using static EMCL.Utils;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Net.WebRequestMethods;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using EMCL.Modules;
 
 namespace EMCL
 {
     public partial class Form1 : Form
     {
         Dictionary<string, bool> javaList = new Dictionary<string, bool>();
-        string path = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-        string pathMCFolder = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}.minecraft";
-        //string path = "";
-        //string path = "";
-        private string _pathEnv = null;
-        private string _pathJavaHome = null;
+        string? path = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+        string? pathMCFolder = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}.minecraft";
+        private string? _pathEnv = null;
+        private string? _pathJavaHome = null;
         public string newLine = "\r\n";
         private bool DEBUG = false;
         public StringBuilder logs = new StringBuilder();
-        public StreamWriter logger = null;
+        public StreamWriter? logger = null;
         public object loggerLock = new object();
         public object loggerFlushLock = new object();
         private List<Thread> threads = new List<Thread>();
@@ -41,7 +37,7 @@ namespace EMCL
             get
             {
                 if (_pathEnv is null) { _pathEnv = Environment.GetEnvironmentVariable("Path") != null ? Environment.GetEnvironmentVariable("Path") : ""; }
-                return _pathEnv;
+                return _pathEnv!;
             }
         }
         public string pathJavaHome
@@ -49,10 +45,11 @@ namespace EMCL
             get
             {
                 if (_pathJavaHome is null) { _pathJavaHome = Environment.GetEnvironmentVariable("JAVA_HOME") != null ? Environment.GetEnvironmentVariable("JAVA_HOME") : ""; }
-                return _pathJavaHome;
+                return _pathJavaHome!;
             }
         }
 
+        #region 日志记录器
         public void LoggerStart()
         {
             RunThread(() =>
@@ -118,7 +115,7 @@ namespace EMCL
         public void LoggerFlush()
         {
             if (logger == null) return;
-            string log = null;
+            string? log = null;
             lock (loggerFlushLock)
             {
                 if (logs.Length > 0)
@@ -136,6 +133,35 @@ namespace EMCL
             }
         }
 
+        public enum LogLevel
+        {
+            Normal = 1,
+            Debug = 2,
+            Information = 3,
+            Hint = 4,
+            Message = 5,
+            Error = 6,
+            Fatal = 7
+        }
+
+        public void Log(string info, LogLevel level = LogLevel.Normal, string title = "出现错误")
+        {
+            string text = $"[{ModTime.GetTimeNow()}] {info}{newLine}";
+            lock (loggerLock)
+            {
+                logs.Append(text);
+            }
+            if (DEBUG) { Console.Write(text); }
+            string repText = ModString.RegexReplace(info, "", "\\[[^\\]]+?\\] ");
+        }
+
+        public void Log(Exception ex, string info, LogLevel level = LogLevel.Normal, string title = "出现错误")
+        {
+            Log($"[Main] 出现错误！{info}{newLine}{ex.GetType()}:{ex.Message}{newLine}{ex.StackTrace}", LogLevel.Error);
+        }
+        #endregion
+
+        #region 异常处理与线程运行
         public Thread RunThread(Action action, string name, ThreadPriority priority = ThreadPriority.Normal, bool addToPool = true)
         {
             Thread th = new Thread(() =>
@@ -173,50 +199,25 @@ namespace EMCL
             }
         }
 
-        public string[] Split(string fullStr, string splitStr)
+        private void RunProtected(Action function)
         {
-            if (splitStr.Length == 1)
+            try
             {
-                return fullStr.Split(splitStr[0]);
+                function();
             }
-            else
+            catch (Exception ex)
             {
-                return fullStr.Split(new string[] { splitStr }, StringSplitOptions.None);
+                handleException(ex);
             }
         }
+        #endregion
 
-        public enum LogLevel
-        {
-            Normal = 1,
-            Debug = 2,
-            Information = 3,
-            Hint = 4,
-            Message = 5,
-            Error = 6,
-            Fatal = 7
-        }
-
-        public void Log(string info, LogLevel level = LogLevel.Normal, string title = "出现错误")
-        {
-            string text = $"[{Utils.GetTimeNow()}] {info}{newLine}";
-            lock (loggerLock)
-            {
-                logs.Append(text);
-            }
-            if (DEBUG) { Console.Write(text); }
-            string repText = RegexReplace(info, "", "\\[[^\\]]+?\\] ");
-        }
-
-        public void Log(Exception ex, string info, LogLevel level = LogLevel.Normal, string title = "出现错误")
-        {
-            Log($"[Main] 出现错误！{info}{newLine}{ex.GetType()}:{ex.Message}{newLine}{ex.StackTrace}", LogLevel.Error);
-        }
-
+        #region Java搜索
         public Dictionary<string, bool> javaSearch()
         {
             Log($"[Java] 开始搜索 Java");
             Dictionary<string, bool> javaDic = new Dictionary<string, bool>();
-            foreach (string i in Split(($"{pathEnv};{pathJavaHome}").Replace("\\\\", "\\").Replace(" \\ ", "/"), ";"))
+            foreach (string i in ModString.Split(($"{pathEnv};{pathJavaHome}").Replace("\\\\", "\\").Replace(" \\ ", "/"), ";"))
             {
                 string pathInEnv = i.Trim("\"\"".ToCharArray());
                 if (pathInEnv == "") { continue; }
@@ -233,15 +234,15 @@ namespace EMCL
             JavaSearchFolder($"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/", javaDic, false);
             JavaSearchFolder($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}/", javaDic, false);
             //查找启动器目录中的 Java
-            JavaSearchFolder(path, javaDic, false, isFullSearch: true);
+            JavaSearchFolder(path!, javaDic, false, isFullSearch: true);
             //查找所选 Minecraft 文件夹中的 Java
-            if (!(string.IsNullOrWhiteSpace(pathMCFolder) && (path == pathMCFolder))) { JavaSearchFolder(pathMCFolder, javaDic, false, isFullSearch: true); }
+            if (!(string.IsNullOrWhiteSpace(pathMCFolder) && (path == pathMCFolder))) { JavaSearchFolder(pathMCFolder!, javaDic, false, isFullSearch: true); }
             //若不全为符号链接，则清除符号链接的地址
             Dictionary<string, bool> JavaWithoutReparse = new Dictionary<string, bool>();
             foreach (KeyValuePair<string, bool> pair in javaDic)
             {
                 string folder = pair.Key.Replace("\\\\", "\\").Replace("\\", "/");
-                FileSystemInfo info = new FileInfo($"{folder}javaw.exe");
+                FileSystemInfo? info = new FileInfo($"{folder}javaw.exe");
                 do
                 {
                     if (info.Attributes.HasFlag(FileAttributes.ReparsePoint))
@@ -274,7 +275,6 @@ namespace EMCL
             Log($"[Java] Java 扫描完毕！");
             return javaDic;
         }
-
         //public Dictionary<string, bool> JavaSearchFolder(string originalPath, ref Dictionary<string, bool> results, bool source, bool isFullSearch = false)
         public void JavaSearchFolder(string originalPath, Dictionary<string, bool> results, bool source, bool isFullSearch = false)
         {
@@ -293,30 +293,6 @@ namespace EMCL
             }
         }
 
-        public void DoNothing()
-        {
-            return;
-        }
-
-        private void RunProtected(Action function)
-        {
-            try
-            {
-                function();
-            }
-            catch (Exception ex)
-            {
-                handleException(ex);
-            }
-        }
-
-        public bool ReturnIfSus(bool isFullSearch, DirectoryInfo folder, string searchEntry)
-        {
-            return isFullSearch || (folder.Parent.Name == "users") || Utils.ContainsSuspiciousWords(searchEntry) ||
-                searchEntry == "bin";
-        }
-
-        //public Dictionary<string,bool> JavaSearchFolder(DirectoryInfo originPath, Dictionary<string,bool> result, bool source, bool isFullSearch = false)
         public void JavaSearchFolder(DirectoryInfo originPath, Dictionary<string, bool> result, bool source, bool isFullSearch = false)
         {
             try
@@ -332,7 +308,7 @@ namespace EMCL
                         if (!folder.Exists) continue;
                         if (folder.Attributes.HasFlag(FileAttributes.ReparsePoint)) continue;
                         string searchEntry = GetFileNameFromPath(folder.Name).ToLower();
-                        if (ReturnIfSus(isFullSearch, folder, searchEntry))
+                        if (ModString.ReturnIfSus(isFullSearch, folder, searchEntry))
                         {
                             JavaSearchFolder(folder, result, false);
                         }
@@ -345,7 +321,7 @@ namespace EMCL
                     {
                         if (originPath == null) { throw new ArgumentNullException("Expected a non null value, but received a null value as a parameter."); }
                         else if (!originPath.Exists) { throw new FileNotFoundException($"The specified file ({originPath.Name}) does not exist."); }
-                        else { throw new UnknownException(); }
+                        else { throw new ModExceptions.UnknownException(); }
                     }
                     catch (Exception ex)
                     {
@@ -359,7 +335,9 @@ namespace EMCL
             }
             //return result;
         }
+        #endregion
 
+        #region 游戏启动
         public int launchGame(string javaPath, string launchArgs)
         {
             try
@@ -380,17 +358,9 @@ namespace EMCL
                 return -1;
             }
         }
+        #endregion
 
-        public string GetFileNameFromPath(string filePath)
-        {
-            string path = filePath.Replace("\\", "/");
-            if (path.EndsWith("/")) { throw new Exception($"不包含文件名：{filePath}"); }
-            string name = filePath.Split('/').Last().Split('?').First();
-            if (name.Length == 0) { throw new Exception($"不包含文件名：{filePath}"); }
-            if (name.Length > 250) { throw new PathTooLongException($"文件名过长：{filePath}"); }
-            return name;
-        }
-
+        #region 窗口初始化
         public Form1()
         {
             Log("[Main] 主程序启动中！");
@@ -400,24 +370,17 @@ namespace EMCL
             LoggerStart();
         }
 
-        private void btnLaunch_Click(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
-            //Person laiya = new Person("Łaiya",Person.HasDick.No);
-            //laiya.Kill();
+            Log("[Main] 主程序窗口框架加载完毕！");
             try
             {
-                StreamReader sr = new StreamReader("./args.txt");//目前直接读取程序目录下args.txt内的内容
-                string args = sr.ReadToEnd();
-                //现在可以自己选择 Java 了
-                string java = $"{cmbJavaList.Text}javaw.exe";
-                sr.Close();
-                Thread t = RunThread(() => launchGame(java, args), "MinecraftLaunchThread", ThreadPriority.AboveNormal);//创建MC启动线程
-                Log("[Launcher] 启动 Minecraft 成功！");
-                MessageBox.Show("启动成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (OutOfMemoryException ex)
-            {
-                Log(ex, "内存不足", LogLevel.Message);
+                LoadApp();
+                lblTips.Text = tips[random.Next(tips.Count)];
+                ModApril.IsAprilFool(() =>
+                {
+                    lblTips.Visible = true;
+                });
             }
             catch (Exception ex)
             {
@@ -436,7 +399,7 @@ namespace EMCL
                     config = ReadConfig();
                     if (!(DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 > config.tempTime))
                     {
-                        foreach (List<object> i in config.java)
+                        foreach (List<object> i in config.java!)
                         {
                             cmbJavaList.Items.Clear();
                             javaList.Add((string)i[0], (bool)i[1]);
@@ -486,37 +449,9 @@ namespace EMCL
                 LoadApp();
             }
         }
+        #endregion
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            Log("[Main] 主程序窗口框架加载完毕！");
-            try
-            {
-                LoadApp();
-                lblTips.Text = tips[random.Next(tips.Count)];
-                IsAprilFool(() =>
-                {
-                    lblTips.Visible = true;
-                });
-            }
-            catch (Exception ex)
-            {
-                handleException(ex);
-            }
-        }
-
-        private void IsAprilFool(Action func, Action defaultFunc = null)
-        {
-            if (func != null && DateTime.Now.ToString("MM-dd") == "04-01")
-            {
-                func();
-            }
-            else if (defaultFunc != null)
-            {
-                defaultFunc();
-            }
-        }
-
+        #region 配置读取
         public void WriteConfig(Config config)
         {
             StreamWriter sw = new StreamWriter($"{path}EMCL/settings.json");
@@ -529,11 +464,13 @@ namespace EMCL
             Config result;
             using (StreamReader sr = new StreamReader($"{path}EMCL/settings.json"))
             {
-                result = JsonConvert.DeserializeObject<Config>(sr.ReadToEnd());
+                result = JsonConvert.DeserializeObject<Config>(sr.ReadToEnd())!;
             }
             return result;
         }
+        #endregion
 
+        #region 窗口控件行为
         private void btnJavaSearch_Click(object sender, EventArgs e)
         {
             cmbJavaList.Items.Clear();
@@ -544,6 +481,31 @@ namespace EMCL
             }
         }
 
+        private void btnLaunch_Click(object sender, EventArgs e)
+        {
+            //Person laiya = new Person("Łaiya",Person.HasDick.No);
+            //laiya.Kill();
+            try
+            {
+                StreamReader sr = new StreamReader("./args.txt");//目前直接读取程序目录下args.txt内的内容
+                string args = sr.ReadToEnd();
+                //现在可以自己选择 Java 了
+                string java = $"{cmbJavaList.Text}javaw.exe";
+                sr.Close();
+                Thread t = RunThread(() => launchGame(java, args), "MinecraftLaunchThread", ThreadPriority.AboveNormal);//创建MC启动线程
+                Log("[Launcher] 启动 Minecraft 成功！");
+                MessageBox.Show("启动成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (OutOfMemoryException ex)
+            {
+                Log(ex, "内存不足", LogLevel.Message);
+            }
+            catch (Exception ex)
+            {
+                handleException(ex);
+            }
+        }
+
         private void cmbJavaList_SelectedIndexChanged(object sender, EventArgs e)
         {
             Log($"[Java] 选择的 Java 更改为 {cmbJavaList.Text}");
@@ -551,7 +513,7 @@ namespace EMCL
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            IsAprilFool(() =>
+            ModApril.IsAprilFool(() =>
             {
                 //愚人节彩蛋罢了（
                 Log("[2YHLrd] 有人在关掉我！", LogLevel.Normal);
@@ -582,8 +544,9 @@ namespace EMCL
             dialog.Filter = "Java Executable File (javaw.exe)|javaw.exe";
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                cmbJavaList.Text = new FileInfo(dialog.FileName).DirectoryName.Replace("\\\\", "\\").Replace("\\", "/");
+                cmbJavaList.Text = new FileInfo(dialog.FileName).DirectoryName!.Replace("\\\\", "\\").Replace("\\", "/");
             }
         }
+        #endregion
     }
 }

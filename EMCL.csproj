@@ -13,4 +13,12 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\SALTWOOD\source\repos\EMCL\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\SALTWOOD\source\repos\EMCL\.editorconfig" />
+  </ItemGroup>
+
 </Project>

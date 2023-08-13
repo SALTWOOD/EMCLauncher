@@ -52,36 +52,26 @@ namespace EMCL
         };
         public class Config
         {
-            public List<List<object>> java;
+            public List<List<object>>? java;
             public long tempTime;
             public bool forceDisableJavaAutoSearch;
         }
 
-        public class UnknownException : Exception
+        //根据路径获取文件名
+        public static string GetFileNameFromPath(string filePath)
         {
-            public UnknownException(string message = "Unknown error occurred.")
-               : base(message)
-            {
-                return;
-            }
-            public UnknownException(string message, Exception innerException)
-            : base(message, innerException)
-            {
-                return;
-            }
+            string path = filePath.Replace("\\", "/");
+            if (path.EndsWith("/")) { throw new Exception($"不包含文件名：{filePath}"); }
+            string name = filePath.Split('/').Last().Split('?').First();
+            if (name.Length == 0) { throw new Exception($"不包含文件名：{filePath}"); }
+            if (name.Length > 250) { throw new PathTooLongException($"文件名过长：{filePath}"); }
+            return name;
         }
 
-        public static bool ContainsSuspiciousWords(string s)
+        //啥也不干
+        public static void DoNothing()
         {
-            foreach (string i in suspiciousWords)
-            {
-                if (s.Contains(i)) { return true; }
-            }
-            return false;
+            return;
         }
-
-        public static string GetTimeNow() { return DateTime.Now.ToString("HH:mm:ss.fff"); }
-
-        public static string RegexReplace(string input, string replacement, string regex, RegexOptions options = RegexOptions.None) { return Regex.Replace(input, regex, replacement, options); }
     }
 }
