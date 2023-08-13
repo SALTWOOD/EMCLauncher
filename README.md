@@ -13,7 +13,10 @@
 
 # 特别鸣谢
 
-**@Hex-Dragon**(**@LTCatt**) - 借鉴了 Plain Craft Launcher 2 的 Java 搜索代码以及其 GitHub 仓库的 Issue 模板。
+别看借鉴了很多一样，其实很少的（）关键的部分会自己写
+懒得思考会看别人的实现然后自己按照代码流程写出来
+
+**@Hex-Dragon**(**@LTCatt**) - 借鉴了 Plain Craft Launcher 2 的 Java 搜索思路、Logger实现以及其 GitHub 仓库的 Issue 模板。
 - [GitHub](https://github.com/Hex-Dragon/PCL2)
 - [爱发电](https://afdian.net/a/LTCat)
 - [Bilibili](https://space.bilibili.com/11343203)
