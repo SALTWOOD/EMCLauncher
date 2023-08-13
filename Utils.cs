@@ -62,12 +62,12 @@ namespace EMCL
             public UnknownException(string message = "Unknown error occurred.")
                : base(message)
             {
-
+                return;
             }
             public UnknownException(string message, Exception innerException)
             : base(message, innerException)
             {
-
+                return;
             }
         }
 
