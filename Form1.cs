@@ -14,11 +14,10 @@ using static EMCL.Utils;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Net.WebRequestMethods;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-using System.Runtime.Remoting.Messaging;
 
 namespace EMCL
 {
-    public partial class winMain : Form
+    public partial class Form1 : Form
     {
         Dictionary<string, bool> javaList = new Dictionary<string, bool>();
         string path = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
@@ -333,7 +332,7 @@ namespace EMCL
                         if (!folder.Exists) continue;
                         if (folder.Attributes.HasFlag(FileAttributes.ReparsePoint)) continue;
                         string searchEntry = GetFileNameFromPath(folder.Name).ToLower();
-                        if (ReturnIfSus(isFullSearch,folder,searchEntry))
+                        if (ReturnIfSus(isFullSearch, folder, searchEntry))
                         {
                             JavaSearchFolder(folder, result, false);
                         }
@@ -392,7 +391,7 @@ namespace EMCL
             return name;
         }
 
-        public winMain()
+        public Form1()
         {
             Log("[Main] 主程序启动中！");
             InitializeComponent();
@@ -488,7 +487,7 @@ namespace EMCL
             }
         }
 
-        private void winMain_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
             Log("[Main] 主程序窗口框架加载完毕！");
             try
@@ -506,7 +505,7 @@ namespace EMCL
             }
         }
 
-        private void IsAprilFool(Action func,Action defaultFunc = null)
+        private void IsAprilFool(Action func, Action defaultFunc = null)
         {
             if (func != null && DateTime.Now.ToString("MM-dd") == "04-01")
             {
@@ -550,7 +549,7 @@ namespace EMCL
             Log($"[Java] 选择的 Java 更改为 {cmbJavaList.Text}");
         }
 
-        private void winMain_FormClosing(object sender, FormClosingEventArgs e)
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             IsAprilFool(() =>
             {
@@ -560,7 +559,7 @@ namespace EMCL
             Log("[Main] 程序正在关闭！", LogLevel.Normal);
         }
 
-        private void winMain_FormClosed(object sender, FormClosedEventArgs e)
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             Log("[Main] 准备开始关闭其他线程", LogLevel.Normal);
             isExited = true;

@@ -1,16 +1,16 @@
 ﻿namespace EMCL
 {
-    partial class winMain
+    partial class Form1
     {
         /// <summary>
-        /// 必需的设计器变量。
+        ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// 清理所有正在使用的资源。
+        ///  Clean up any resources being used.
         /// </summary>
-        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,98 +20,95 @@
             base.Dispose(disposing);
         }
 
-        #region Windows 窗体设计器生成的代码
+        #region Windows Form Designer generated code
 
         /// <summary>
-        /// 设计器支持所需的方法 - 不要修改
-        /// 使用代码编辑器修改此方法的内容。
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnLaunch = new System.Windows.Forms.Button();
-            this.btnJavaSearch = new System.Windows.Forms.Button();
-            this.cmbJavaList = new System.Windows.Forms.ComboBox();
-            this.btnChooseJava = new System.Windows.Forms.Button();
-            this.lblTips = new System.Windows.Forms.Label();
-            this.SuspendLayout();
+            btnLaunch = new Button();
+            cmbJavaList = new ComboBox();
+            btnChooseJava = new Button();
+            btnJavaSearch = new Button();
+            lblTips = new Label();
+            SuspendLayout();
             // 
             // btnLaunch
             // 
-            this.btnLaunch.Location = new System.Drawing.Point(12, 367);
-            this.btnLaunch.Name = "btnLaunch";
-            this.btnLaunch.Size = new System.Drawing.Size(142, 71);
-            this.btnLaunch.TabIndex = 0;
-            this.btnLaunch.Text = "MC，启动！";
-            this.btnLaunch.UseVisualStyleBackColor = true;
-            this.btnLaunch.Click += new System.EventHandler(this.btnLaunch_Click);
-            // 
-            // btnJavaSearch
-            // 
-            this.btnJavaSearch.Location = new System.Drawing.Point(12, 290);
-            this.btnJavaSearch.Name = "btnJavaSearch";
-            this.btnJavaSearch.Size = new System.Drawing.Size(142, 71);
-            this.btnJavaSearch.TabIndex = 1;
-            this.btnJavaSearch.Text = "扫描 Java";
-            this.btnJavaSearch.UseVisualStyleBackColor = true;
-            this.btnJavaSearch.Click += new System.EventHandler(this.btnJavaSearch_Click);
+            btnLaunch.Location = new Point(12, 376);
+            btnLaunch.Name = "btnLaunch";
+            btnLaunch.Size = new Size(137, 62);
+            btnLaunch.TabIndex = 0;
+            btnLaunch.Text = "启动游戏";
+            btnLaunch.UseVisualStyleBackColor = true;
+            btnLaunch.Click += btnLaunch_Click;
             // 
             // cmbJavaList
             // 
-            this.cmbJavaList.FormattingEnabled = true;
-            this.cmbJavaList.Location = new System.Drawing.Point(169, 415);
-            this.cmbJavaList.Name = "cmbJavaList";
-            this.cmbJavaList.Size = new System.Drawing.Size(619, 23);
-            this.cmbJavaList.TabIndex = 2;
-            this.cmbJavaList.Text = "Java 列表";
-            this.cmbJavaList.SelectedIndexChanged += new System.EventHandler(this.cmbJavaList_SelectedIndexChanged);
+            cmbJavaList.FormattingEnabled = true;
+            cmbJavaList.Location = new Point(155, 410);
+            cmbJavaList.Name = "cmbJavaList";
+            cmbJavaList.Size = new Size(633, 28);
+            cmbJavaList.TabIndex = 1;
+            cmbJavaList.Text = "Java 列表";
+            cmbJavaList.SelectedIndexChanged += cmbJavaList_SelectedIndexChanged;
             // 
             // btnChooseJava
             // 
-            this.btnChooseJava.Location = new System.Drawing.Point(169, 367);
-            this.btnChooseJava.Name = "btnChooseJava";
-            this.btnChooseJava.Size = new System.Drawing.Size(112, 42);
-            this.btnChooseJava.TabIndex = 3;
-            this.btnChooseJava.Text = "手动选择";
-            this.btnChooseJava.UseVisualStyleBackColor = true;
-            this.btnChooseJava.Click += new System.EventHandler(this.btnChooseJava_Click);
+            btnChooseJava.Location = new Point(155, 376);
+            btnChooseJava.Name = "btnChooseJava";
+            btnChooseJava.Size = new Size(94, 29);
+            btnChooseJava.TabIndex = 2;
+            btnChooseJava.Text = "手动选择";
+            btnChooseJava.UseVisualStyleBackColor = true;
+            btnChooseJava.Click += btnChooseJava_Click;
+            // 
+            // btnJavaSearch
+            // 
+            btnJavaSearch.Location = new Point(255, 376);
+            btnJavaSearch.Name = "btnJavaSearch";
+            btnJavaSearch.Size = new Size(94, 29);
+            btnJavaSearch.TabIndex = 3;
+            btnJavaSearch.Text = "扫描 Java";
+            btnJavaSearch.UseVisualStyleBackColor = true;
+            btnJavaSearch.Click += btnJavaSearch_Click;
             // 
             // lblTips
             // 
-            this.lblTips.AutoSize = true;
-            this.lblTips.Location = new System.Drawing.Point(13, 13);
-            this.lblTips.Name = "lblTips";
-            this.lblTips.Size = new System.Drawing.Size(55, 15);
-            this.lblTips.TabIndex = 4;
-            this.lblTips.Text = "label1";
-            this.lblTips.Visible = false;
+            lblTips.AutoSize = true;
+            lblTips.Location = new Point(12, 9);
+            lblTips.Name = "lblTips";
+            lblTips.Size = new Size(0, 20);
+            lblTips.TabIndex = 4;
+            lblTips.Visible = false;
             // 
-            // winMain
+            // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.lblTips);
-            this.Controls.Add(this.btnChooseJava);
-            this.Controls.Add(this.cmbJavaList);
-            this.Controls.Add(this.btnJavaSearch);
-            this.Controls.Add(this.btnLaunch);
-            this.Name = "winMain";
-            this.Text = "EMCL 启动器";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.winMain_FormClosing);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.winMain_FormClosed);
-            this.Load += new System.EventHandler(this.winMain_Load);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(9F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(lblTips);
+            Controls.Add(btnJavaSearch);
+            Controls.Add(btnChooseJava);
+            Controls.Add(cmbJavaList);
+            Controls.Add(btnLaunch);
+            Name = "Form1";
+            Text = "Form1";
+            FormClosing += Form1_FormClosing;
+            FormClosed += Form1_FormClosed;
+            Load += Form1_Load;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        private System.Windows.Forms.Button btnLaunch;
-        private System.Windows.Forms.Button btnJavaSearch;
-        private System.Windows.Forms.ComboBox cmbJavaList;
-        private System.Windows.Forms.Button btnChooseJava;
-        private System.Windows.Forms.Label lblTips;
+        private Button btnLaunch;
+        private ComboBox cmbJavaList;
+        private Button btnChooseJava;
+        private Button btnJavaSearch;
+        private Label lblTips;
     }
 }
-
