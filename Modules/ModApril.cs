@@ -8,7 +8,6 @@ namespace EMCL.Modules
 {
     internal class ModApril
     {
-
         //愚人节
         public static void IsAprilFool(Action? func, Action? defaultFunc = null)
         {

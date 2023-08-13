@@ -21,4 +21,8 @@
     <None Include="C:\Users\SALTWOOD\source\repos\EMCL\.editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
 </Project>

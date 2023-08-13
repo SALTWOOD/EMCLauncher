@@ -366,6 +366,7 @@ namespace EMCL
             Log("[Main] 主程序启动中！");
             InitializeComponent();
             Log("[Main] InitializeComponent() 执行完毕！");
+            this.Text = Metadata.title;
             Log("[Main] 主程序组件成功加载！");
             LoggerStart();
         }
