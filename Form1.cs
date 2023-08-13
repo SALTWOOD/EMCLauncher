@@ -296,7 +296,7 @@ namespace EMCL
 
         public void DoNothing()
         {
-
+            return;
         }
 
         private void RunProtected(Action function)
@@ -307,7 +307,7 @@ namespace EMCL
             }
             catch (Exception ex)
             {
-
+                handleException(ex);
             }
         }
 
