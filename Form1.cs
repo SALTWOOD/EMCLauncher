@@ -14,6 +14,7 @@ using static EMCL.Utils;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Net.WebRequestMethods;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Runtime.Remoting.Messaging;
 
 namespace EMCL
 {
@@ -293,6 +294,50 @@ namespace EMCL
             }
         }
 
+        public void DoNothing()
+        {
+
+        }
+
+        private void RunProtected(Action function)
+        {
+            try
+            {
+                function();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public bool ReturnIfSus(bool isFullSearch, DirectoryInfo folder, string searchEntry)
+        {
+            return isFullSearch || (folder.Parent.Name == "users") ||
+            searchEntry.Contains("java") || searchEntry.Contains("jdk") || searchEntry.Contains("env") ||
+            searchEntry.Contains("环境") || searchEntry.Contains("run") || searchEntry.Contains("软件") ||
+            searchEntry.Contains("jre") || searchEntry == "bin" || searchEntry.Contains("mc") ||
+            searchEntry.Contains("software") || searchEntry.Contains("cache") || searchEntry.Contains("temp") ||
+            searchEntry.Contains("corretto") || searchEntry.Contains("roaming") || searchEntry.Contains("users") ||
+            searchEntry.Contains("craft") || searchEntry.Contains("program") || searchEntry.Contains("世界") ||
+            searchEntry.Contains("net") || searchEntry.Contains("游戏") || searchEntry.Contains("oracle") ||
+            searchEntry.Contains("game") || searchEntry.Contains("file") || searchEntry.Contains("data") ||
+            searchEntry.Contains("jvm") || searchEntry.Contains("服务") || searchEntry.Contains("server") ||
+            searchEntry.Contains("客户") || searchEntry.Contains("client") || searchEntry.Contains("整合") ||
+            searchEntry.Contains("应用") || searchEntry.Contains("运行") || searchEntry.Contains("前置") ||
+            searchEntry.Contains("mojang") || searchEntry.Contains("官启") || searchEntry.Contains("新建文件夹") ||
+            searchEntry.Contains("eclipse") || searchEntry.Contains("microsoft") || searchEntry.Contains("hotspot") ||
+            searchEntry.Contains("runtime") || searchEntry.Contains("x86") || searchEntry.Contains("x64") ||
+            searchEntry.Contains("forge") || searchEntry.Contains("原版") || searchEntry.Contains("optifine") ||
+            searchEntry.Contains("官方") || searchEntry.Contains("启动") || searchEntry.Contains("hmcl") ||
+            searchEntry.Contains("mod") || searchEntry.Contains("高清") || searchEntry.Contains("download") ||
+            searchEntry.Contains("launch") || searchEntry.Contains("程序") || searchEntry.Contains("path") ||
+            searchEntry.Contains("version") || searchEntry.Contains("baka") || searchEntry.Contains("pcl") ||
+            searchEntry.Contains("local") || searchEntry.Contains("packages") || searchEntry.Contains("4297127D64EC6") ||
+            searchEntry.Contains("国服") || searchEntry.Contains("网易") || searchEntry.Contains("ext") ||
+            searchEntry.Contains("netease") || searchEntry.Contains("1.") || searchEntry.Contains("启动");
+        }
+
         //public Dictionary<string,bool> JavaSearchFolder(DirectoryInfo originPath, Dictionary<string,bool> result, bool source, bool isFullSearch = false)
         public void JavaSearchFolder(DirectoryInfo originPath, Dictionary<string, bool> result, bool source, bool isFullSearch = false)
         {
@@ -309,29 +354,7 @@ namespace EMCL
                         if (!folder.Exists) continue;
                         if (folder.Attributes.HasFlag(FileAttributes.ReparsePoint)) continue;
                         string searchEntry = GetFileNameFromPath(folder.Name).ToLower();
-                        if (isFullSearch || (folder.Parent.Name == "users") ||
-                            searchEntry.Contains("java") || searchEntry.Contains("jdk") || searchEntry.Contains("env") ||
-                            searchEntry.Contains("环境") || searchEntry.Contains("run") || searchEntry.Contains("软件") ||
-                            searchEntry.Contains("jre") || searchEntry == "bin" || searchEntry.Contains("mc") ||
-                            searchEntry.Contains("software") || searchEntry.Contains("cache") || searchEntry.Contains("temp") ||
-                            searchEntry.Contains("corretto") || searchEntry.Contains("roaming") || searchEntry.Contains("users") ||
-                            searchEntry.Contains("craft") || searchEntry.Contains("program") || searchEntry.Contains("世界") ||
-                            searchEntry.Contains("net") || searchEntry.Contains("游戏") || searchEntry.Contains("oracle") ||
-                            searchEntry.Contains("game") || searchEntry.Contains("file") || searchEntry.Contains("data") ||
-                            searchEntry.Contains("jvm") || searchEntry.Contains("服务") || searchEntry.Contains("server") ||
-                            searchEntry.Contains("客户") || searchEntry.Contains("client") || searchEntry.Contains("整合") ||
-                            searchEntry.Contains("应用") || searchEntry.Contains("运行") || searchEntry.Contains("前置") ||
-                            searchEntry.Contains("mojang") || searchEntry.Contains("官启") || searchEntry.Contains("新建文件夹") ||
-                            searchEntry.Contains("eclipse") || searchEntry.Contains("microsoft") || searchEntry.Contains("hotspot") ||
-                            searchEntry.Contains("runtime") || searchEntry.Contains("x86") || searchEntry.Contains("x64") ||
-                            searchEntry.Contains("forge") || searchEntry.Contains("原版") || searchEntry.Contains("optifine") ||
-                            searchEntry.Contains("官方") || searchEntry.Contains("启动") || searchEntry.Contains("hmcl") ||
-                            searchEntry.Contains("mod") || searchEntry.Contains("高清") || searchEntry.Contains("download") ||
-                            searchEntry.Contains("launch") || searchEntry.Contains("程序") || searchEntry.Contains("path") ||
-                            searchEntry.Contains("version") || searchEntry.Contains("baka") || searchEntry.Contains("pcl") ||
-                            searchEntry.Contains("local") || searchEntry.Contains("packages") || searchEntry.Contains("4297127D64EC6") ||
-                            searchEntry.Contains("国服") || searchEntry.Contains("网易") || searchEntry.Contains("ext") ||
-                            searchEntry.Contains("netease") || searchEntry.Contains("1.") || searchEntry.Contains("启动"))
+                        if (ReturnIfSus(isFullSearch,folder,searchEntry))
                         {
                             JavaSearchFolder(folder, result, false);
                         }
@@ -528,7 +551,15 @@ namespace EMCL
 
         private void winMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Log("[Main] 程序正在关闭！",LogLevel.Normal);
+            if (DateTime.Now.ToString("MM-dd") == "04-01")
+            {
+                //愚人节彩蛋罢了（
+                Log("[2YHLrd] 有人在关掉我！", LogLevel.Normal);
+            }
+            else
+            {
+                Log("[Main] 程序正在关闭！", LogLevel.Normal);
+            }
         }
 
         private void winMain_FormClosed(object sender, FormClosedEventArgs e)
@@ -554,7 +585,7 @@ namespace EMCL
             dialog.Filter = "Java Executable File (javaw.exe)|javaw.exe";
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                cmbJavaList.Text = new FileInfo(dialog.FileName).DirectoryName.Replace("\\\\","\\").Replace("\\","/");
+                cmbJavaList.Text = new FileInfo(dialog.FileName).DirectoryName.Replace("\\\\", "\\").Replace("\\", "/");
             }
         }
     }
