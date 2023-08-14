@@ -14,7 +14,7 @@ namespace EMCL
         public static string version = "dt-0.0.2";
 
         public static string title = $"{name} {version}";
-        public static string fullTitle = $"{fullName} v{version}";
+        public static string fullTitle = $"{fullName} (version {version})";
 
         public static bool DEBUG = false;
     }

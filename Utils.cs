@@ -56,7 +56,8 @@ namespace EMCL
         {
             $"{ModPath.path}EMCL/",
             $"{ModPath.path}EMCL/Logs/",
-            $"{ModPath.path}EMCL/Temp/"
+            $"{ModPath.path}EMCL/Temp/",
+            $"{ModPath.path}EMCL/CrashReports/"
         };
         public class Config
         {

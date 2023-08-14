@@ -9,7 +9,7 @@ namespace EMCL.Modules
     internal class ModPath
     {
         public static string path = ModString.SlashReplace(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!);
-        public static string pathMCFolder = $"{ModString.SlashReplace(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!)}.minecraft";
+        public static string pathMCFolder = $"{ModString.SlashReplace(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!)}.minecraft/";
 
         public static string? _pathEnv = null;
         public static string? _pathJavaHome = null;

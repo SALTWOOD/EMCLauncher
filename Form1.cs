@@ -52,23 +52,43 @@ namespace EMCL
         #region 游戏启动
         public int launchGame(string javaPath, string launchArgs)
         {
+            int result;
             try
             {
+                ModLogger.Log($"[Main] ~ ~ ~ S U M M A R Y ~ ~ ~{ModString.newLine}Java Path: {javaPath}{ModString.newLine}Args: {launchArgs}");
                 Process mc = new Process();
-                mc.StartInfo.FileName = javaPath;//使用传入的Java Path
-                mc.StartInfo.Arguments = launchArgs;//使用传入的参数
-                mc.StartInfo.UseShellExecute = false;//不使用命令行启动
-                mc.StartInfo.RedirectStandardOutput = true;
-                mc.StartInfo.RedirectStandardError = true;
-                mc.StartInfo.RedirectStandardInput = true;
+                ProcessStartInfo info = new ProcessStartInfo()
+                {
+                    FileName = javaPath,//使用传入的Java Path
+                    Arguments = launchArgs,//使用传入的参数
+                    UseShellExecute = false,//不使用命令行启动
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    RedirectStandardInput = true,
+                    WorkingDirectory = ModPath.pathMCFolder
+                };
+                mc.StartInfo = info;
                 mc.Start();//MC，启动！
-                return 0;
+                ModLogger.Log($"[Main] Minecraft 启动成功！");
+                mc.WaitForExit(-1);
+                string file = $"{ModPath.path}EMCL/CrashReports/crash-{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}.log";
+                if (mc.ExitCode != 0)
+                {
+                    MessageBox.Show($"Minecraft 异常退出！{ModString.newLine}" +
+                        $"程序退出代码：{mc.ExitCode}{ModString.newLine}" +
+                        $"错误日志已保存至{file}", "Minecraft 崩溃！");
+                }
+                result = mc.ExitCode;
+                StreamWriter sr = new StreamWriter(file);
+                sr.Write(mc.StandardOutput.ReadToEnd());
+                sr.Close();
             }
             catch (Exception ex)
             {
                 ModLogger.Log(ex, "Minecraft 启动失败", LogLevel.Normal);
-                return -1;
+                result = -1;
             }
+            return result;
         }
         #endregion
 
@@ -169,16 +189,14 @@ namespace EMCL
 
         private void btnLaunch_Click(object sender, EventArgs e)
         {
-            //Person laiya = new Person("Łaiya",Person.HasDick.No);
-            //laiya.Kill();
             try
             {
-                StreamReader sr = new StreamReader("./args.txt");//目前直接读取程序目录下args.txt内的内容
-                string args = sr.ReadToEnd();
+                //生成且传入参数
+                string args = ModLaunch.GetLaunchArgs();
                 //现在可以自己选择 Java 了
                 string java = $"{cmbJavaList.Text}javaw.exe";
-                sr.Close();
                 Thread t = ModThread.RunThread(() => launchGame(java, args), "MinecraftLaunchThread", ThreadPriority.AboveNormal);//创建MC启动线程
+                ModThread.threads.Add(t);
                 ModLogger.Log("[Launcher] 启动 Minecraft 成功！");
                 MessageBox.Show("启动成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
