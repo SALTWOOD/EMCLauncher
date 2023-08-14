@@ -22,7 +22,7 @@ namespace EMCL.Modules
                     throw new FileNotFoundException($"在 \"{javaPath}\" 中未找到 Java 可执行文件或 Java 可执行文件缺失/损坏！");
                 }
                 //确定Java版本
-                res = ModRun.RunProcess($"{javaPath}java.exe", "-version", 15000).ToLower();
+                res = ModRun.RunProcess($"{javaPath}java.exe", "-version", 15000, $"{ModPath.path}EMCL/Temp").ToLower();
                 bool isDev = File.Exists($"{javaPath}javac.exe");
                 bool is64B = res.Contains("64-bit");
                 if (res == "") { throw new Exception("尝试运行该 Java 失败"); }

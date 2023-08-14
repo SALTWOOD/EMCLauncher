@@ -104,56 +104,54 @@ namespace EMCL
 
         public void LoadApp()
         {
-            if (Directory.Exists($"{ModPath.path}EMCL/"))
+            foreach (string fold in folders)
             {
-                if (System.IO.File.Exists($"{ModPath.path}EMCL/settings.json"))
+                if (!Directory.Exists(fold))
                 {
-                    ModLogger.Log($"[Config] 正在加载配置文件 {ModPath.path}EMCL/settings.json");
-                    ModLogger.Log($"[Java] 开始读取 Java 缓存");
-                    config = ReadConfig();
-                    if (!(DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 < config.tempTime))
+                    Directory.CreateDirectory(fold);
+                    break;
+                }
+            }
+            if (File.Exists($"{ModPath.path}EMCL/settings.json"))
+            {
+                ModLogger.Log($"[Config] 正在加载配置文件 {ModPath.path}EMCL/settings.json");
+                ModLogger.Log($"[Java] 开始读取 Java 缓存");
+                config = ReadConfig();
+                if (!(DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 < config.tempTime))
+                {
+                    cmbJavaList.Items.Clear();
+                    foreach (List<object> i in config.java!)
                     {
-                        cmbJavaList.Items.Clear();
-                        foreach (List<object> i in config.java!)
-                        {
-                            javaList.Add((string)i[0], (bool)i[1]);
-                            cmbJavaList.Items.Add(i[0]);
-                        }
-                        ModLogger.Log($"[Java] Java 缓存读取完毕！");
+                        javaList.Add((string)i[0], (bool)i[1]);
+                        cmbJavaList.Items.Add(i[0]);
                     }
-                    else
-                    {
-                        ModLogger.Log($"[Java] Java 缓存已过期，开始重新生成缓存！");
-                        cmbJavaList.Items.Clear();
-                        javaList = ModJava.JavaCacheGen(config);
-                        foreach (string i in javaList.Keys)
-                        {
-                            cmbJavaList.Items.Add(i);
-                        }
-                        WriteConfig(config);
-                    }
+                    ModLogger.Log($"[Java] Java 缓存读取完毕！");
                 }
                 else
                 {
-                    ModLogger.Log($"[Config] 没有找到配置文件，开始生成默认配置文件！");
+                    ModLogger.Log($"[Java] Java 缓存已过期，开始重新生成缓存！");
                     cmbJavaList.Items.Clear();
                     javaList = ModJava.JavaCacheGen(config);
                     foreach (string i in javaList.Keys)
                     {
                         cmbJavaList.Items.Add(i);
                     }
-                    config.tempTime = DateTimeOffset.Now.ToUnixTimeSeconds();
-                    config.forceDisableJavaAutoSearch = false;
                     WriteConfig(config);
-                    ModLogger.Log($"[Config] 默认配置文件生成完毕！");
                 }
             }
             else
             {
-                ModLogger.Log($"[Main] 未找到EMCL 文件夹，自动创建！！");
-                Directory.CreateDirectory($"{ModPath.path}EMCL/");
-                Directory.CreateDirectory($"{ModPath.path}EMCL/Logs/");
-                LoadApp();
+                ModLogger.Log($"[Config] 没有找到配置文件，开始生成默认配置文件！");
+                cmbJavaList.Items.Clear();
+                javaList = ModJava.JavaCacheGen(config);
+                foreach (string i in javaList.Keys)
+                {
+                    cmbJavaList.Items.Add(i);
+                }
+                config.tempTime = DateTimeOffset.Now.ToUnixTimeSeconds();
+                config.forceDisableJavaAutoSearch = false;
+                WriteConfig(config);
+                ModLogger.Log($"[Config] 默认配置文件生成完毕！");
             }
         }
         #endregion

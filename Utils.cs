@@ -52,6 +52,12 @@ namespace EMCL
             "netease","1.","启动",
             "files"
         };
+        public static List<string> folders = new List<string>()
+        {
+            $"{ModPath.path}EMCL/",
+            $"{ModPath.path}EMCL/Logs/",
+            $"{ModPath.path}EMCL/Temp/"
+        };
         public class Config
         {
             public List<List<object>>? java;
