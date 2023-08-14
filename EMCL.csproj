@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Panuon.UI.Silver" Version="2.2.20" />
   </ItemGroup>
 
   <ItemGroup>

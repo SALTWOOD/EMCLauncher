@@ -27,9 +27,6 @@
 **@LitJson** - 曾经使用 LitJson 进行 JSON 配置的读写。
 - [GitHub](https://github.com/LitJson/litjson)
 
-**@Panuon** - 使用 PanuonUI.Silver 设计界面
-- [GitHub](https://github.com/Panuon/Panuon.WPF.UI)
-
 # 附加信息
 ## 开源许可证
 
