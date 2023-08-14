@@ -28,8 +28,9 @@
 - [GitHub](https://github.com/LitJson/litjson)
 
 **@Panuon** - 使用 PanuonUI.Silver 设计界面
-[GitHub](https://github.com/Panuon/Panuon.WPF.UI)
+- [GitHub](https://github.com/Panuon/Panuon.WPF.UI)
 
 # 附加信息
 ## 开源许可证
+
 见[此处](https://github.com/SALTWOOD/EMCLauncher/blob/main/开源许可证.md)
