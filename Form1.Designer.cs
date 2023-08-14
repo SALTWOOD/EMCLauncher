@@ -33,6 +33,7 @@
             btnChooseJava = new Button();
             btnJavaSearch = new Button();
             lblTips = new Label();
+            lblJavaVer = new Label();
             SuspendLayout();
             // 
             // btnLaunch
@@ -84,11 +85,22 @@
             lblTips.TabIndex = 4;
             lblTips.Visible = false;
             // 
+            // lblJavaVer
+            // 
+            lblJavaVer.AutoSize = true;
+            lblJavaVer.Location = new Point(355, 380);
+            lblJavaVer.Name = "lblJavaVer";
+            lblJavaVer.Size = new Size(144, 20);
+            lblJavaVer.TabIndex = 5;
+            lblJavaVer.Text = "当前Java版本：未知";
+            lblJavaVer.TextAlign = ContentAlignment.MiddleRight;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(lblJavaVer);
             Controls.Add(lblTips);
             Controls.Add(btnJavaSearch);
             Controls.Add(btnChooseJava);
@@ -109,5 +121,6 @@
         private Button btnChooseJava;
         private Button btnJavaSearch;
         private Label lblTips;
+        private Label lblJavaVer;
     }
 }

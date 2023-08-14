@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using System.IO;
+using EMCL.Modules;
 
 namespace EMCL
 {
@@ -48,7 +49,8 @@ namespace EMCL
             "version","baka","pcl",
             "local","packages","4297127D64EC6",
             "国服","网易","ext",
-            "netease","1.","启动"
+            "netease","1.","启动",
+            "files"
         };
         public class Config
         {
@@ -73,5 +75,35 @@ namespace EMCL
         {
             return;
         }
+
+        public enum LogLevel
+        {
+            Normal = 1,
+            Debug = 2,
+            Information = 3,
+            Hint = 4,
+            Message = 5,
+            Error = 6,
+            Fatal = 7
+        }
+
+        #region 配置读取
+        public static void WriteConfig(Config config)
+        {
+            StreamWriter sw = new StreamWriter($"{ModPath.path}EMCL/settings.json");
+            sw.Write(JsonConvert.SerializeObject(config));
+            sw.Close();
+        }
+
+        public static Config ReadConfig()
+        {
+            Config result;
+            using (StreamReader sr = new StreamReader($"{ModPath.path}EMCL/settings.json"))
+            {
+                result = JsonConvert.DeserializeObject<Config>(sr.ReadToEnd())!;
+            }
+            return result;
+        }
+        #endregion
     }
 }
