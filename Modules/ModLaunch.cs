@@ -21,13 +21,13 @@ namespace EMCL.Modules
             args.Add(new LaunchArg("Xmx", $"6G",""));
             args.Add(new LaunchArg("jar", $"\"C:/Users/SALTWOOD/AppData/Roaming/PCL/JavaWrapper.jar\""));
             args.Add(new LaunchArg("net.minecraft.client.main.Main"));
-            args.Add(new LaunchArg("-username",$"SaltWood_233"));
+            args.Add(new LaunchArg("-username",$""));
             args.Add(new LaunchArg("-version",$"1.20.1"));
             args.Add(new LaunchArg("-gameDir",$"\"{ModPath.pathMCFolder}\""));
             args.Add(new LaunchArg("-assetsDir",$"\"{ModPath.pathMCFolder}assets\""));
             args.Add(new LaunchArg("-assetIndex",$"5"));
-            args.Add(new LaunchArg("-uuid",$"b5eaf642-1059-4372-bc3b-ed56637e0448"));
-            args.Add(new LaunchArg("-accessToken",$"eyJraXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXOWlZc"));
+            args.Add(new LaunchArg("-uuid",$""));
+            args.Add(new LaunchArg("-accessToken",$""));
             //args.Add(new LaunchArg("-userProperties","{}"));
             args.Add(new LaunchArg("-userType","msa"));
             args.Add(new LaunchArg("-versionType",$"\"{Metadata.name}\""));
