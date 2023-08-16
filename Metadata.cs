@@ -17,5 +17,7 @@ namespace EMCL
         public static string fullTitle = $"{fullName} (version {version})";
 
         public static bool DEBUG = false;
+
+        public static int protocol = 0x00_00_00_01;
     }
 }
