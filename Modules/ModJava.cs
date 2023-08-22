@@ -46,7 +46,6 @@ namespace EMCL.Modules
                     version = new Version(1, version.Major, version.Build, version.Revision);
                 }
                 if (version.Minor <= 4 || version.Minor >= 25) { throw new Exception($"分析详细信息失败，获取的版本为 {version.ToString()}"); }
-                if ((!isDev) && version.Minor >= 16) { throw new Exception("由于高版本 JRE 对 Minecraft 的兼容性很差，因此不再允许使用"); }
                 return version;
             }
             catch (Exception ex)
