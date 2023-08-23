@@ -17,7 +17,6 @@ namespace EMCL.Modules
 
     public static class LoadAssembly
     {
-
         private static Assembly assemblyNAudio = null!;
         private static Assembly assemblyJson = null!;
         private static Assembly assemblyNAudioLock = null!;

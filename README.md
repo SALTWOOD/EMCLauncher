@@ -33,6 +33,10 @@
 **@naudio** - 使用了 NAudio 进行音乐、音效的播放。
 - [GitHub](https://github.com/naudio/NAudio)
 
+**@Fody** - 使用了 Fody 和 Costura.Fody 进行 DLL 的自动合并
+- [GitHub](https://github.com/Fody)
+
+
 # 附加信息
 ## 开源许可证
 
