@@ -32,4 +32,6 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app-debug
-          path: bin/*
+          path: |
+            bin/*
+            开源许可证.txt
