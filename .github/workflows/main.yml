@@ -11,7 +11,7 @@ jobs:
   build:
     strategy:
       matrix:
-        configuration: [Debug]
+        configuration: [Debug, Release]
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -32,4 +32,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app-debug
-          path: bin/Debug/net6.0-windows/*
+          path: bin/*
