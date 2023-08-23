@@ -3,26 +3,95 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>default</LangVersion>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <NeutralLanguage>zh-CN</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images/a.ico" />
+    <None Remove="Images/alex.png" />
+    <None Remove="Images/appbar.inbox.in.png" />
+    <None Remove="Images/appbar.settings.png" />
+    <None Remove="Images/Back.png" />
+    <None Remove="Images/Block-Add.png" />
+    <None Remove="Images/Block-Anvil.png" />
+    <None Remove="Images/Block-CobbleStone.png" />
+    <None Remove="Images/Block-CommandBlock.png" />
+    <None Remove="Images/Block-Dirt.png" />
+    <None Remove="Images/Block-False.png" />
+    <None Remove="Images/Block-Glass.png" />
+    <None Remove="Images/Block-Grass.png" />
+    <None Remove="Images/Block-RedstoneBlock.png" />
+    <None Remove="Images/Block-Settings.png" />
+    <None Remove="Images/Block-True.png" />
+    <None Remove="Images/blockSide_grass_block.png" />
+    <None Remove="Images/block_anvil.png" />
+    <None Remove="Images/block_cobblestone.png" />
+    <None Remove="Images/block_command_block.png" />
+    <None Remove="Images/block_dirt.png" />
+    <None Remove="Images/block_glass.png" />
+    <None Remove="Images/block_grass.png" />
+    <None Remove="Images/block_redstone_block.png" />
+    <None Remove="Images/btnExit.png" />
+    <None Remove="Images/btnMinimize.png" />
+    <None Remove="Images/Checked-Black.png" />
+    <None Remove="Images/Checked-Blue.png" />
+    <None Remove="Images/Checked-Gray.png" />
+    <None Remove="Images/False.png" />
+    <None Remove="Images/Hint-Critical.png" />
+    <None Remove="Images/Hint-Finish.png" />
+    <None Remove="Images/Hint-Info.png" />
+    <None Remove="Images/Hint-Warn.png" />
+    <None Remove="Images/icon.ico" />
+    <None Remove="Images/imgMusic.png" />
+    <None Remove="Images/imgTopClose.png" />
+    <None Remove="Images/imgTopMin.png" />
+    <None Remove="Images/Infobox-Bg.png" />
+    <None Remove="Images/infobox-blue.png" />
+    <None Remove="Images/infobox-brown.png" />
+    <None Remove="Images/infobox-green.png" />
+    <None Remove="Images/infobox-orange.png" />
+    <None Remove="Images/infobox-purple.png" />
+    <None Remove="Images/infobox-yellow.png" />
+    <None Remove="Images/LB.png" />
+    <None Remove="Images/LeftBar-BG_Black.png" />
+    <None Remove="Images/LeftBar-BG_DeathBlue.png" />
+    <None Remove="Images/LeftBar-BG_Green.png" />
+    <None Remove="Images/LeftBar-BG_Hunluan.png" />
+    <None Remove="Images/LeftBar-BG_Orange.png" />
+    <None Remove="Images/Stats-Fail.png" />
+    <None Remove="Images/Stats-Finish.png" />
+    <None Remove="Images/Stats-Retry.png" />
+    <None Remove="Images/Stats-Running.png" />
+    <None Remove="Images/Stats-Wait.png" />
+    <None Remove="Images/steve.png" />
+    <None Remove="Images/True.png" />
+    <None Remove="Images\block_theme_1.png" />
+    <None Remove="Images\theme1.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\theme1.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images/block_anvil.png" />
+    <Resource Include="Images/block_cobblestone.png" />
+    <Resource Include="Images/block_command_block.png" />
+    <Resource Include="Images/block_dirt.png" />
+    <Resource Include="Images/block_glass.png" />
+    <Resource Include="Images/block_grass.png" />
+    <Resource Include="Images/block_redstone_block.png" />
+    <Resource Include="Images/btnExit.png" />
+    <Resource Include="Images/btnMinimize.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EditorConfigFiles Remove="C:\Users\SALTWOOD\source\repos\EMCL\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="C:\Users\SALTWOOD\source\repos\EMCL\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -86,9 +87,9 @@ namespace EMCL.Modules
             {
                 string folder = ModString.SlashReplace(pair.Key);
                 FileSystemInfo? info = new FileInfo($"{folder}javaw.exe");
+                ModLogger.Log($"[Java] 发现 Java {pair.Key}");
                 do
                 {
-                    ModLogger.Log($"[Java] 发现 Java {pair.Key}");
                     if ((!info.Attributes.HasFlag(FileAttributes.ReparsePoint) && !(pair.Key.Contains("javapath_target_") || pair.Key.Contains("javatmp"))))
                     {
                         javaToCheck[pair.Key] = pair.Value;
@@ -141,7 +142,7 @@ namespace EMCL.Modules
                 {
                     string path = ModString.SlashReplace(originPath.FullName);
                     if (!path.EndsWith("/")) path += "/";
-                    if (File.Exists($"{path}javaw.exe")) { result[path] = source; ModLogger.Log($"[Java] 找到一个 Java: {ModPath.path}"); }
+                    if (File.Exists($"{path}javaw.exe")) { result[path] = source; ModLogger.Log($"[Java] 找到一个 Java: {path}"); }
                     foreach (DirectoryInfo folder in originPath.EnumerateDirectories())
                     {
                         if (!folder.Exists) continue;
