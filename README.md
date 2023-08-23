@@ -27,6 +27,12 @@
 **@LitJson** - 曾经使用 LitJson 进行 JSON 配置的读写。
 - [GitHub](https://github.com/LitJson/litjson)
 
+**@ookii-dialogs** - 使用了 Ookii.Dialogs.Wpf 进行文件选择、对话框等操作。
+- [GitHub](https://github.com/ookii-dialogs/ookii-dialogs-wpf)
+
+**@naudio** - 使用了 NAudio 进行音乐、音效的播放。
+- [GitHub](https://github.com/naudio/NAudio)
+
 # 附加信息
 ## 开源许可证
 
