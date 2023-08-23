@@ -36,4 +36,4 @@
 # 附加信息
 ## 开源许可证
 
-见[此处](https://github.com/SALTWOOD/EMCLauncher/blob/main/开源许可证.md)
+见[此处](https://github.com/SALTWOOD/EMCLauncher/blob/main/开源许可证.txt)
