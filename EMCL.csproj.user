@@ -7,10 +7,16 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Pages\PageDownload.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="WinComps\Button.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="WinComps\MsgBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WinComps\VersionItem.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -18,10 +24,19 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Pages\PageDownload.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="WinComps\Button.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="WinComps\MsgBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WinComps\VersionItem.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

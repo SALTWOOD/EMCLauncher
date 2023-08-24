@@ -21,6 +21,7 @@ using Ookii.Dialogs.Wpf;
 using Microsoft.Win32;
 using Microsoft.VisualBasic.Devices;
 using System.Windows.Threading;
+using EMCL.Pages;
 
 namespace EMCL
 {
@@ -33,6 +34,7 @@ namespace EMCL
         public Config config = new Config();
         public ModSerial.CInfo computer = new ModSerial.CInfo();
         public ModSerial.FingerPrint fingerprint = new ModSerial.FingerPrint();
+        public List<Window> windows = new List<Window>();
 
         #region 异常处理与线程运行
         public void HandleException(Exception ex)
@@ -192,7 +194,7 @@ namespace EMCL
             InitializeComponent();
             ModLogger.Log("[Main] InitializeComponent() 执行完毕！");
             this.Title = Metadata.title;
-            lblTitle.Content = Metadata.title;
+            this.lblTitle.Content = Metadata.title;
             ModLogger.Log("[Main] 主程序组件成功加载！");
             ModLogger.LoggerStart();
         }
@@ -404,6 +406,13 @@ namespace EMCL
         private void brdTop_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
+        }
+
+        private void btnDownloadWindow_Click(object sender, RoutedEventArgs e)
+        {
+            Window newWindow = new PageDownload();
+            windows.Add(newWindow);
+            newWindow.Show();
         }
         #endregion
 
