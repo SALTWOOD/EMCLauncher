@@ -9,17 +9,8 @@ namespace EMCL.Modules
 {
     public static class ModSerial
     {
-
-        // Computer Information 
         public class CInfo
         {
-
-            // 构造函数
-            public CInfo()
-            {
-
-            }
-
             public string CPUID
             {
                 get

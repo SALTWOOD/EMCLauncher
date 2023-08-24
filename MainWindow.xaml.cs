@@ -32,24 +32,15 @@ namespace EMCL
         public Config config = new Config();
         public ModSerial.CInfo computer = new ModSerial.CInfo();
 
-        #region 日志记录器
-        #endregion
-
         #region 异常处理与线程运行
-        /*
         public void handleException(Exception ex)
         {
             ModLogger.Log(ex, "未知错误", LogLevel.Fatal);
-            Console.WriteLine($"{ex.GetType()}{ModString.newLine}{ex.Message}{ModString.newLine}{ex.StackTrace}{ModString.newLine}{ModString.newLine}现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！");
-            if (MessageBox.Show($"{ex.GetType()}{ModString.newLine}{ex.Message}{ModString.newLine}{ex.StackTrace}{ModString.newLine}{ModString.newLine}现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！", "无法处理的异常", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Error) == DialogResult.Yes)
+            //Console.WriteLine($"{ex.GetType()}{ModString.newLine}{ex.Message}{ModString.newLine}{ex.StackTrace}{ModString.newLine}{ModString.newLine}现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！");
+            if (MessageBox.Show($"{ex.GetType()}{ModString.newLine}{ex.Message}{ModString.newLine}{ex.StackTrace}{ModString.newLine}{ModString.newLine}现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！", "无法处理的异常", MessageBoxButton.YesNoCancel, MessageBoxImage.Error) == MessageBoxResult.Yes)
             {
                 Process.Start("https://github.com/SALTWOOD/EMCLauncher/issues/new/choose");
             }
-        }*/
-
-        public void handleException(Exception ex)
-        {
-
         }
 
         private void RunProtected(Action function)
@@ -92,7 +83,7 @@ namespace EMCL
                 {
                     MessageBox.Show($"Minecraft 异常退出！{ModString.newLine}" +
                         $"程序退出代码：{mc.ExitCode}{ModString.newLine}" +
-                        $"错误日志已保存至{file}", "Minecraft 崩溃！");
+                        $"错误日志已保存至{file}", "Minecraft 崩溃！", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 result = mc.ExitCode;
                 StreamWriter sr = new StreamWriter(file);
@@ -217,7 +208,7 @@ namespace EMCL
                 Thread t = ModThread.RunThread(() => launchGame(java, args), "MinecraftLaunchThread", ThreadPriority.AboveNormal);//创建MC启动线程
                 ModThread.threads.Add(t);
                 ModLogger.Log("[Launcher] 启动 Minecraft 成功！");
-                //MessageBox.Show("启动成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("启动成功", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (OutOfMemoryException ex)
             {
@@ -271,7 +262,7 @@ namespace EMCL
                             }
                             catch
                             {
-                                MessageBox.Show("此 Java 无法使用。", "检查失败");
+                                MessageBox.Show("此 Java 无法使用。", "检查失败", MessageBoxButton.OK, MessageBoxImage.Error);
                                 lblJavaVer.Content = $"当前 Java 版本：未知";
                             }
                             break;

@@ -5,7 +5,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using static EMCL.Form1;
 using System.Xml.Linq;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
