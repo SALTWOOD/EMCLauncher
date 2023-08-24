@@ -32,8 +32,6 @@ namespace EMCL.Modules
                     {
                         return "unknown";
                     }
-
-                    finally { }
                 }
             }
 
@@ -62,7 +60,6 @@ namespace EMCL.Modules
                     {
                         return "unknown";
                     }
-                    finally { }
                 }
             }
 
@@ -87,7 +84,6 @@ namespace EMCL.Modules
                     {
                         return "unknown";
                     }
-                    finally { }
                 }
             }
 
@@ -118,7 +114,6 @@ namespace EMCL.Modules
                     {
                         return "unknown";
                     }
-                    finally { }
                 }
             }
 
@@ -136,7 +131,6 @@ namespace EMCL.Modules
                     {
                         return "unknown";
                     }
-                    finally { }
                 }
             }
 
@@ -152,7 +146,6 @@ namespace EMCL.Modules
                     {
                         return "unknown";
                     }
-                    finally { }
                 }
             }
 
@@ -177,7 +170,6 @@ namespace EMCL.Modules
                     {
                         return "unknown";
                     }
-                    finally { }
                 }
             }
 
@@ -202,7 +194,6 @@ namespace EMCL.Modules
                     {
                         return "unknown";
                     }
-                    finally { }
                 }
             }
 
