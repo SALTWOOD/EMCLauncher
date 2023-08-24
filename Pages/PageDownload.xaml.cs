@@ -47,12 +47,12 @@ namespace EMCL.Pages
                     versionItem.lblVersionName.Content = current.id;
                     if (current.type == "release")
                     {
-                        BitmapImage imgSource = new BitmapImage(new Uri("/Images/block_grass_block", UriKind.Relative));
+                        BitmapImage imgSource = new BitmapImage(new Uri("/Images/block_grass.png", UriKind.Relative));
                         versionItem.imgVersionType.Source = imgSource;
                     }
                     else
                     {
-                        BitmapImage imgSource = new BitmapImage(new Uri("/Images/block_command_block", UriKind.Relative));
+                        BitmapImage imgSource = new BitmapImage(new Uri("/Images/block_command_block.png", UriKind.Relative));
                         versionItem.imgVersionType.Source = imgSource;
                     }
                     stkVersions.Children.Add(versionItem);

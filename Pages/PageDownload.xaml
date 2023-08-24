@@ -36,8 +36,8 @@
                             <Label x:Name="lblTitle" Content="EMCL" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#A5FFFFFF" FontSize="17" Padding="0" IsHitTestVisible="False" Margin="40,0,0,0"/>
                         </Grid>
                         <Button Grid.Row="2" HorizontalAlignment="Left" Margin="100,30,0,0" x:Name="btnEvent" VerticalAlignment="Top" Command="MediaCommands.Play" Visibility="Collapsed" />
-                        <ScrollViewer x:Name="scrVersionList" Grid.Row="2" Margin="150,45,0,0">
-                            <StackPanel x:Name="stkVersions" Height="100" Width="100"/>
+                        <ScrollViewer x:Name="scrVersionList" Grid.Row="2" Margin="150,40,0,0">
+                            <StackPanel x:Name="stkVersions" Height="370" Width="573"/>
                         </ScrollViewer>
                     </Grid>
                     <Grid Grid.Row="2" x:Name="panDrag" IsHitTestVisible="False" Background="#75000000" Opacity="0" d:IsHidden="True">
