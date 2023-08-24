@@ -84,8 +84,8 @@ namespace EMCL
 
         public enum LogLevel
         {
-            Normal = 1,
-            Debug = 2,
+            Debug = 1,
+            Normal = 2,
             Information = 3,
             Hint = 4,
             Message = 5,

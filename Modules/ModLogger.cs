@@ -103,18 +103,22 @@ namespace EMCL.Modules
 
         public static void Log(string info, LogLevel level = LogLevel.Normal, string title = "出现错误")
         {
-            string text = $"[{ModTime.GetTimeNow()}] {info}{ModString.newLine}";
-            lock (loggerLock)
+            string text = $"[{ModTime.GetTimeNow()}] {info}\r\n";
+
+            if ((level <= LogLevel.Debug && Metadata.DEBUG) || level > LogLevel.Debug)
             {
-                logs.Append(text);
+                lock (loggerLock)
+                {
+                    logs.Append(text);
+                }
+                Console.WriteLine(text);
             }
-            if (Metadata.DEBUG) { Console.Write(text); }
             string repText = ModString.RegexReplace(info, "", "\\[[^\\]]+?\\] ");
         }
 
         public static void Log(Exception ex, string info, LogLevel level = LogLevel.Normal, string title = "出现错误")
         {
-            ModLogger.Log($"[Main] 出现错误！{info}{ModString.newLine}{ex.GetType()}:{ex.Message}{ModString.newLine}{ex.StackTrace}", LogLevel.Error);
+            ModLogger.Log($"[System] 捕获到异常！{info}\r\n{ex.GetType()}:{ex.Message}\r\n{ex.StackTrace}", LogLevel.Error);
         }
     }
 }

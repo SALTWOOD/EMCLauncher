@@ -11,13 +11,13 @@ namespace EMCL
     {
         public static string name = "EMCL";
         public static string fullName = "Easy-Minecraft Launcher";
-        public static string version = "dt-0.0.3";
+        public static string version = "dt-0.0.4";
 
         public static string title = $"{name} {version}";
         public static string fullTitle = $"{fullName} (version {version})";
 
         public static bool DEBUG = false;
 
-        public static int protocol = 0x00_00_00_01;
+        public static int protocol = 0x00_00_00_02;
     }
 }

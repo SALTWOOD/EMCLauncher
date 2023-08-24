@@ -20,6 +20,7 @@ using System.IO;
 using Ookii.Dialogs.Wpf;
 using Microsoft.Win32;
 using Microsoft.VisualBasic.Devices;
+using System.Windows.Threading;
 
 namespace EMCL
 {
@@ -31,16 +32,77 @@ namespace EMCL
         Dictionary<string, bool> javaList = new Dictionary<string, bool>();
         public Config config = new Config();
         public ModSerial.CInfo computer = new ModSerial.CInfo();
+        public ModSerial.FingerPrint fingerprint = new ModSerial.FingerPrint();
 
         #region 异常处理与线程运行
-        public void handleException(Exception ex)
+        public void HandleException(Exception ex)
         {
-            ModLogger.Log(ex, "未知错误", LogLevel.Fatal);
-            //Console.WriteLine($"{ex.GetType()}{ModString.newLine}{ex.Message}{ModString.newLine}{ex.StackTrace}{ModString.newLine}{ModString.newLine}现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！");
-            if (MessageBox.Show($"{ex.GetType()}{ModString.newLine}{ex.Message}{ModString.newLine}{ex.StackTrace}{ModString.newLine}{ModString.newLine}现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！", "无法处理的异常", MessageBoxButton.YesNoCancel, MessageBoxImage.Error) == MessageBoxResult.Yes)
+            ModLogger.Log(ex, "", LogLevel.Fatal);
+            //Console.WriteLine($"{ex.GetType()}\r\n{ex.Message}\r\n{ex.StackTrace}\r\n\r\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！");
+            if (MessageBox.Show($"{ex.GetType()}\r\n{ex.Message}\r\n{ex.StackTrace}\r\n\r\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！", "无法处理的异常", MessageBoxButton.YesNoCancel, MessageBoxImage.Error) == MessageBoxResult.Yes)
             {
                 Process.Start("https://github.com/SALTWOOD/EMCLauncher/issues/new/choose");
             }
+        }
+
+        public void HandleException(Exception ex1, Exception ex2)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append($"{ex1.GetType()}\r\n{ex1.Message}\r\n{ex1.StackTrace}\r\n\r\n");
+            stringBuilder.Append($"在处理以上异常的过程中，抛出了另一个异常:\r\n");
+            stringBuilder.Append($"{ex2.GetType()}\r\n{ex2.Message}\r\n{ex2.StackTrace}\r\n\r\n");
+            ModLogger.Log($"[System] 捕获多重异常！\n{stringBuilder}", LogLevel.Fatal);
+            //Console.WriteLine($"{ex.GetType()}\r\n{ex.Message}\r\n{ex.StackTrace}\r\n\r\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！");
+            if (MessageBox.Show($"{stringBuilder}警告: 通常情况下，在处理一个异常的过程中出现另一个异常属于一个极大的 Bug！\r\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！", "多个无法处理的异常", MessageBoxButton.YesNoCancel, MessageBoxImage.Error) == MessageBoxResult.Yes)
+            {
+                Process.Start("https://github.com/SALTWOOD/EMCLauncher/issues/new/choose");
+            }
+        }
+
+        public void HandleException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                e.Handled = true;   
+                HandleException(e.Exception);
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Log("[System] 程序发生致命错误，即将终止！");
+                HandleException(e.Exception, ex);
+            }
+
+        }
+
+        public void HandleException(object sender, UnhandledExceptionEventArgs e)
+        {
+            ModLogger.Log("[System] 其他线程内捕获到未处理异常:");
+            StringBuilder sb = new StringBuilder();
+            if (e.ExceptionObject is Exception)
+            {
+                Exception ex = (Exception)e.ExceptionObject;
+                sb.Append($"{ex.GetType()}\r\n{ex.Message}\r\n{ex.StackTrace}");
+            }
+            else
+            {
+                sb.Append($"{e.ExceptionObject}\r\n无法显示详细信息");
+            }
+            if (e.IsTerminating)
+            {
+                ModLogger.Log("[System] 程序发生致命错误，即将终止！");
+                HandleException((e.ExceptionObject as Exception)!);
+                return;
+            }
+            ModLogger.Log(sb.ToString());
+            HandleException((e.ExceptionObject as Exception)!);
+        }
+
+        public void HandleException(object? sender, UnobservedTaskExceptionEventArgs e)
+        {
+            //task线程内未处理捕获
+            ModLogger.Log("[System] 捕获线程内未处理异常：" + e.Exception.Message);
+            e.SetObserved();//设置该异常已察觉（这样处理后就不会引起程序崩溃）
+            HandleException(e.Exception);
         }
 
         private void RunProtected(Action function)
@@ -51,18 +113,18 @@ namespace EMCL
             }
             catch (Exception ex)
             {
-                handleException(ex);
+                HandleException(ex);
             }
         }
         #endregion
 
         #region 游戏启动
-        public int launchGame(string javaPath, string launchArgs)
+        public int LaunchGame(string javaPath, string launchArgs)
         {
             int result;
             try
             {
-                ModLogger.Log($"[Main] ~ ~ ~ S U M M A R Y ~ ~ ~{ModString.newLine}Java Path: {javaPath}{ModString.newLine}Args: {launchArgs}");
+                ModLogger.Log($"[Main] ~ ~ ~ S U M M A R Y ~ ~ ~\r\nJava Path: {javaPath}\r\nArgs: {launchArgs}");
                 Process mc = new Process();
                 ProcessStartInfo info = new ProcessStartInfo()
                 {
@@ -81,8 +143,8 @@ namespace EMCL
                 string file = $"{ModPath.path}EMCL/CrashReports/crash-{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}.log";
                 if (mc.ExitCode != 0)
                 {
-                    MessageBox.Show($"Minecraft 异常退出！{ModString.newLine}" +
-                        $"程序退出代码：{mc.ExitCode}{ModString.newLine}" +
+                    MessageBox.Show($"Minecraft 异常退出！\r\n" +
+                        $"程序退出代码：{mc.ExitCode}\r\n" +
                         $"错误日志已保存至{file}", "Minecraft 崩溃！", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 result = mc.ExitCode;
@@ -102,10 +164,20 @@ namespace EMCL
         #region 窗口初始化
         public MainWindow()
         {
+            //UI线程捕获异常处理事件
+            Application.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(HandleException);
+
+            //Task线程内未捕获异常处理事件
+            TaskScheduler.UnobservedTaskException += HandleException;
+
+            //非UI线程未捕获异常处理事件
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(HandleException);
+
             ModLogger.Log("[Main] 主程序启动中！");
             ModLogger.Log($"[App] {Metadata.name}, 版本 {Metadata.version}");
             ModLogger.Log($"[App] 网络协议版本号 {Metadata.protocol} (0x{Metadata.protocol.ToString("X").PadLeft(8,'0')})");
-            ModLogger.Log($"[System] 计算机基础信息:\n{computer}");
+            ModLogger.Log($"[System] 计算机基础信息:\n{computer}", LogLevel.Debug);
+            ModLogger.Log($"[System] 计算机唯一识别码: {fingerprint}");
             InitializeComponent();
             ModLogger.Log("[Main] InitializeComponent() 执行完毕！");
             this.Title = Metadata.title;
@@ -127,7 +199,7 @@ namespace EMCL
             }
             catch (Exception ex)
             {
-                handleException(ex);
+                HandleException(ex);
             }
             ModLogger.Log("[Main] 主程序窗口框架加载完毕！");
         }
@@ -205,7 +277,7 @@ namespace EMCL
                 string args = ModLaunch.GetLaunchArgs();
                 //现在可以自己选择 Java 了
                 string java = $"{cmbJavaList.Text}javaw.exe";
-                Thread t = ModThread.RunThread(() => launchGame(java, args), "MinecraftLaunchThread", ThreadPriority.AboveNormal);//创建MC启动线程
+                Thread t = ModThread.RunThread(() => LaunchGame(java, args), "MinecraftLaunchThread", ThreadPriority.AboveNormal);//创建MC启动线程
                 ModThread.threads.Add(t);
                 ModLogger.Log("[Launcher] 启动 Minecraft 成功！");
                 MessageBox.Show("启动成功", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -216,7 +288,7 @@ namespace EMCL
             }
             catch (Exception ex)
             {
-                handleException(ex);
+                HandleException(ex);
             }
         }
         
@@ -233,7 +305,7 @@ namespace EMCL
                 TaskDialog choice = new TaskDialog
                 {
                     WindowTitle = "Java 错误!",
-                    Content = $"{ex.Message}{ModString.newLine}{ModString.newLine}此 Java 可能无效，继续使用此 Java吗？{ModString.newLine}{ModString.newLine}按\"中止\"使用其他 Java{ModString.newLine}按\"重试\"重新检查此 Java{ModString.newLine}按\"忽略\"强制使用 Java"
+                    Content = $"{ex.Message}\r\n\r\n此 Java 可能无效，继续使用此 Java吗？\r\n\r\n按\"中止\"使用其他 Java\r\n按\"重试\"重新检查此 Java\r\n按\"忽略\"强制使用 Java"
                 };
                 choice.Buttons.Add(new TaskDialogButton(ButtonType.Yes));
                 choice.Buttons.Add(new TaskDialogButton(ButtonType.Retry));

@@ -51,7 +51,7 @@ namespace EMCL.Modules
             }
             catch (Exception ex)
             {
-                ModLogger.Log($"[Java] 检查失败的 Java 输出：{javaPath}java.exe{ModString.newLine}{(res!= null ? res : "无程序输出")}{ModString.newLine}{ex}");
+                ModLogger.Log($"[Java] 检查失败的 Java 输出：{javaPath}java.exe\r\n{(res!= null ? res : "无程序输出")}\r\n{ex}");
                 throw new Exception($"检查 Java 失败（{(javaPath != null ? javaPath : "null")}）", ex);
             }
         }
