@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 
 namespace EMCL.Modules
 {
@@ -17,54 +17,24 @@ namespace EMCL.Modules
 
     public static class LoadAssembly
     {
-        private static Assembly assemblyNAudio = null!;
-        private static Assembly assemblyJson = null!;
-        private static Assembly assemblyNAudioLock = null!;
-        private static Assembly assemblyJsonLock = null!;
-        public static Assembly AssemblyResolve(object sender, ResolveEventArgs args)
+        public static Assembly AssemblyResolve(string arg)
         {
             Assembly assets = Assembly.GetAssembly(typeof(App))!;
-            if (args.Name.StartsWith("NAudio"))
+            Assembly? assembly = null;
+            if (assembly == null)
             {
-                lock (assemblyJsonLock)
+                Stream json = assets.GetManifestResourceStream(arg)!;
+                ModLogger.Log($"[Library] 加载 DLL：{arg}");
+                byte[] bytes;
+                // 从嵌入的资源文件中获取字节数组
+                using (BinaryReader br = new BinaryReader(json))
                 {
-                    if (assemblyJson == null)
-                    {
-                        Stream json = assets.GetManifestResourceStream("NAudio.dll")!;
-                        ModLogger.Log("[Start] 加载 DLL：NAudio");
-                        byte[] bytes;
-                        // 从嵌入的资源文件中获取字节数组
-                        using (BinaryReader br = new BinaryReader(json))
-                        {
-                            bytes = br.ReadBytes((int)json.Length);
-                        }
-                        // 从字节数组中加载程序集
-                        assemblyJson = Assembly.Load(bytes);
-                    }
-                    return assemblyJson;
+                    bytes = br.ReadBytes((int)json.Length);
                 }
+                // 从字节数组中加载程序集
+                assembly = Assembly.Load(bytes);
             }
-            else if (args.Name.StartsWith("Newtonsoft.Json"))
-            {
-                lock (assemblyJsonLock)
-                {
-                    if (assemblyJson == null)
-                    {
-                        Stream json = assets.GetManifestResourceStream("Newtonsoft.Json.dll")!;
-                        ModLogger.Log("[Start] 加载 DLL：Json");
-                        byte[] bytes;
-                        // 从嵌入的资源文件中获取字节数组
-                        using (BinaryReader br = new BinaryReader(json))
-                        {
-                            bytes = br.ReadBytes((int)json.Length);
-                        }
-                        // 从字节数组中加载程序集
-                        assemblyJson = Assembly.Load(bytes);
-                    }
-                    return assemblyJson;
-                }
-            }
-            else return null!;
+            return assembly;
         }
     }
 }

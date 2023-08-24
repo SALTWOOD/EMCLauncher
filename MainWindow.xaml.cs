@@ -19,6 +19,7 @@ using System.Threading;
 using System.IO;
 using Ookii.Dialogs.Wpf;
 using Microsoft.Win32;
+using Microsoft.VisualBasic.Devices;
 
 namespace EMCL
 {
@@ -29,6 +30,7 @@ namespace EMCL
     {
         Dictionary<string, bool> javaList = new Dictionary<string, bool>();
         public Config config = new Config();
+        public ModSerial.CInfo computer = new ModSerial.CInfo();
 
         #region 日志记录器
         #endregion
@@ -111,9 +113,12 @@ namespace EMCL
         {
             ModLogger.Log("[Main] 主程序启动中！");
             ModLogger.Log($"[App] {Metadata.name}, 版本 {Metadata.version}");
-            //InitializeComponent();
+            ModLogger.Log($"[App] 网络协议版本号 {Metadata.protocol} (0x{Metadata.protocol.ToString("X").PadLeft(8,'0')})");
+            ModLogger.Log($"[System] 计算机基础信息:\n{computer}");
+            InitializeComponent();
             ModLogger.Log("[Main] InitializeComponent() 执行完毕！");
             this.Title = Metadata.title;
+            lblTitle.Content = Metadata.title;
             ModLogger.Log("[Main] 主程序组件成功加载！");
             ModLogger.LoggerStart();
         }
@@ -264,7 +269,7 @@ namespace EMCL
                             {
                                 ModJava.Check(cmbJavaList.Text);
                             }
-                            catch (Exception exc)
+                            catch
                             {
                                 MessageBox.Show("此 Java 无法使用。", "检查失败");
                                 lblJavaVer.Content = $"当前 Java 版本：未知";
@@ -281,7 +286,7 @@ namespace EMCL
             }
         }
 
-        private void MainWindow_Closing(object sender, EventArgs e)
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ModApril.IsAprilFool(() =>
             {
@@ -328,7 +333,6 @@ namespace EMCL
                 cmbJavaList.SelectedItem = ModString.SlashReplace(selected);
             }
         }
-        #endregion
 
         private void btnMinimize_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -340,14 +344,10 @@ namespace EMCL
             this.AppExit();
         }
 
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
-
         private void brdTop_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
         }
+        #endregion
     }
 }

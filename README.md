@@ -2,6 +2,7 @@
 <h1 align = "center"><a href="https://www.codefactor.io/repository/github/saltwood/emclauncher"><img src="https://www.codefactor.io/repository/github/saltwood/emclauncher/badge" alt="CodeFactor" /></a></h1>
 
 一个简洁、轻量、免安装的新生代Minecraft启动器
+**EDIT: 拿来练手的，大的在后面.png**
 
 # 获取 EMCL
 **提示：由于 EMCL 还处在早期开发阶段（不是一个确定会长期开发的项目），所以其更新速度、质量以及其开发的连续性无法得到保证。**
@@ -12,9 +13,6 @@
 打开 [Releases 页面](https://github.com/SALTWOOD/EMCLauncher/releases)，在 Assets 中下载对应的版本。
 
 # 特别鸣谢
-
-别看借鉴了很多一样，其实很少的（）关键的部分会自己写
-懒得思考会看别人的实现然后自己按照代码流程写出来
 
 **@Hex-Dragon**(**@LTCatt**) - 借鉴了 Plain Craft Launcher 2 的 Java 搜索思路、Logger实现以及其 GitHub 仓库的 Issue 模板。
 - [GitHub](https://github.com/Hex-Dragon/PCL2)

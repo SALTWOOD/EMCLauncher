@@ -33,5 +33,6 @@ jobs:
         with:
           name: app-debug
           path: |
-            bin/*
+            bin/Debug
+            bin/Release
             开源许可证.txt
