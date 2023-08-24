@@ -27,7 +27,10 @@ namespace EMCL.Modules
                 bool isDev = File.Exists($"{javaPath}javac.exe");
                 bool is64B = res.Contains("64-bit");
                 if (res == "") { throw new Exception("尝试运行该 Java 失败"); }
-                if (Metadata.DEBUG) { ModLogger.Log("[Java] Java 检查输出：{PathFolder}{java.exe}{vbCrLf}{res}"); }
+                if (Metadata.DEBUG)
+                {
+                    ModLogger.Log("[Java] Java 检查输出：{PathFolder}{java.exe}{vbCrLf}{res}");
+                }
                 ModLogger.Log(res);
                 //获取详细信息
                 string verStr = (ModString.RegexMatch(res, "(?<=version \")[^\"\"]+") != null ?

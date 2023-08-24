@@ -61,17 +61,28 @@ namespace EMCL
 
         public void HandleException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            try
+            if (e.Exception.Message.Contains("System.Windows.Threading.Dispatcher.Invoke") ||
+                e.Exception.Message.Contains("MS.Internal.AppModel.ITaskbarList.HrInit") ||
+                e.Exception.Message.Contains(".NET") ||
+                e.Exception.Message.Contains("未能加载文件或程序集"))
             {
-                e.Handled = true;   
-                HandleException(e.Exception);
+                Process.Start("https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/sdk-6.0.413-windows-x64-installer");
+                MessageBox.Show("你的 .NET 版本过低或损坏，请在打开的网页中重新下载并安装 .NET 6 后重试！",".NET 错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                AppExit();
             }
-            catch (Exception ex)
+            else
             {
-                ModLogger.Log("[System] 程序发生致命错误，即将终止！");
-                HandleException(e.Exception, ex);
+                try
+                {
+                    e.Handled = true;
+                    HandleException(e.Exception);
+                }
+                catch (Exception ex)
+                {
+                    ModLogger.Log("[System] 程序发生致命错误，即将终止！");
+                    HandleException(e.Exception, ex);
+                }
             }
-
         }
 
         public void HandleException(object sender, UnhandledExceptionEventArgs e)
@@ -175,7 +186,7 @@ namespace EMCL
 
             ModLogger.Log("[Main] 主程序启动中！");
             ModLogger.Log($"[App] {Metadata.name}, 版本 {Metadata.version}");
-            ModLogger.Log($"[App] 网络协议版本号 {Metadata.protocol} (0x{Metadata.protocol.ToString("X").PadLeft(8,'0')})");
+            ModLogger.Log($"[App] 网络协议版本号 {Metadata.protocol} (0x{Metadata.protocol.ToString("X").PadLeft(8, '0')})");
             ModLogger.Log($"[System] 计算机基础信息:\n{computer}", LogLevel.Debug);
             ModLogger.Log($"[System] 计算机唯一识别码: {fingerprint}");
             InitializeComponent();
@@ -185,7 +196,7 @@ namespace EMCL
             ModLogger.Log("[Main] 主程序组件成功加载！");
             ModLogger.LoggerStart();
         }
-        
+
         private void MainWindow_Loaded(object sender, EventArgs e)
         {
             try
@@ -291,7 +302,7 @@ namespace EMCL
                 HandleException(ex);
             }
         }
-        
+
         private void cmbJavaList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ModLogger.Log($"[Java] 选择的 Java 更改为 {(string)cmbJavaList.SelectedValue}");
@@ -365,23 +376,6 @@ namespace EMCL
             this.AppExit();
         }
 
-        private void AppExit()
-        {
-            ModLogger.Log("[Main] 准备开始关闭其他线程", LogLevel.Normal);
-            ModRun.isExited = true;
-            ModLogger.Log("[Option] isExited 状态被设为 true", LogLevel.Normal);
-            ModLogger.Log("[Thread]<Main> 开始关闭其他线程", LogLevel.Normal);
-            foreach (Thread t in ModThread.threads)
-            {
-                t.Join();
-            }
-            ModLogger.Log("[Thread]<Main> 其他线程已关闭！", LogLevel.Normal);
-            ModLogger.Log("[Main] 程序已关闭！", LogLevel.Normal);
-            ModLogger.LoggerFlush();
-            Close();
-            Application.Current.Shutdown();
-        }
-
         private void btnChooseJava_Click(object sender, RoutedEventArgs e)
         {
             VistaOpenFileDialog dialog = new VistaOpenFileDialog();
@@ -410,6 +404,25 @@ namespace EMCL
         private void brdTop_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
+        }
+        #endregion
+
+        #region 程序退出
+        private void AppExit()
+        {
+            ModLogger.Log("[Main] 准备开始关闭其他线程", LogLevel.Normal);
+            ModRun.isExited = true;
+            ModLogger.Log("[Option] isExited 状态被设为 true", LogLevel.Normal);
+            ModLogger.Log("[Thread]<Main> 开始关闭其他线程", LogLevel.Normal);
+            foreach (Thread t in ModThread.threads)
+            {
+                t.Join();
+            }
+            ModLogger.Log("[Thread]<Main> 其他线程已关闭！", LogLevel.Normal);
+            ModLogger.Log("[Main] 程序已关闭！", LogLevel.Normal);
+            ModLogger.LoggerFlush();
+            Close();
+            Application.Current.Shutdown();
         }
         #endregion
     }
