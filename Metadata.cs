@@ -18,6 +18,6 @@ namespace EMCL
 
         public static bool DEBUG = false;
 
-        public static int protocol = 0x00_00_00_02;
+        public static int protocol = 0x00_00_00_01;
     }
 }
