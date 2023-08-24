@@ -2,6 +2,7 @@
 <h1 align = "center"><a href="https://www.codefactor.io/repository/github/saltwood/emclauncher"><img src="https://www.codefactor.io/repository/github/saltwood/emclauncher/badge" alt="CodeFactor" /></a></h1>
 
 一个简洁、轻量、免安装的新生代Minecraft启动器
+
 **EDIT: 拿来练手的，大的在后面.png**
 
 # 获取 EMCL
