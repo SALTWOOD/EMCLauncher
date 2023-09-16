@@ -120,5 +120,17 @@ namespace EMCL.Modules
         {
             ModLogger.Log($"[System] 捕获到异常！{info}\r\n{ex.GetType()}:{ex.Message}\r\n{ex.StackTrace}", LogLevel.Error);
         }
+
+        public static void Log(string info, LogLevel level = LogLevel.Normal, string title = "出现错误", params Exception[] exs)
+        {
+            List<string> errors = new List<string>();
+            foreach (Exception i in exs)
+            {
+                errors.Add($"{i.GetType()}:{i.Message}\r\n{i.StackTrace}\r\n\r\n");
+            }
+            ModLogger.Log($"[Test] {string.Join("\r\n\r\n\r\n", errors)}");
+            ModLogger.Log($"[Test] {string.Join("\r\n\r\n\r\n", exs.Select(ex => ex.GetType().FullName))}");
+            ModLogger.Log($"[System] 捕获到多重异常！{info}\r\n{string.Join("\r\n", errors.ToList())}", LogLevel.Error);
+        }
     }
 }

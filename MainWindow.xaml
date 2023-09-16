@@ -44,6 +44,7 @@
                         <Button x:Name="btnJavaSearch" Content="搜索 Java" HorizontalAlignment="Left" Margin="135,345,0,0" Grid.Row="2" VerticalAlignment="Top" Height="33" Width="95" Click="btnJavaSearch_Click"/>
                         <Button x:Name="btnChooseJava" Content="手动选择" HorizontalAlignment="Left" Margin="235,345,0,0" Grid.Row="2" VerticalAlignment="Top" Height="33" Width="95" Click="btnChooseJava_Click"/>
                         <Button x:Name="btnDownloadWindow" Content="打开下载页面" HorizontalAlignment="Left" Margin="335,346,0,0" Grid.Row="2" VerticalAlignment="Top" Height="32" Width="112" Click="btnDownloadWindow_Click"/>
+                        <Button x:Name="btnTest" Content="测试" HorizontalAlignment="Left" Margin="9,299,0,0" Grid.Row="2" VerticalAlignment="Top" Height="41" Width="121" Click="btnTest_Click" Visibility="Hidden"/>
                     </Grid>
                     <Grid Grid.Row="2" x:Name="panDrag" IsHitTestVisible="False" Background="#75000000" Opacity="0" d:IsHidden="True">
                         <Label Content="拖拽想要自动安装的文件/文件夹到这里" x:Name="labDrag" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="25" FontWeight="Bold" Margin="0,0,0,24" />

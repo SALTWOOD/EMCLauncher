@@ -21,9 +21,22 @@ namespace EMCL.WinComps
     /// </summary>
     public partial class VersionItem : UserControl
     {
+        public MinecraftJson.MinecraftVersionInfo? versionJson;
+
         public VersionItem()
         {
             InitializeComponent();
+        }
+
+        public void Download(object sender)
+        {
+            ModThread.RunThread(() =>
+            {
+                if (versionJson != null)
+                {
+                    ModDownload.DownloadMinecraft(versionJson);
+                }
+            }, "MinecraftDownloaderThread");
         }
     }
 }

@@ -25,20 +25,17 @@
                             <Grid HorizontalAlignment="Stretch" x:Name="panHostRight" VerticalAlignment="Top" Grid.Column="1" UseLayoutRounding="False" />
                         </Grid>
                         <Grid Grid.Row="2" x:Name="panGuild" Margin="0,40,0,0" HorizontalAlignment="Left" Height="375" VerticalAlignment="Top" Width="740" RenderTransformOrigin="0.5,0.5"/>
-                        <Grid x:Name="brdTop" VerticalAlignment="Top" Height="40" UseLayoutRounding="False" Grid.Row="2">
+                        <Grid x:Name="brdTop" VerticalAlignment="Top" Height="40" UseLayoutRounding="False" Grid.Row="2" MouseLeftButtonDown="brdTop_MouseLeftButtonDown">
                             <Grid.Background>
                                 <ImageBrush ImageSource="/Images/theme1.png" Stretch="None" TileMode="Tile" Viewport="0,0,90,90" ViewportUnits="Absolute" />
                             </Grid.Background>
                             <WebBrowser Height="24" HorizontalAlignment="Left" Margin="551,10,0,0" x:Name="webData" VerticalAlignment="Top" Width="21" IsHitTestVisible="False" Visibility="Collapsed" />
-                            <Image Height="40" HorizontalAlignment="Right" VerticalAlignment="Top" Width="35" Opacity="0.5" x:Name="btnExit" Margin="0,0,5,0" Source="/Images/btnExit.png" UseLayoutRounding="True" />
-                            <Image Height="40" HorizontalAlignment="Right" Margin="0,0,40,0" VerticalAlignment="Top" Width="35" Opacity="0.5" x:Name="btnMinimize" Source="/Images/btnMinimize.png" UseLayoutRounding="True" />
+                            <Image Height="40" HorizontalAlignment="Right" VerticalAlignment="Top" Width="35" Opacity="0.5" x:Name="btnExit" Margin="0,0,5,0" Source="/Images/btnExit.png" UseLayoutRounding="True" MouseLeftButtonDown="btnExit_MouseLeftButtonDown" />
+                            <Image Height="40" HorizontalAlignment="Right" Margin="0,0,40,0" VerticalAlignment="Top" Width="35" Opacity="0.5" x:Name="btnMinimize" Source="/Images/btnMinimize.png" UseLayoutRounding="True" MouseLeftButtonDown="btnMinimize_MouseLeftButtonDown" />
                             <Label x:Name="labTopVer" VerticalAlignment="Bottom" Foreground="White" Opacity="0.233" HorizontalAlignment="Right" Padding="7,7,10,7" UseLayoutRounding="True" Background="#016C6C6C" />
                             <Label x:Name="lblTitle" Content="EMCL" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#A5FFFFFF" FontSize="17" Padding="0" IsHitTestVisible="False" Margin="40,0,0,0"/>
                         </Grid>
                         <Button Grid.Row="2" HorizontalAlignment="Left" Margin="100,30,0,0" x:Name="btnEvent" VerticalAlignment="Top" Command="MediaCommands.Play" Visibility="Collapsed" />
-                        <ScrollViewer x:Name="scrVersionList" Grid.Row="2" Margin="150,40,0,0">
-                            <StackPanel x:Name="stkVersions" Height="370" Width="573"/>
-                        </ScrollViewer>
                     </Grid>
                     <Grid Grid.Row="2" x:Name="panDrag" IsHitTestVisible="False" Background="#75000000" Opacity="0" d:IsHidden="True">
                         <Label Content="拖拽想要自动安装的文件/文件夹到这里" x:Name="labDrag" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="25" FontWeight="Bold" Margin="0,0,0,24" />
@@ -47,5 +44,6 @@
                 </Grid>
             </Border>
         </Border>
+        <ListBox x:Name="lstVersions" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="150,51,10,10" SelectionChanged="lstVersions_SelectionChanged"/>
     </Grid>
 </Window>

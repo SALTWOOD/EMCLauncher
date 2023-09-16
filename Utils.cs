@@ -56,7 +56,11 @@ namespace EMCL
             $"{ModPath.path}EMCL/",
             $"{ModPath.path}EMCL/Logs/",
             $"{ModPath.path}EMCL/Temp/",
-            $"{ModPath.path}EMCL/CrashReports/"
+            $"{ModPath.path}EMCL/CrashReports/",
+            $"{ModPath.path}.minecraft/",
+            $"{ModPath.path}.minecraft/libraries",
+            $"{ModPath.path}.minecraft/assets",
+            $"{ModPath.path}.minecraft/versions"
         };
         public class Config
         {

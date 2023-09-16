@@ -189,8 +189,8 @@ namespace EMCL
             ModLogger.Log("[Main] 主程序启动中！");
             ModLogger.Log($"[App] {Metadata.name}, 版本 {Metadata.version}");
             ModLogger.Log($"[App] 网络协议版本号 {Metadata.protocol} (0x{Metadata.protocol.ToString("X").PadLeft(8, '0')})");
-            ModLogger.Log($"[System] 计算机基础信息:\n{computer}", LogLevel.Debug);
-            ModLogger.Log($"[System] 计算机唯一识别码: {fingerprint}");
+            //ModLogger.Log($"[System] 计算机基础信息:\n{computer}", LogLevel.Debug);
+            //ModLogger.Log($"[System] 计算机唯一识别码: {fingerprint}");
             InitializeComponent();
             ModLogger.Log("[Main] InitializeComponent() 执行完毕！");
             this.Title = Metadata.title;
@@ -434,5 +434,20 @@ namespace EMCL
             Application.Current.Shutdown();
         }
         #endregion
+
+        private void btnTest_Click(object sender, RoutedEventArgs e)
+        {
+            Classes.Tree<int> tree = new Classes.Tree<int>();
+            tree.Insert(1);
+            tree.Insert(-2);
+            tree.Insert(-42);
+            tree.Insert(-1);
+            //tree.Insert(0);
+            tree.Insert(5);
+            tree.Insert(6785);
+            tree.Insert(453);
+            tree.Insert(23);
+            MessageBox.Show(string.Join(" ",tree.WalkTree()));
+        }
     }
 }

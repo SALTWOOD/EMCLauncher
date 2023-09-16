@@ -29,6 +29,10 @@ namespace EMCL.Modules
                 {
                     ModLogger.Log($"[Thread]<{name}> 线程 {name} 被迫终止！");
                 }
+                catch (AggregateException agex)
+                {
+                    Log($"{name}：线程执行失败", LogLevel.Error, "锟斤拷锟斤拷", agex.InnerExceptions.ToArray());
+                }
                 catch (Exception ex)
                 {
                     Log(ex, $"{name}：线程执行失败", LogLevel.Error);
