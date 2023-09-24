@@ -30,6 +30,8 @@ namespace EMCL
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow? _mainWindow;
+
         Dictionary<string, bool> javaList = new Dictionary<string, bool>();
         public Config config = new Config();
         public ModSerial.CInfo computer = new ModSerial.CInfo();
@@ -69,7 +71,7 @@ namespace EMCL
                 e.Exception.Message.Contains("未能加载文件或程序集"))
             {
                 Process.Start("https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/sdk-6.0.413-windows-x64-installer");
-                MessageBox.Show("你的 .NET 版本过低或损坏，请在打开的网页中重新下载并安装 .NET 6 后重试！",".NET 错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("你的 .NET 版本过低或损坏，请在打开的网页中重新下载并安装 .NET 6 后重试！", ".NET 错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 AppExit();
             }
             else
@@ -196,6 +198,9 @@ namespace EMCL
             this.Title = Metadata.title;
             this.lblTitle.Content = Metadata.title;
             ModLogger.Log("[Main] 主程序组件成功加载！");
+            _mainWindow = (Application.Current.Windows
+                .Cast<Window>()
+                .FirstOrDefault(window => window is MainWindow) as MainWindow);
         }
 
         private void MainWindow_Loaded(object sender, EventArgs e)
@@ -415,7 +420,7 @@ namespace EMCL
         #endregion
 
         #region 程序退出
-        private void AppExit()
+        public void AppExit()
         {
             ModLogger.Log("[Main] 准备开始关闭其他线程", LogLevel.Normal);
             ModRun.isExited = true;
@@ -444,7 +449,7 @@ namespace EMCL
             tree.Insert(6785);
             tree.Insert(453);
             tree.Insert(23);
-            MessageBox.Show(string.Join(" ",tree.WalkTree()));
+            MessageBox.Show(string.Join(" ", tree.WalkTree()));
         }
     }
 }

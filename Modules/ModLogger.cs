@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static EMCL.Utils;
 using System.Threading;
+using System.Windows;
 
 namespace EMCL.Modules
 {
@@ -104,15 +105,43 @@ namespace EMCL.Modules
         }*/
         #endregion 已废弃
 
+        /// <summary>
+        /// 用于记录日志。
+        /// </summary>
+        /// <remarks>
+        /// 在调用后将传入的信息存入 AppLog_yyyyMMdd_HHmmss.log
+        /// </remarks>
+        /// <param name="info"></param>
+        /// <param name="level"></param>
+        /// <param name="title"></param>
         public static void Log(string info, LogLevel level = LogLevel.Normal, string title = "出现错误")
         {
-            string text = $"[{ModTime.GetTimeNow()}] {info}";
-
-            if ((level <= LogLevel.Debug && Metadata.DEBUG) || level > LogLevel.Debug)
+            string text = info;
+            switch (level)
             {
-                Logger.WriteInfo(text);
-                Console.WriteLine(text);
+                case LogLevel.Debug when Metadata.DEBUG:
+                case LogLevel.Normal:
+                case LogLevel.Information:
+                    Logger.WriteInfo(text);
+                    break;
+                case LogLevel.Hint:
+                    Logger.WriteInfo(text);
+                    //TODO
+                    break;
+                case LogLevel.Message:
+                    Logger.WriteInfo(text);
+                    //TODO
+                    break;
+                case LogLevel.Error:
+                    Logger.WriteWarn(text);
+                    //TODO
+                    break;
+                case LogLevel.Fatal:
+                    Logger.WriteError(text);
+                    if (MainWindow._mainWindow != null) MainWindow._mainWindow.AppExit();
+                    break;
             }
+            Console.WriteLine(text);
             string repText = ModString.RegexReplace(info, "", "\\[[^\\]]+?\\] ");
         }
 
