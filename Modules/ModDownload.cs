@@ -212,7 +212,6 @@ namespace EMCL.Modules
             }
             ModLogger.Log($"[Download] Minecraft (Java Archive File) 文件下载完毕！\r\n    {ModPath.pathMCFolder}versions/{version.id}/{version.id}.jar");
             ModLogger.Log($"[Download] 开始补全 Minecraft 依赖库...共 {json.libraries.Count} 个依赖");
-            int counter = 0;
             List<Action> actions = new List<Action>();
             foreach (MinecraftLauncherJson.Library i in json.libraries)
             {
@@ -226,8 +225,7 @@ namespace EMCL.Modules
                             ModLogger.Log($"[Http] 下载链接：{CheckIfRedirect(i.downloads.artifact.path)}");
                             Directory.CreateDirectory($"{ModPath.pathMCFolder}libraries/{ModString.RegexMatch(i.downloads.artifact.path, "(.+)/")}");
                             WriteByteArrayToFile(GetByteArrayAsync(CheckIfRedirect(i.downloads.artifact.url)).Result, $"{ModPath.pathMCFolder}libraries/{i.downloads.artifact.path}");
-                            counter++;
-                            ModLogger.Log($"[Download] 依赖库 {i.downloads.artifact.path} 下载完毕！{counter} 个/共 {json.libraries.Count} 个");
+                            ModLogger.Log($"[Download] 依赖库 {i.downloads.artifact.path} 下载完毕！");
                             break;
                         }
                         catch (Exception ex)
