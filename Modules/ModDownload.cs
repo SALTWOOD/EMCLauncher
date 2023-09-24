@@ -14,6 +14,54 @@ namespace EMCL.Modules
 {
     public static class ModDownload
     {
+        public enum DownloadSourceEnum
+        {
+            OFFICIAL,
+            BMCLAPI
+        }
+
+        public static string Source
+        {
+            get
+            {
+                switch (source)
+                {
+                    default:
+                    case DownloadSourceEnum.OFFICIAL:
+                        {
+                            return "https://launchermeta.mojang.com";
+                        }
+                    case DownloadSourceEnum.BMCLAPI:
+                        {
+                            return "https://bmclapi2.bangbang93.com/";
+                        }
+                }
+            }
+        }
+
+        public static DownloadSourceEnum source = DownloadSourceEnum.BMCLAPI;
+
+        public static string CheckIfRedirect(string url)
+        {
+            string result = url;
+            switch (source)
+            {
+                default:
+                case DownloadSourceEnum.OFFICIAL:
+                    {
+                        return url;
+                    }
+                case DownloadSourceEnum.BMCLAPI:
+                    {
+                        result = result.Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven");
+                        result = result.Replace("http://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets");
+                        result = result.Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com");
+                        result = result.Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com");
+                        return result;
+                    }
+            }
+        }
+
         public static HttpClient GetHttpClient()
         {
             HttpClient client = new HttpClient();
@@ -55,10 +103,7 @@ namespace EMCL.Modules
             try
             {
                 HttpClient client = ModDownload.GetHttpClient();
-                HttpResponseMessage response = client.GetAsync(uri).Result;
-                response.EnsureSuccessStatusCode();
-                resp = await response.Content.ReadAsByteArrayAsync();
-                return resp;
+                return await client.GetByteArrayAsync(uri);
             }
             catch (Exception ex)
             {
@@ -73,7 +118,7 @@ namespace EMCL.Modules
             MinecraftVersionList? versions = null!;
             try
             {
-                Task<string> responce = GetAsync($"https://launchermeta.mojang.com/mc/game/version_manifest_v2.json");
+                Task<string> responce = GetAsync(CheckIfRedirect("https://launchermeta.mojang.com/mc/game/version_manifest_v2.json"));
                 string result = responce.Result;
                 versions = JsonConvert.DeserializeObject<MinecraftVersionList>(result);
             }
@@ -117,7 +162,7 @@ namespace EMCL.Modules
             }
         }*/
 
-        public static void DownloadMinecraft(MinecraftVersionInfo version)
+        public static async Task DownloadMinecraft(MinecraftVersionInfo version)
         {
             ModLogger.Log($"[Download] 收到 Minecraft {version.id} 的下载请求，准备下载...");
             ModLogger.Log($"[Download] 开始下载 Minecraft 本体");
@@ -125,7 +170,7 @@ namespace EMCL.Modules
             string jsonString;
             using (StreamWriter sw = new StreamWriter($"{ModPath.pathMCFolder}versions/{version.id}/{version.id}.json"))
             {
-                jsonString = GetAsync(version.url).Result;
+                jsonString = await GetAsync(CheckIfRedirect(version.url));
                 sw.Write(jsonString);
             }
             ModLogger.Log($"[Download] Minecraft (Json) 文件下载完毕！\r\n    {ModPath.pathMCFolder}versions/{version.id}/{version.id}.json");
@@ -134,7 +179,7 @@ namespace EMCL.Modules
             ModLogger.Log($"[Download] 开始下载 Minecraft (Java Archive File) ...");
             try
             {
-                byte[] bytes = GetByteArrayAsync($"{json.downloads.client.url}").Result;
+                byte[] bytes = await GetByteArrayAsync(CheckIfRedirect(json.downloads.client.url));
                 WriteByteArrayToFile(bytes, $"{ModPath.pathMCFolder}versions/{version.id}/{version.id}.jar");
             }
             catch (Exception ex)
@@ -145,33 +190,40 @@ namespace EMCL.Modules
             ModLogger.Log($"[Download] Minecraft (Java Archive File) 文件下载完毕！\r\n    {ModPath.pathMCFolder}versions/{version.id}/{version.id}.jar");
             ModLogger.Log($"[Download] 开始补全 Minecraft 依赖库...共 {json.libraries.Count} 个依赖");
             int counter = 0;
-            foreach (Library i in json.libraries)
+            List<Action> actions = new List<Action>();
+            foreach (MinecraftLauncherJson.Library i in json.libraries)
             {
-                int retryCounter = 0;
-                while (true)
+                actions.Add(() =>
                 {
-                    try
+                    int retryCounter = 0;
+                    while (true)
                     {
-                        Directory.CreateDirectory($"{ModPath.pathMCFolder}libraries/{ModString.RegexMatch(i.downloads.artifact.path, "(.+)/")}");
-                        WriteByteArrayToFile(GetByteArrayAsync(i.downloads.artifact.url).Result, $"{ModPath.pathMCFolder}libraries/{i.downloads.artifact.path}");
-                        counter++;
-                        ModLogger.Log($"[Download] 依赖库 {i.downloads.artifact.path} 下载完毕！{counter} 个/共 {json.libraries.Count} 个");
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (retryCounter >= 5)
+                        try
                         {
-                            throw new Exception("下载达到最大重试次数");
+                            Directory.CreateDirectory($"{ModPath.pathMCFolder}libraries/{ModString.RegexMatch(i.downloads.artifact.path, "(.+)/")}");
+                            WriteByteArrayToFile(GetByteArrayAsync(CheckIfRedirect(i.downloads.artifact.url)).Result, $"{ModPath.pathMCFolder}libraries/{i.downloads.artifact.path}");
+                            counter++;
+                            ModLogger.Log($"[Download] 依赖库 {i.downloads.artifact.path} 下载完毕！{counter} 个/共 {json.libraries.Count} 个");
+                            break;
                         }
-                        retryCounter++;
-                        ModLogger.Log(ex, "未处理的异常");
-                        ModLogger.Log($"[Download] 下载失败，第 {retryCounter} 次重试！");
+                        catch (Exception ex)
+                        {
+                            if (retryCounter >= 5)
+                            {
+                                throw new Exception("下载达到最大重试次数");
+                            }
+                            retryCounter++;
+                            ModLogger.Log(ex, "未处理的异常");
+                            ModLogger.Log($"[Download] 下载失败，第 {retryCounter} 次重试！");
+                        }
+                        finally { }
                     }
-                    finally { }
-                }
+                });
             }
-            ModLogger.Log($"[Download] Minecraft 依赖库补全完毕！");
+            ModThread.RunActions(actions, () =>
+            {
+                ModLogger.Log($"[Download] Minecraft 依赖库补全完毕！");
+            });
         }
 
         public static bool WriteByteArrayToFile(byte[] byteArray, string fileName)

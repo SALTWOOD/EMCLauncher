@@ -43,6 +43,7 @@ namespace EMCL.Modules
         }
     }
 
+#pragma warning disable CS8618
     public class MinecraftLauncherJson
     {
         public Arguments arguments;
@@ -62,134 +63,66 @@ namespace EMCL.Modules
         public string time;
         public string type;
 
-        private MinecraftLauncherJson()
+        public class Download
         {
-            this.arguments = default!;
-            this.assetIndex = default!;
-            this.assets = default!;
-            this.complianceLevel = default!;
-            this.downloads = default!;
-            this.id = default!;
-            this.javaVersion = default!;
-            this.libraries = default!;
-            this.loggingClient = default!;
-            this.loggingFile = default!;
-            this.logging = default!;
-            this.mainClass = default!;
-            this.minimumLauncherVersion = default!;
-            this.releaseTime = default!;
-            this.time = default!;
-            this.type = default!;
+            public Asset artifact;
         }
-    }
 
-    public class Arguments
-    {
-        public List<object> game;
-        public List<object> jvm;
-
-        private Arguments()
+        public class Library
         {
-            this.game = default!;
-            this.jvm = default!;
+            public string name;
+            public List<Dictionary<string, object>> rules;
+            public string action;
+            public Download downloads;
         }
-    }
 
-    public class Downloads
-    {
-        public Asset client;
-        public Asset client_mappings;
-        public Asset server;
-        public Asset server_mappings;
-
-        private Downloads()
+        public class JavaVersion
         {
-            this.client = default!;
-            this.client_mappings = default!;
-            this.server = default!;
-            this.server_mappings = default!;
+            public string component;
+            public string majorVersion;
         }
-    }
 
-    public class Asset
-    {
-        public string id = "";
-        public string sha1 = "";
-        public long size = 0;
-        public long totalSize = 0;
-        public string url = "";
-        public string path;
-
-        private Asset()
+        public class Logging
         {
-            this.id = default!;
-            this.sha1 = default!;
-            this.size = default!;
-            this.totalSize = default!;
-            this.url = default!;
-            this.path = default!;
+            public Client client;
         }
-    }
 
-    public class Download
-    {
-        public Asset artifact;
-
-        private Download()
+        public class Client
         {
-            this.artifact = default!;
+            public string argument;
+            public Asset file;
+            public string type;
         }
-    }
 
-    public class Library
-    {
-        public string name;
-        public List<Dictionary<string,object>> rules;
-        public string action;
-        public Download downloads;
-
-        private Library()
+        public class Arguments
         {
-            this.rules = default!;
-            this.action = default!;
-            this.name = default!;
-            this.downloads = default!;
+            public List<object> game;
+            public List<object> jvm;
+
+            private Arguments()
+            {
+                this.game = default!;
+                this.jvm = default!;
+            }
         }
-    }
 
-    public class JavaVersion
-    {
-        public string component;
-        public string majorVersion;
-
-        private JavaVersion()
+        public class Downloads
         {
-            this.component = default!;
-            this.majorVersion = default!;
+            public Asset client;
+            public Asset client_mappings;
+            public Asset server;
+            public Asset server_mappings;
         }
-    }
 
-    public class Logging
-    {
-        public Client client;
-
-        private Logging()
+        public class Asset
         {
-            this.client = default!;
-        }
-    }
-
-    public class Client
-    {
-        public string argument;
-        public Asset file;
-        public string type;
-
-        public Client()
-        {
-            this.argument = default!;
-            this.file = default!;
-            this.type = default!;
+            public string id = "";
+            public string sha1 = "";
+            public long size = 0;
+            public long totalSize = 0;
+            public string url = "";
+            public string path;
         }
     }
 }
+#pragma warning restore CS8618

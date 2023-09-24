@@ -34,7 +34,7 @@ namespace EMCL.WinComps
             {
                 if (versionJson != null)
                 {
-                    ModDownload.DownloadMinecraft(versionJson);
+                    ModDownload.DownloadMinecraft(versionJson).Wait();
                 }
             }, "MinecraftDownloaderThread");
         }

@@ -40,6 +40,7 @@ namespace EMCL.Pages
         public void DownloadVersionList()
         {
             versionList = ModDownload.GetMinecraftVersionList();
+            MessageBox.Show(JsonConvert.SerializeObject(versionList));
         }
 
         public string GetWebsiteCode(string URL)
@@ -91,8 +92,8 @@ namespace EMCL.Pages
                     {
                         BitmapImage imgSource = new BitmapImage(new Uri("/Images/block_command_block.png", UriKind.Relative));
                         versionItem.imgVersionType.Source = imgSource;
-                        versionItem.versionJson = current;
                     }
+                    versionItem.versionJson = current;
                     lstVersions.Items.Add(versionItem);
                 }
             }

@@ -12,6 +12,7 @@ namespace EMCL.Modules
     internal static class ModThread
     {
         public static List<Thread> threads = new List<Thread>();
+        public static List<Action> actions = new List<Action>();
 
         public static Thread RunThread(Action action, string name, ThreadPriority priority = ThreadPriority.Normal, bool addToPool = true)
         {
@@ -19,6 +20,7 @@ namespace EMCL.Modules
             {
                 try
                 {
+                    ModLogger.Log($"[Thread] 启动了新的线程：{name}，{action}");
                     action();
                 }
                 catch (ThreadInterruptedException ex)
@@ -42,6 +44,28 @@ namespace EMCL.Modules
             th.Start();
             if (addToPool) { threads.Add(th); }
             return th;
+        }
+
+        public static void RunActions(List<Action> act)
+        {
+            actions = actions.Concat(act).ToList();
+            RunThread(() => Parallel.ForEach(act, (action) =>
+            {
+                RunThread(action, "ActionRunnerSubThread");
+            }), "ActionRunner");
+        }
+
+        public static void RunActions(List<Action> act, Action endAction)
+        {
+            actions = actions.Concat(act).ToList();
+            RunThread(() =>
+            {
+                Parallel.ForEach(act, (action) =>
+                {
+                    RunThread(action, "ActionRunnerSubThread");
+                });
+                endAction();
+            }, "ActionRunner");
         }
     }
 }

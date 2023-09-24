@@ -232,7 +232,7 @@ namespace EMCL
                 ModLogger.Log($"[Config] 正在加载配置文件 {ModPath.path}EMCL/settings.json");
                 ModLogger.Log($"[Java] 开始读取 Java 缓存");
                 config = ReadConfig();
-                if (!(DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 > config.tempTime))
+                if (DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 > config.tempTime)
                 {
                     cmbJavaList.Items.Clear();
                     foreach (List<object> i in config.java!)

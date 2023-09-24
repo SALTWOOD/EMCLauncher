@@ -31,19 +31,18 @@ namespace EMCL.Modules
                 {
                     ModLogger.Log("[Java] Java 检查输出：{PathFolder}{java.exe}{vbCrLf}{res}");
                 }
-                ModLogger.Log(res);
+                if (Metadata.DEBUG) ModLogger.Log(res);
                 //获取详细信息
                 string verStr = (ModString.RegexMatch(res, "(?<=version \")[^\"\"]+") != null ?
                     ModString.RegexMatch(res, "(?<=version \")[^\"\"]+") :
                     (ModString.RegexMatch(res, "(?<=openjdk )[0-9]+") != null ? ModString.RegexMatch(res, "(?<=openjdk )[0-9]+") : ""))
                     .Replace("_", ".").Split("-").First();
-                ModLogger.Log(verStr);
+                if (Metadata.DEBUG) ModLogger.Log(verStr);
                 while (verStr.Split(".").Count() < 4)
                 {
                     if (verStr.StartsWith("1.")) { verStr = $"{verStr}.0"; }
                     else { verStr = $"1.{verStr}"; }
                 }
-                //ModLogger.Log(verStr);
                 Version version = new Version(verStr);
                 if (version.Minor == 0)
                 {
