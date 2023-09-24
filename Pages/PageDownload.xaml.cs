@@ -37,9 +37,9 @@ namespace EMCL.Pages
             UpdateVersionList();
         }
 
-        public void DownloadVersionList()
+        public async void DownloadVersionList()
         {
-            versionList = ModDownload.GetMinecraftVersionList();
+            versionList = await ModDownload.GetMinecraftVersionList();
             MessageBox.Show(JsonConvert.SerializeObject(versionList));
         }
 
@@ -121,6 +121,7 @@ namespace EMCL.Pages
             {
                 item.Download(sender);
             }
+            this.mainWindow.Close();
         }
     }
 }

@@ -197,6 +197,18 @@ namespace EMCL
             this.lblTitle.Content = Metadata.title;
             ModLogger.Log("[Main] 主程序组件成功加载！");
             ModLogger.LoggerStart();
+            ModThread.RunThread(() =>
+            {
+                while (true)
+                {
+                    this.lblDownloadStatus.Content = $"下载状态：{ModDownload.status}";
+                    if (ModRun.isExited)
+                    {
+                        return;
+                    }
+                    Thread.Sleep(50);
+                }
+            }, "DownloaderStatusRefresher");
         }
 
         private void MainWindow_Loaded(object sender, EventArgs e)
