@@ -7,6 +7,7 @@
 
 # 获取 EMCL
 **提示：由于 EMCL 还处在早期开发阶段（不是一个确定会长期开发的项目），所以其更新速度、质量以及其开发的连续性无法得到保证。**
+
 ## 测试版
 打开 [Actions 页面](https://github.com/SALTWOOD/EMCLauncher/actions)，点击左侧的".NET Build & Test"，在右侧的条目中选择一个带有蓝色或绿色对勾的条目，然后在下方的 Artifacts 中下载"app-debug"
 
@@ -15,7 +16,7 @@
 
 # 特别鸣谢
 
-**@Hex-Dragon**(**@LTCatt**) - 借鉴了 Plain Craft Launcher 2 的 Java 搜索思路、Logger实现以及其 GitHub 仓库的 Issue 模板。
+**@Hex-Dragon**(**@LTCatt**) - 借鉴了 Plain Craft Launcher 2 的 Java 搜索思路及其 GitHub 仓库的 Issue 模板。
 - [GitHub](https://github.com/Hex-Dragon/PCL2)
 - [爱发电](https://afdian.net/a/LTCat)
 - [Bilibili](https://space.bilibili.com/11343203)
@@ -32,8 +33,11 @@
 **@naudio** - 使用了 NAudio 进行音乐、音效的播放。
 - [GitHub](https://github.com/naudio/NAudio)
 
-**@Fody** - 使用了 Fody 和 Costura.Fody 进行 DLL 的自动合并
+**@Fody** - 使用了 Fody 和 Costura.Fody 进行 DLL 的自动合并。
 - [GitHub](https://github.com/Fody)
+
+**@apache** - 使用了 Log4Net 进行日志记录。
+- [GitHub](https://github.com/apache/logging-log4net)
 
 
 # 附加信息

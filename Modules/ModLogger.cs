@@ -13,6 +13,8 @@ namespace EMCL.Modules
 {
     internal static class ModLogger
     {
+        #region 已废弃
+        /*
         public static StringBuilder logs = new StringBuilder();
         public static StreamWriter? logger = null;
         public static object loggerLock = new object();
@@ -99,18 +101,16 @@ namespace EMCL.Modules
             {
                 logger.Write(log);
             }
-        }
+        }*/
+        #endregion 已废弃
 
         public static void Log(string info, LogLevel level = LogLevel.Normal, string title = "出现错误")
         {
-            string text = $"[{ModTime.GetTimeNow()}] {info}\r\n";
+            string text = $"[{ModTime.GetTimeNow()}] {info}";
 
             if ((level <= LogLevel.Debug && Metadata.DEBUG) || level > LogLevel.Debug)
             {
-                lock (loggerLock)
-                {
-                    logs.Append(text);
-                }
+                Logger.WriteInfo(text);
                 Console.WriteLine(text);
             }
             string repText = ModString.RegexReplace(info, "", "\\[[^\\]]+?\\] ");

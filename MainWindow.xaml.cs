@@ -196,7 +196,6 @@ namespace EMCL
             this.Title = Metadata.title;
             this.lblTitle.Content = Metadata.title;
             ModLogger.Log("[Main] 主程序组件成功加载！");
-            ModLogger.LoggerStart();
         }
 
         private void MainWindow_Loaded(object sender, EventArgs e)
@@ -234,16 +233,6 @@ namespace EMCL
                 config = ReadConfig();
                 if (DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 > config.tempTime)
                 {
-                    cmbJavaList.Items.Clear();
-                    foreach (List<object> i in config.java!)
-                    {
-                        javaList.Add((string)i[0], (bool)i[1]);
-                        cmbJavaList.Items.Add(i[0]);
-                    }
-                    ModLogger.Log($"[Java] Java 缓存读取完毕！");
-                }
-                else
-                {
                     ModLogger.Log($"[Java] Java 缓存已过期，开始重新生成缓存！");
                     cmbJavaList.Items.Clear();
                     javaList = ModJava.JavaCacheGen(config);
@@ -252,6 +241,16 @@ namespace EMCL
                         cmbJavaList.Items.Add(i);
                     }
                     WriteConfig(config);
+                }
+                else
+                {
+                    cmbJavaList.Items.Clear();
+                    foreach (List<object> i in config.java!)
+                    {
+                        javaList.Add((string)i[0], (bool)i[1]);
+                        cmbJavaList.Items.Add(i[0]);
+                    }
+                    ModLogger.Log($"[Java] Java 缓存读取完毕！");
                 }
             }
             else
@@ -370,7 +369,6 @@ namespace EMCL
                 ModLogger.Log("[2YHLrd] 有人在关掉我！", LogLevel.Normal);
             });
             ModLogger.Log("[Main] 程序正在关闭！", LogLevel.Normal);
-            ModLogger.LoggerFlush();
         }
 
         private void MainWindow_Closed(object sender, EventArgs e)
@@ -429,7 +427,6 @@ namespace EMCL
             }
             ModLogger.Log("[Thread]<Main> 其他线程已关闭！", LogLevel.Normal);
             ModLogger.Log("[Main] 程序已关闭！", LogLevel.Normal);
-            ModLogger.LoggerFlush();
             Close();
             Application.Current.Shutdown();
         }
