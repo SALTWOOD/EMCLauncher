@@ -202,7 +202,7 @@ namespace EMCL
                 .Cast<Window>()
                 .FirstOrDefault(window => window is MainWindow) as MainWindow);
             ModFile.RemoveOutdatedLogs();
-            ModFile.RemoveOutdatedLogs("*.tmp", "EMCL/Temp", 3, 5);
+            ModFile.RemoveOutdatedLogs("*.log", "EMCL/Temp", 3, 5);
         }
 
         private void MainWindow_Loaded(object sender, EventArgs e)

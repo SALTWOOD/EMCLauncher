@@ -28,7 +28,7 @@ namespace EMCL
         /// <param name="source">信息来源</param>
         private static void WriteLog(string msg, Action<object> action)
         {
-            string filename = $"AppLog_{action.Method.Name}_{time}.log";
+            string filename = $"AppLog_{time}.log";
             var repository = LogManager.GetRepository();
             var appenders = repository.GetAppenders();
             if (appenders.Length > 0)
