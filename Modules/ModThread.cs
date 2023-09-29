@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static EMCL.Utils;
+using static EMCL.Constants;
 using static EMCL.Modules.ModLogger;
 using System.Threading;
 

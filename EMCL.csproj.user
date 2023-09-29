@@ -10,10 +10,16 @@
     <Compile Update="Pages\PageDownload.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\Settings.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="WinComps\Button.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="WinComps\MsgBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WinComps\SettingItem.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="WinComps\VersionItem.xaml.cs">
@@ -27,6 +33,9 @@
     <Page Update="Pages\PageDownload.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Pages\Settings.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Themes\Generic.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -34,6 +43,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="WinComps\MsgBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WinComps\SettingItem.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="WinComps\VersionItem.xaml">

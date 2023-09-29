@@ -1,0 +1,46 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:my="clr-namespace:EMCL.Pages" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="EMCL.Pages.Settings"
+    Title="EMCLauncher" ResizeMode="NoResize" WindowStyle="None" Background="{x:Null}" WindowStartupLocation="CenterScreen" AllowsTransparency="True" FontFamily="Microsoft YaHei" x:Name="mainWindow">
+    <Grid x:Name="panAllBack" Width="760" Height="435" UseLayoutRounding="True" RenderTransformOrigin="0.5,0.5">
+        <Border Width="740" Height="415">
+            <Border Width="740.001" Height="415.001" UseLayoutRounding="False">
+                <Grid Width="740" Height="415" UseLayoutRounding="False">
+                    <Grid Width="740" Height="415" UseLayoutRounding="True" x:Name="panel" AllowDrop="True" Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="305*" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="2" Margin="0,92,0,0" HorizontalAlignment="Left" Height="323" VerticalAlignment="Top" Width="740">
+                            <Image HorizontalAlignment="Right" x:Name="imgMainBg" VerticalAlignment="Bottom" IsHitTestVisible="False" Stretch="None" />
+                        </Grid>
+                        <Grid Grid.Row="2" x:Name="panMain" Margin="0,92,0,0" HorizontalAlignment="Left" Height="323" VerticalAlignment="Top" Width="740" RenderTransformOrigin="0.5,0.5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="677*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid HorizontalAlignment="Left" x:Name="panHostLeft" VerticalAlignment="Top" />
+                            <Grid HorizontalAlignment="Stretch" x:Name="panHostRight" VerticalAlignment="Top" Grid.Column="1" UseLayoutRounding="False" />
+                        </Grid>
+                        <Grid Grid.Row="2" x:Name="panGuild" Margin="0,40,0,0" HorizontalAlignment="Left" Height="375" VerticalAlignment="Top" Width="740" RenderTransformOrigin="0.5,0.5"/>
+                        <Grid x:Name="brdTop" VerticalAlignment="Top" Height="40" UseLayoutRounding="False" Grid.Row="2" MouseLeftButtonDown="brdTop_MouseLeftButtonDown">
+                            <Grid.Background>
+                                <ImageBrush ImageSource="/Images/theme1.png" Stretch="None" TileMode="Tile" Viewport="0,0,90,90" ViewportUnits="Absolute" />
+                            </Grid.Background>
+                            <WebBrowser Height="24" HorizontalAlignment="Left" Margin="551,10,0,0" x:Name="webData" VerticalAlignment="Top" Width="21" IsHitTestVisible="False" Visibility="Collapsed" />
+                            <Image Height="40" HorizontalAlignment="Right" VerticalAlignment="Top" Width="35" Opacity="0.5" x:Name="btnExit" Margin="0,0,5,0" Source="/Images/btnExit.png" UseLayoutRounding="True" MouseLeftButtonDown="btnExit_MouseLeftButtonDown" />
+                            <Image Height="40" HorizontalAlignment="Right" Margin="0,0,40,0" VerticalAlignment="Top" Width="35" Opacity="0.5" x:Name="btnMinimize" Source="/Images/btnMinimize.png" UseLayoutRounding="True" MouseLeftButtonDown="btnMinimize_MouseLeftButtonDown" />
+                            <Label x:Name="labTopVer" VerticalAlignment="Bottom" Foreground="White" Opacity="0.233" HorizontalAlignment="Right" Padding="7,7,10,7" UseLayoutRounding="True" Background="#016C6C6C" />
+                            <Label x:Name="lblTitle" Content="EMCL" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#A5FFFFFF" FontSize="17" Padding="0" IsHitTestVisible="False" Margin="40,0,0,0"/>
+                        </Grid>
+                        <Button Grid.Row="2" HorizontalAlignment="Left" Margin="100,30,0,0" x:Name="btnEvent" VerticalAlignment="Top" Command="MediaCommands.Play" Visibility="Collapsed" />
+                        <Button x:Name="btnSave" Content="保存" HorizontalAlignment="Left" Margin="687,45,0,0" Grid.Row="2" VerticalAlignment="Top" Width="43" Click="btnSave_Click"/>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Border>
+        <ListBox x:Name="lstSettings" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,75,10,10" Width="NaN"/>
+    </Grid>
+</Window>

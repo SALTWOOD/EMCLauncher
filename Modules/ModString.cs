@@ -53,7 +53,7 @@ namespace EMCL.Modules
         //路径搜索检索关键词
         public static bool ContainsSuspiciousWords(string s)
         {
-            foreach (string i in Utils.suspiciousWords)
+            foreach (string i in Constants.suspiciousWords)
             {
                 if (s.Contains(i)) { return true; }
             }

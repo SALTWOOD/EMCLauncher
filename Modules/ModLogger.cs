@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static EMCL.Utils;
+using static EMCL.Constants;
 using System.Threading;
 using System.Windows;
 
@@ -160,6 +160,17 @@ namespace EMCL.Modules
             ModLogger.Log($"[Test] {string.Join("\r\n\r\n\r\n", errors)}");
             ModLogger.Log($"[Test] {string.Join("\r\n\r\n\r\n", exs.Select(ex => ex.GetType().FullName))}");
             ModLogger.Log($"[System] 捕获到多重异常！{info}\r\n{string.Join("\r\n", errors.ToList())}", LogLevel.Error);
+        }
+
+        public enum LogLevel
+        {
+            Debug = 1,
+            Normal = 2,
+            Information = 3,
+            Hint = 4,
+            Message = 5,
+            Error = 6,
+            Fatal = 7
         }
     }
 }

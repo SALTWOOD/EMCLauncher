@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using EMCL.Modules;
-using static EMCL.Utils;
+using static EMCL.Constants;
 using System.Diagnostics;
 using System.Threading;
 using System.IO;
@@ -33,7 +33,7 @@ namespace EMCL
         public static MainWindow? _mainWindow;
 
         Dictionary<string, bool> javaList = new Dictionary<string, bool>();
-        public Config config = new Config();
+        public ModConfig.Config config = new();
         public ModSerial.CInfo computer = new ModSerial.CInfo();
         public ModSerial.FingerPrint fingerprint = new ModSerial.FingerPrint();
         public List<Window> windows = new List<Window>();
@@ -41,7 +41,7 @@ namespace EMCL
         #region 异常处理与线程运行
         public void HandleException(Exception ex)
         {
-            ModLogger.Log(ex, "", LogLevel.Fatal);
+            ModLogger.Log(ex, "", ModLogger.LogLevel.Fatal);
             //Console.WriteLine($"{ex.GetType()}\r\n{ex.Message}\r\n{ex.StackTrace}\r\n\r\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！");
             if (MessageBox.Show($"{ex.GetType()}\r\n{ex.Message}\r\n{ex.StackTrace}\r\n\r\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！", "无法处理的异常", MessageBoxButton.YesNoCancel, MessageBoxImage.Error) == MessageBoxResult.Yes)
             {
@@ -55,7 +55,7 @@ namespace EMCL
             stringBuilder.Append($"{ex1.GetType()}\r\n{ex1.Message}\r\n{ex1.StackTrace}\r\n\r\n");
             stringBuilder.Append($"在处理以上异常的过程中，抛出了另一个异常:\r\n");
             stringBuilder.Append($"{ex2.GetType()}\r\n{ex2.Message}\r\n{ex2.StackTrace}\r\n\r\n");
-            ModLogger.Log($"[System] 捕获多重异常！\n{stringBuilder}", LogLevel.Fatal);
+            ModLogger.Log($"[System] 捕获多重异常！\n{stringBuilder}", ModLogger.LogLevel.Fatal);
             //Console.WriteLine($"{ex.GetType()}\r\n{ex.Message}\r\n{ex.StackTrace}\r\n\r\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！");
             if (MessageBox.Show($"{stringBuilder}警告: 通常情况下，在处理一个异常的过程中出现另一个异常属于一个极大的 Bug！\r\n现在反馈问题吗？如果不反馈，这个问题可能永远无法解决！", "多个无法处理的异常", MessageBoxButton.YesNoCancel, MessageBoxImage.Error) == MessageBoxResult.Yes)
             {
@@ -169,7 +169,7 @@ namespace EMCL
             }
             catch (Exception ex)
             {
-                ModLogger.Log(ex, "Minecraft 启动失败", LogLevel.Normal);
+                ModLogger.Log(ex, "Minecraft 启动失败", ModLogger.LogLevel.Normal);
                 result = -1;
             }
             return result;
@@ -191,7 +191,7 @@ namespace EMCL
             ModLogger.Log("[Main] 主程序启动中！");
             ModLogger.Log($"[App] {Metadata.name}, 版本 {Metadata.version}");
             ModLogger.Log($"[App] 网络协议版本号 {Metadata.protocol} (0x{Metadata.protocol.ToString("X").PadLeft(8, '0')})");
-            //ModLogger.Log($"[System] 计算机基础信息:\n{computer}", LogLevel.Debug);
+            //ModLogger.Log($"[System] 计算机基础信息:\n{computer}", ModLogger.LogLevel.Debug);
             //ModLogger.Log($"[System] 计算机唯一识别码: {fingerprint}");
             InitializeComponent();
             ModLogger.Log("[Main] InitializeComponent() 执行完毕！");
@@ -200,7 +200,7 @@ namespace EMCL
             ModLogger.Log("[Main] 主程序组件成功加载！");
             _mainWindow = (Application.Current.Windows
                 .Cast<Window>()
-                .FirstOrDefault(window => window is MainWindow) as MainWindow);
+                .FirstOrDefault(window => window is MainWindow) as MainWindow)!;
             ModFile.RemoveOutdatedLogs();
             ModFile.RemoveOutdatedLogs("*.log", "EMCL/Temp", 3, 5);
         }
@@ -210,11 +210,6 @@ namespace EMCL
             try
             {
                 LoadApp();
-                lblTips.Content = tips[random.Next(tips.Count)];
-                ModApril.IsAprilFool(() =>
-                {
-                    lblTips.Visibility = Visibility.Visible;
-                });
             }
             catch (Exception ex)
             {
@@ -237,7 +232,7 @@ namespace EMCL
             {
                 ModLogger.Log($"[Config] 正在加载配置文件 {ModPath.path}EMCL/settings.json");
                 ModLogger.Log($"[Java] 开始读取 Java 缓存");
-                config = ReadConfig();
+                config = ModConfig.ReadConfig();
                 if (DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 > config.tempTime)
                 {
                     ModLogger.Log($"[Java] Java 缓存已过期，开始重新生成缓存！");
@@ -247,7 +242,7 @@ namespace EMCL
                     {
                         cmbJavaList.Items.Add(i);
                     }
-                    WriteConfig(config);
+                    ModConfig.WriteConfig(config);
                 }
                 else
                 {
@@ -271,7 +266,7 @@ namespace EMCL
                 }
                 config.tempTime = DateTimeOffset.Now.ToUnixTimeSeconds();
                 config.forceDisableJavaAutoSearch = false;
-                WriteConfig(config);
+                ModConfig.WriteConfig(config);
                 ModLogger.Log($"[Config] 默认配置文件生成完毕！");
             }
         }
@@ -303,7 +298,7 @@ namespace EMCL
             }
             catch (OutOfMemoryException ex)
             {
-                ModLogger.Log(ex, "内存不足", LogLevel.Message);
+                ModLogger.Log(ex, "内存不足", ModLogger.LogLevel.Message);
             }
             catch (Exception ex)
             {
@@ -373,9 +368,9 @@ namespace EMCL
             ModApril.IsAprilFool(() =>
             {
                 //愚人节彩蛋罢了（
-                ModLogger.Log("[2YHLrd] 有人在关掉我！", LogLevel.Normal);
+                ModLogger.Log("[2YHLrd] 有人在关掉我！", ModLogger.LogLevel.Normal);
             });
-            ModLogger.Log("[Main] 程序正在关闭！", LogLevel.Normal);
+            ModLogger.Log("[Main] 程序正在关闭！", ModLogger.LogLevel.Normal);
         }
 
         private void MainWindow_Closed(object sender, EventArgs e)
@@ -424,34 +419,26 @@ namespace EMCL
         #region 程序退出
         public void AppExit()
         {
-            ModLogger.Log("[Main] 准备开始关闭其他线程", LogLevel.Normal);
+            ModLogger.Log("[Main] 准备开始关闭其他线程", ModLogger.LogLevel.Normal);
             ModRun.isExited = true;
-            ModLogger.Log("[Option] isExited 状态被设为 true", LogLevel.Normal);
-            ModLogger.Log("[Thread]<Main> 开始关闭其他线程", LogLevel.Normal);
+            ModLogger.Log("[Option] isExited 状态被设为 true", ModLogger.LogLevel.Normal);
+            ModLogger.Log("[Thread]<Main> 开始关闭其他线程", ModLogger.LogLevel.Normal);
             foreach (Thread t in ModThread.threads)
             {
                 t.Join();
             }
-            ModLogger.Log("[Thread]<Main> 其他线程已关闭！", LogLevel.Normal);
-            ModLogger.Log("[Main] 程序已关闭！", LogLevel.Normal);
+            ModLogger.Log("[Thread]<Main> 其他线程已关闭！", ModLogger.LogLevel.Normal);
+            ModLogger.Log("[Main] 程序已关闭！", ModLogger.LogLevel.Normal);
             Close();
             Application.Current.Shutdown();
         }
         #endregion
 
-        private void btnTest_Click(object sender, RoutedEventArgs e)
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
-            Classes.Tree<int> tree = new Classes.Tree<int>();
-            tree.Insert(1);
-            tree.Insert(-2);
-            tree.Insert(-42);
-            tree.Insert(-1);
-            //tree.Insert(0);
-            tree.Insert(5);
-            tree.Insert(6785);
-            tree.Insert(453);
-            tree.Insert(23);
-            MessageBox.Show(string.Join(" ", tree.WalkTree()));
+            Window newWindow = new Pages.Settings();
+            windows.Add(newWindow);
+            newWindow.Show();
         }
     }
 }

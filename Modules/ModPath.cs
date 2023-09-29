@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace EMCL.Modules
                 return _pathEnv!;
             }
         }
+
         public static string pathJavaHome
         {
             get
@@ -29,6 +31,17 @@ namespace EMCL.Modules
                 if (_pathJavaHome is null) { _pathJavaHome = Environment.GetEnvironmentVariable("JAVA_HOME") != null ? Environment.GetEnvironmentVariable("JAVA_HOME") : ""; }
                 return _pathJavaHome!;
             }
+        }
+
+        //根据路径获取文件名
+        public static string GetFileNameFromPath(string filePath)
+        {
+            string path = filePath.Replace("\\", "/");
+            if (path.EndsWith("/")) { throw new Exception($"不包含文件名：{filePath}"); }
+            string name = filePath.Split('/').Last().Split('?').First();
+            if (name.Length == 0) { throw new Exception($"不包含文件名：{filePath}"); }
+            if (name.Length > 250) { throw new PathTooLongException($"文件名过长：{filePath}"); }
+            return name;
         }
     }
 }

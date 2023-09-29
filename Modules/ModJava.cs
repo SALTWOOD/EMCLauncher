@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static EMCL.Utils;
+using static EMCL.Constants;
 
 namespace EMCL.Modules
 {
@@ -149,7 +149,7 @@ namespace EMCL.Modules
                     {
                         if (!folder.Exists) continue;
                         if (folder.Attributes.HasFlag(FileAttributes.ReparsePoint)) continue;
-                        string searchEntry = GetFileNameFromPath(folder.Name).ToLower();
+                        string searchEntry = ModPath.GetFileNameFromPath(folder.Name).ToLower();
                         if (ModString.ReturnIfSus(isFullSearch, folder, searchEntry))
                         {
                             result = JavaSearchFolder(folder, result, false);
@@ -167,7 +167,7 @@ namespace EMCL.Modules
                     }
                     catch (Exception ex)
                     {
-                        ModLogger.Log(ex, ex.Message, LogLevel.Normal);
+                        ModLogger.Log(ex, ex.Message, ModLogger.LogLevel.Normal);
                     }
                 }
             }
@@ -178,7 +178,7 @@ namespace EMCL.Modules
             return result;
         }
 
-        public static Dictionary<string, bool> JavaCacheGen(Config? config = null)
+        public static Dictionary<string, bool> JavaCacheGen(ModConfig.Config? config = null)
         {
             Dictionary<string,bool> result = javaSearch();
             List<List<object>> json = new List<List<object>>();
@@ -190,7 +190,7 @@ namespace EMCL.Modules
             if (config != null)
             {
                 config.java = json;
-                WriteConfig(config);
+                ModConfig.WriteConfig(config);
                 ModLogger.Log($"[Java] Java 缓存写入完毕！");
             }
             return result;
