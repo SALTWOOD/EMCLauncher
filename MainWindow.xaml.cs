@@ -237,7 +237,7 @@ namespace EMCL
                 ModLogger.Log($"[Config] 正在加载配置文件 {ModPath.path}EMCL/settings.json");
                 ModLogger.Log($"[Java] 开始读取 Java 缓存");
                 config = ModConfig.ReadConfig();
-                if (DateTimeOffset.Now.ToUnixTimeSeconds() - 604800 > config.tempTime)
+                if (DateTimeOffset.Now.AddDays(-7).ToUnixTimeSeconds() > config.tempTime)
                 {
                     ModLogger.Log($"[Java] Java 缓存已过期，开始重新生成缓存！");
                     cmbJavaList.Items.Clear();

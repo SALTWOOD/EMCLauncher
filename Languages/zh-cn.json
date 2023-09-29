@@ -3,7 +3,8 @@
   "languageName": "简体中文",
   "languageVersion": "1.0.0",
   "translations": [
-    [ "setting.tempTime", "缓存有效时间" ],
+    [ "setting.tempValidTime", "缓存有效时间" ],
+    [ "setting.tempTime", "上一次缓存创建时间" ],
     [ "setting.forceDisableJavaAutoSearch", "强制禁用 Java 自动搜索" ],
     [ "setting.language", "程序语言" ]
   ]
