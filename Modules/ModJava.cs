@@ -149,7 +149,7 @@ namespace EMCL.Modules
                     {
                         if (!folder.Exists) continue;
                         if (folder.Attributes.HasFlag(FileAttributes.ReparsePoint)) continue;
-                        string searchEntry = ModPath.GetFileNameFromPath(folder.Name).ToLower();
+                        string searchEntry = Path.GetFileName(folder.Name).ToLower();
                         if (ModString.ReturnIfSus(isFullSearch, folder, searchEntry))
                         {
                             result = JavaSearchFolder(folder, result, false);

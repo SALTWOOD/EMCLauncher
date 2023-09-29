@@ -191,8 +191,11 @@ namespace EMCL
             ModLogger.Log("[Main] 主程序启动中！");
             ModLogger.Log($"[App] {Metadata.name}, 版本 {Metadata.version}");
             ModLogger.Log($"[App] 网络协议版本号 {Metadata.protocol} (0x{Metadata.protocol.ToString("X").PadLeft(8, '0')})");
-            //ModLogger.Log($"[System] 计算机基础信息:\n{computer}", ModLogger.LogLevel.Debug);
-            //ModLogger.Log($"[System] 计算机唯一识别码: {fingerprint}");
+            ModThread.RunThread(() =>
+            {
+                ModLogger.Log($"[System] 计算机基础信息:\n{computer}", ModLogger.LogLevel.Debug);
+                ModLogger.Log($"[System] 计算机唯一识别码: {fingerprint}");
+            }, "ComputerInfoGetter");
             InitializeComponent();
             ModLogger.Log("[Main] InitializeComponent() 执行完毕！");
             this.Title = Metadata.title;
