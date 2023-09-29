@@ -125,7 +125,7 @@ namespace EMCL.Modules
                 ModLogger.Log($@"[Java] 开始{(isFullSearch ? """完全""" : """部分""")}遍历查找：{originalPath}");
                 results = JavaSearchFolder(new DirectoryInfo(originalPath), results, source, isFullSearch);
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 ModLogger.Log($"[Java] 遍历查找 Java 时遭遇无权限的文件夹：{originalPath}");
             }
@@ -171,7 +171,7 @@ namespace EMCL.Modules
                     }
                 }
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 //Console.WriteLine(ex.Message);
             }
