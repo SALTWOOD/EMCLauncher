@@ -33,6 +33,8 @@ namespace EMCL.Modules
         public class Config
         {
             public List<List<object>>? java = new();
+            public bool logAutomaticCleanup = true;
+            public int logFileAutomaticCleanupInterval = 7;
             public int tempValidTime = 7 * 24 * 60 * 60;
             public long tempTime = 0;
             public bool forceDisableJavaAutoSearch = false;

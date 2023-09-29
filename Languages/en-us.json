@@ -4,7 +4,9 @@
   "languageVersion": "1.0.0",
   "translations": [
     [ "setting.tempValidTime", "Cache Validity Time" ],
-    [ "setting.tempTime", "Last cache Creation Time" ],
+    [ "setting.tempTime", "Last Cache Creation Time" ],
+    [ "setting.logAutomaticCleanup", "Log File Automatic Cleanup" ],
+    [ "setting.logFileAutomaticCleanupInterval", "Log File Auto Cleanup Interval" ],
     [ "setting.forceDisableJavaAutoSearch", "Force Disable Java Auto Search" ],
     [ "setting.forceJavaFullSearch", "Force Java Full Search" ],
     [ "setting.language", "Language" ]

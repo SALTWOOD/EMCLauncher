@@ -204,8 +204,6 @@ namespace EMCL
             _mainWindow = (Application.Current.Windows
                 .Cast<Window>()
                 .FirstOrDefault(window => window is MainWindow) as MainWindow)!;
-            ModFile.RemoveOutdatedLogs();
-            ModFile.RemoveOutdatedLogs("*.log", "EMCL/Temp", 3, 5);
         }
 
         private void MainWindow_Loaded(object sender, EventArgs e)
@@ -271,6 +269,11 @@ namespace EMCL
                 ModConfig.WriteConfig(config);
                 ModLogger.Log($"[Config] 默认配置文件生成完毕！");
             }
+            if (config.logAutomaticCleanup)
+            {
+                ModFile.RemoveOutdatedLogs();
+            }
+            ModFile.RemoveOutdatedLogs("*.log", "EMCL/Temp", 3, 10);
             LanguageHelper.Initialize(config.language);
         }
         #endregion
