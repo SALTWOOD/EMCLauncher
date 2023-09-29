@@ -36,7 +36,7 @@ namespace EMCL.WinComps
     {
 
         // 声明
-        public event ClickEventHandler Click; // 自定义事件
+        public event ClickEventHandler? Click = null; // 自定义事件
 
         public delegate void ClickEventHandler(object sender, EventArgs e);
 
