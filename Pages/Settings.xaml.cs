@@ -59,35 +59,48 @@ namespace EMCL.Pages
                     if (obj is string)
                     {
                         string i = (string)obj;
-                        item.lblSettingItemName.Content = name;
+                        item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
+                        item.lblType.Content = "字符串";
                         item.txtValue.Text = i;
                         this.lstSettings.Items.Add(item);
                     }
                     else if (obj is int)
                     {
                         int i = (int)obj;
-                        item.lblSettingItemName.Content = name;
+                        item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
+                        item.lblType.Content = "整型";
                         item.txtValue.Text = i.ToString();
                         this.lstSettings.Items.Add(item);
                     }
                     else if (obj is long)
                     {
                         long i = (long)obj;
-                        item.lblSettingItemName.Content = name;
+                        item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
+                        item.lblType.Content = "长整型";
                         item.txtValue.Text = i.ToString();
                         this.lstSettings.Items.Add(item);
                     }
                     else if (obj is double)
                     {
                         double i = (double)obj;
-                        item.lblSettingItemName.Content = name;
+                        item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
+                        item.lblType.Content = "双精度浮点数";
+                        item.txtValue.Text = i.ToString();
+                        this.lstSettings.Items.Add(item);
+                    }
+                    else if (obj is float)
+                    {
+                        double i = (double)obj;
+                        item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
+                        item.lblType.Content = "单精度浮点数";
                         item.txtValue.Text = i.ToString();
                         this.lstSettings.Items.Add(item);
                     }
                     else if (obj is bool)
                     {
                         bool i = (bool)obj;
-                        item.lblSettingItemName.Content = name;
+                        item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
+                        item.lblType.Content = "布尔值";
                         item.txtValue.Text = i.ToString();
                         this.lstSettings.Items.Add(item);
                     }

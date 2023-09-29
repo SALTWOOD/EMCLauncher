@@ -32,9 +32,10 @@ namespace EMCL.Modules
 
         public class Config
         {
-            public List<List<object>>? java;
-            public long tempTime;
-            public bool forceDisableJavaAutoSearch;
+            public List<List<object>>? java = new();
+            public long tempTime = 0;
+            public bool forceDisableJavaAutoSearch = false;
+            public string language = "zh-cn";
         }
     }
 }

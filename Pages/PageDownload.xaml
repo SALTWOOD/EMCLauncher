@@ -33,7 +33,7 @@
                             <Image Height="40" HorizontalAlignment="Right" VerticalAlignment="Top" Width="35" Opacity="0.5" x:Name="btnExit" Margin="0,0,5,0" Source="/Images/btnExit.png" UseLayoutRounding="True" MouseLeftButtonDown="btnExit_MouseLeftButtonDown" />
                             <Image Height="40" HorizontalAlignment="Right" Margin="0,0,40,0" VerticalAlignment="Top" Width="35" Opacity="0.5" x:Name="btnMinimize" Source="/Images/btnMinimize.png" UseLayoutRounding="True" MouseLeftButtonDown="btnMinimize_MouseLeftButtonDown" />
                             <Label x:Name="labTopVer" VerticalAlignment="Bottom" Foreground="White" Opacity="0.233" HorizontalAlignment="Right" Padding="7,7,10,7" UseLayoutRounding="True" Background="#016C6C6C" />
-                            <Label x:Name="lblTitle" Content="EMCL" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#A5FFFFFF" FontSize="17" Padding="0" IsHitTestVisible="False" Margin="40,0,0,0"/>
+                            <Label x:Name="lblTitle" Content="资源下载" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#A5FFFFFF" FontSize="17" Padding="0" IsHitTestVisible="False" Margin="40,0,0,0"/>
                         </Grid>
                         <Button Grid.Row="2" HorizontalAlignment="Left" Margin="100,30,0,0" x:Name="btnEvent" VerticalAlignment="Top" Command="MediaCommands.Play" Visibility="Collapsed" />
                     </Grid>

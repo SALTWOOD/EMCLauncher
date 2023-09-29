@@ -4,12 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:EMCL.WinComps"
-             mc:Ignorable="d" BorderBrush="#FF303030" Focusable="True" FontSize="14" Name="panMain" Background="#01F8F8F8" Opacity="0.8" UseLayoutRounding="True" BorderThickness="0" Padding="0,0,1,0" Width="555" Height="40">
+             mc:Ignorable="d" BorderBrush="#FF303030" Focusable="True" FontSize="14" Name="panMain" Background="#01F8F8F8" Opacity="0.8" UseLayoutRounding="True" BorderThickness="0" Padding="0,0,1,0" Width="666" Height="40">
     <Border BorderBrush="Black" BorderThickness="1">
         <Grid>
 
-            <Label x:Name="lblSettingItemName" Content="设置项名称" Margin="0,9,277,9" FontSize="10"/>
-            <TextBox x:Name="txtValue" HorizontalAlignment="Left" Margin="276,0,0,0" TextWrapping="Wrap" Text="设置项内容" VerticalAlignment="Center" Width="268"/>
+            <Label x:Name="lblSettingItemName" Content="设置项名称" Margin="0,0,277,0" FontSize="20" Height="38"/>
+            <TextBox x:Name="txtValue" VerticalAlignment="Center" Margin="332,0,10,0" TextWrapping="Wrap" Text="设置项内容" Height="19"/>
+            <Label x:Name="lblType" Content="设置项类型" Margin="235,9,331,9" FontSize="10" HorizontalAlignment="Right"/>
         </Grid>
     </Border>
 </UserControl>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace EMCL.Modules
 {
@@ -14,9 +15,25 @@ namespace EMCL.Modules
     //byte[] Raw = My.Resources.ResourceManager.GetObject(ResourceName);
     //return Raw;
     //}
-
     public static class ModFile
     {
+        public static readonly Assembly assembly = Assembly.GetExecutingAssembly();
+
+        public static string GetInternalFile(string path)
+        {
+            Assembly _assembly = Assembly.GetExecutingAssembly();
+            string resourceName = $"EMCL.{path.Replace('/','.')}";
+            Stream? stream = _assembly.GetManifestResourceStream(resourceName);
+            if (stream != null)
+            {
+                return new StreamReader(stream).ReadToEnd();
+            }
+            else
+            {
+                return "";
+            }
+        }
+
         public static Assembly AssemblyResolve(string arg)
         {
             Assembly assets = Assembly.GetAssembly(typeof(App))!;

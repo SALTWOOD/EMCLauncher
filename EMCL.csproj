@@ -70,6 +70,11 @@
     <None Remove="Images/True.png" />
     <None Remove="Images\block_theme_1.png" />
     <None Remove="Images\theme1.png" />
+    <None Remove="Languages\zh-cn.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Languages\zh-cn.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -105,5 +110,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>

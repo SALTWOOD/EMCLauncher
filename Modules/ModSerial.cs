@@ -246,8 +246,9 @@ namespace EMCL.Modules
                             result = mo[wmiProperty].ToString()!;
                             break;
                         }
-                        catch
+                        catch (Exception)
                         {
+
                         }
                     }
                 }

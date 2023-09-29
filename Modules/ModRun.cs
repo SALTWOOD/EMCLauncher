@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ using static EMCL.Modules.ModLogger;
 
 namespace EMCL.Modules
 {
-    public class ModRun
+    public static class ModRun
     {
         public static bool isExited = false;
 

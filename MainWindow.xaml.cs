@@ -206,6 +206,7 @@ namespace EMCL
                 .FirstOrDefault(window => window is MainWindow) as MainWindow)!;
             ModFile.RemoveOutdatedLogs();
             ModFile.RemoveOutdatedLogs("*.log", "EMCL/Temp", 3, 5);
+            LanguageHelper.Initialize(config.language);
         }
 
         private void MainWindow_Loaded(object sender, EventArgs e)
@@ -422,6 +423,8 @@ namespace EMCL
         #region 程序退出
         public void AppExit()
         {
+            ModLogger.Log($"[Config] 正在保存配置文件至 {ModPath.path}EMCL/settings.json", ModLogger.LogLevel.Normal);
+            ModConfig.WriteConfig(config);
             ModLogger.Log("[Main] 准备开始关闭其他线程", ModLogger.LogLevel.Normal);
             ModRun.isExited = true;
             ModLogger.Log("[Option] isExited 状态被设为 true", ModLogger.LogLevel.Normal);
