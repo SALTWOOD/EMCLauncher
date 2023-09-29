@@ -271,7 +271,7 @@ namespace EMCL
             }
             if (config.logAutomaticCleanup)
             {
-                ModFile.RemoveOutdatedLogs();
+                ModFile.RemoveOutdatedLogs(days: config.logFileAutomaticCleanupInterval);
             }
             ModFile.RemoveOutdatedLogs("*.log", "EMCL/Temp", 3, 10);
             LanguageHelper.Initialize(config.language);
