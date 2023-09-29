@@ -20,6 +20,8 @@ namespace EMCL.WinComps
     /// </summary>
     public partial class SettingItem : UserControl
     {
+        public string key = "";
+
         public SettingItem()
         {
             InitializeComponent();

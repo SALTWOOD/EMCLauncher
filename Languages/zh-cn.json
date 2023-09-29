@@ -6,6 +6,7 @@
     [ "setting.tempValidTime", "缓存有效时间" ],
     [ "setting.tempTime", "上一次缓存创建时间" ],
     [ "setting.forceDisableJavaAutoSearch", "强制禁用 Java 自动搜索" ],
+    [ "setting.forceJavaFullSearch", "强制完整搜索 Java" ],
     [ "setting.language", "程序语言" ]
   ]
 }

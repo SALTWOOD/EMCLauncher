@@ -58,7 +58,7 @@ namespace EMCL.Modules
             }
         }
 
-        public static Dictionary<string, bool> javaSearch()
+        public static Dictionary<string, bool> javaSearch(bool fullSearch = false)
         {
             ModLogger.Log($"[Java] 开始搜索 Java");
             Dictionary<string, bool> javaDic = new Dictionary<string, bool>();
@@ -73,11 +73,11 @@ namespace EMCL.Modules
             //查找磁盘中的 Java
             foreach (DriveInfo disk in DriveInfo.GetDrives())
             {
-                javaDic = JavaSearchFolder(ModString.SlashReplace(disk.Name), javaDic, false);
+                javaDic = JavaSearchFolder(ModString.SlashReplace(disk.Name), javaDic, false,fullSearch);
             }
             //查找 APPDATA 文件夹中的 Java
-            javaDic = JavaSearchFolder($"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/", javaDic, false);
-            javaDic = JavaSearchFolder($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}/", javaDic, false);
+            javaDic = JavaSearchFolder($"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/", javaDic, fullSearch);
+            javaDic = JavaSearchFolder($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}/", javaDic, fullSearch);
             //查找启动器目录中的 Java
             javaDic = JavaSearchFolder(ModPath.path!, javaDic, false, isFullSearch: true);
             //查找所选 Minecraft 文件夹中的 Java
@@ -180,7 +180,15 @@ namespace EMCL.Modules
 
         public static Dictionary<string, bool> JavaCacheGen(ModConfig.Config? config = null)
         {
-            Dictionary<string,bool> result = javaSearch();
+            Dictionary<string,bool> result;
+            if (config == null)
+            {
+                result = javaSearch();
+            }
+            else
+            {
+                result = javaSearch(config.forceJavaFullSearch);
+            }
             List<List<object>> json = new List<List<object>>();
             foreach (KeyValuePair<string, bool> i in result)
             {

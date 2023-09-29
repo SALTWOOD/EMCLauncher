@@ -1,0 +1,12 @@
+{
+  "languageAuthor": "SALTWOOD",
+  "languageName": "简体中文",
+  "languageVersion": "1.0.0",
+  "translations": [
+    [ "setting.tempValidTime", "Cache Validity Time" ],
+    [ "setting.tempTime", "Last cache Creation Time" ],
+    [ "setting.forceDisableJavaAutoSearch", "Force Disable Java Auto Search" ],
+    [ "setting.forceJavaFullSearch", "Force Java Full Search" ],
+    [ "setting.language", "Language" ]
+  ]
+}

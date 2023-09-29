@@ -56,66 +56,57 @@ namespace EMCL.Pages
                 if (obj != null)
                 {
                     SettingItem item = new SettingItem();
+                    item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
+                    item.txtValue.Text = obj.ToString();
                     if (obj is string)
                     {
                         string i = (string)obj;
-                        item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
                         item.lblType.Content = "字符串";
-                        item.txtValue.Text = i;
                         this.lstSettings.Items.Add(item);
                     }
                     else if (obj is int)
                     {
                         int i = (int)obj;
-                        item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
                         item.lblType.Content = "整型";
-                        item.txtValue.Text = i.ToString();
                         this.lstSettings.Items.Add(item);
                     }
                     else if (obj is long)
                     {
                         long i = (long)obj;
-                        item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
                         item.lblType.Content = "长整型";
-                        item.txtValue.Text = i.ToString();
                         this.lstSettings.Items.Add(item);
                     }
                     else if (obj is double)
                     {
                         double i = (double)obj;
-                        item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
                         item.lblType.Content = "双精度浮点数";
-                        item.txtValue.Text = i.ToString();
                         this.lstSettings.Items.Add(item);
                     }
                     else if (obj is float)
                     {
                         double i = (double)obj;
-                        item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
                         item.lblType.Content = "单精度浮点数";
-                        item.txtValue.Text = i.ToString();
                         this.lstSettings.Items.Add(item);
                     }
                     else if (obj is bool)
                     {
                         bool i = (bool)obj;
-                        item.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
                         item.lblType.Content = "布尔值";
-                        item.txtValue.Text = i.ToString();
                         this.lstSettings.Items.Add(item);
                     }
                     else if (obj is List<object>)
                     {
-
+                        //NOT PLANNED
                     }
                     else if (obj is Dictionary<object,object>)
                     {
-
+                        //NOT PLANNED
                     }
                     else
                     {
 
                     }
+                    item.key = name;
                 }
             }
         }
@@ -124,13 +115,14 @@ namespace EMCL.Pages
         {
             foreach (SettingItem item in this.lstSettings.Items)
             {
-                object? value = ConfigDiscoverer.ConvertFieldValue(MainWindow._mainWindow!.config, (string)item.lblSettingItemName.Content, item.txtValue.Text);
+                object? value = ConfigDiscoverer.ConvertFieldValue(MainWindow._mainWindow!.config, item.key, item.txtValue.Text);
                 if (value != null)
                 {
-                    ConfigDiscoverer.SetFieldValue(MainWindow._mainWindow!.config, (string)item.lblSettingItemName.Content, value);
+                    ConfigDiscoverer.SetFieldValue(MainWindow._mainWindow!.config, item.key, value);
                     ModConfig.WriteConfig(MainWindow._mainWindow!.config);
                 }
             }
+            LanguageHelper.Initialize(MainWindow._mainWindow!.config.language);
             MessageBox.Show("设置保存成功！", "设置项", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }

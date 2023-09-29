@@ -27,7 +27,7 @@ namespace EMCL.Modules
                 {
                     Log(ex, $"{name}：线程执行失败");
                 }
-                catch (ThreadAbortException ex)
+                catch (ThreadAbortException)
                 {
                     ModLogger.Log($"[Thread]<{name}> 线程 {name} 被迫终止！");
                 }

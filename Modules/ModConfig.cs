@@ -36,6 +36,7 @@ namespace EMCL.Modules
             public int tempValidTime = 7 * 24 * 60 * 60;
             public long tempTime = 0;
             public bool forceDisableJavaAutoSearch = false;
+            public bool forceJavaFullSearch = false;
             public string language = "zh-cn";
         }
     }
