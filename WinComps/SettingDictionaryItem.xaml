@@ -4,15 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:EMCL.WinComps"
-             mc:Ignorable="d" BorderBrush="#FF303030" Focusable="True" FontSize="14" Name="panMain" Background="#01F8F8F8" Opacity="0.8" UseLayoutRounding="True" BorderThickness="0" Padding="0,0,1,0" Width="750" Height="40">
+             mc:Ignorable="d" BorderBrush="#FF303030" Focusable="True" FontSize="14" Name="panMain" Background="#01F8F8F8" Opacity="0.8" UseLayoutRounding="True" BorderThickness="0" Padding="0,0,1,0" Width="700" Height="40">
     <Border BorderBrush="Black" BorderThickness="1">
         <Grid>
 
             <Label x:Name="lblSettingItemName" Content="设置项名称" Margin="0,0,277,0" FontSize="20" Height="38"/>
-            <TextBox x:Name="txtValue" VerticalAlignment="Center" Margin="598,0,10,0" TextWrapping="Wrap" Text="设置项内容" Height="19"/>
-            <Label x:Name="lblType" Content="设置项类型" Margin="265,9,0,9" FontSize="10" HorizontalAlignment="Left"/>
-            <TextBox x:Name="txtKey" VerticalAlignment="Center" Margin="454,0,154,0" TextWrapping="Wrap" Text="设置项内容" Height="19"/>
-            <ComboBox x:Name="cmbItemIndex" HorizontalAlignment="Left" Margin="330,0,0,0" VerticalAlignment="Center" Width="120" Height="19" SelectionChanged="cmbItemIndex_SelectionChanged"/>
+            <TextBox x:Name="txtValue" VerticalAlignment="Center" Margin="566,0,11,0" TextWrapping="Wrap" Text="设置项内容" Height="19"/>
+            <Label x:Name="lblType" Content="设置项类型" Margin="252,9,0,9" FontSize="10" HorizontalAlignment="Left"/>
+            <TextBox x:Name="txtKey" VerticalAlignment="Center" Margin="441,0,136,0" TextWrapping="Wrap" Text="设置项内容" Height="19"/>
+            <ComboBox x:Name="cmbItemIndex" HorizontalAlignment="Left" Margin="316,0,0,0" VerticalAlignment="Center" Width="120" Height="19" SelectionChanged="cmbItemIndex_SelectionChanged"/>
         </Grid>
     </Border>
 </UserControl>
