@@ -45,6 +45,12 @@
     <Page Update="WinComps\MsgBox.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="WinComps\SettingDictionaryItem.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WinComps\SettingListItem.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="WinComps\SettingItem.xaml">
       <SubType>Designer</SubType>
     </Page>

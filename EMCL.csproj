@@ -108,6 +108,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="WinComps\SettingDictionaryItem.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WinComps\SettingListItem.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

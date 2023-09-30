@@ -96,7 +96,17 @@ namespace EMCL.Pages
                     }
                     else if (obj is List<object>)
                     {
-                        //NOT PLANNED
+                        /*List<object> i = (List<object>)obj;
+                        SettingListItem l = new SettingListItem();
+                        l.lblSettingItemName.Content = LanguageHelper.Get($"setting.{name}");
+                        l.cmbItemIndex.Items.Clear();
+                        for (int j = 0;j < i.Count; j++)
+                        {
+                            l.cmbItemIndex.Items.Add(j);
+                        }
+                        l.list = i;
+                        l.lblType.Content = "列表";
+                        this.lstSettings.Items.Add(l);*/
                     }
                     else if (obj is Dictionary<object,object>)
                     {
