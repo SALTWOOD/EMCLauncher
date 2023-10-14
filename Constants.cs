@@ -9,7 +9,7 @@ using System.Xml.Linq;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using System.IO;
-using EMCL.Modules;
+using SaltLib.Modules;
 
 namespace EMCL
 {

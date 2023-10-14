@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static EMCL.Constants;
 
-namespace EMCL.Modules
+namespace SaltLib.Modules
 {
     internal static class ModJava
     {

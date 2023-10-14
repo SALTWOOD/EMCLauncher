@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Windows.Forms.Design.AxImporter;
 
-namespace EMCL.Modules
+namespace SaltLib.Modules
 {
     internal static class ModString
     {

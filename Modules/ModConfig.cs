@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static EMCL.Constants;
 
-namespace EMCL.Modules
+namespace SaltLib.Modules
 {
     public static class ModConfig
     {

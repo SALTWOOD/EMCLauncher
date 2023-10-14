@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using EMCL.Modules;
+using SaltLib.Modules;
 using static EMCL.Constants;
 using System.Diagnostics;
 using System.Threading;
@@ -22,6 +22,7 @@ using Microsoft.Win32;
 using Microsoft.VisualBasic.Devices;
 using System.Windows.Threading;
 using EMCL.Pages;
+using NAudio;
 
 namespace EMCL
 {

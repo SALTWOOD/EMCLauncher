@@ -1,4 +1,4 @@
-﻿using EMCL.Modules;
+﻿using SaltLib.Modules;
 using EMCL.WinComps;
 using Newtonsoft.Json;
 using System;
@@ -19,7 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static EMCL.Modules.MinecraftJson;
+using static SaltLib.Modules.MinecraftJson;
 
 namespace EMCL.Pages
 {

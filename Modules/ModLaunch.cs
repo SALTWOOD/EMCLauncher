@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EMCL.Modules
+namespace SaltLib.Modules
 {
     internal static class ModLaunch
     {

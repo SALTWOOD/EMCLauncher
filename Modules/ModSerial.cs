@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Security;
 using System.Collections;
 
-namespace EMCL.Modules
+namespace SaltLib.Modules
 {
     public static class ModSerial
     {

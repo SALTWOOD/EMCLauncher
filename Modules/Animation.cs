@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using static System.Resources.ResXFileRef;
 
-namespace EMCL.Modules
+namespace SaltLib.Modules
 {
     internal class Animation
     {

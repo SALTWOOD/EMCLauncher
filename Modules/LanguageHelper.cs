@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using EMCL.Modules;
+using SaltLib.Modules;
 using Newtonsoft.Json;
 
-namespace EMCL.Modules
+namespace SaltLib.Modules
 {
     public class Language
     {
