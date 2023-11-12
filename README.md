@@ -39,6 +39,9 @@
 **@apache** - 使用了 Log4Net 进行日志记录。
 - [GitHub](https://github.com/apache/logging-log4net)
 
+**@Xceed** - 使用了 Extended.Wpf.Toolkit 补全部分WPF控件。
+- [GitHub](https://github.com/xceedsoftware/wpftoolkit)
+
 
 # 附加信息
 ## 开源许可证
