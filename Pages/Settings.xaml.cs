@@ -12,9 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using EMCL;
-using SaltLib.Modules;
+using EMCL.Modules;
 using EMCL.Classes;
 using EMCL.WinComps;
+using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace EMCL.Pages
 {
@@ -23,13 +24,24 @@ namespace EMCL.Pages
     /// </summary>
     public partial class Settings : Window
     {
-        List<ValueTuple<string, object?>> configList;
+        List<(string, object?)> configList;
 
         public Settings()
         {
             InitializeComponent();
             configList = ConfigDiscoverer.GetAllField(MainWindow._mainWindow!.config);
             ShowConfig(configList);
+        }
+
+        private void ShowConfigv2(List<(string, object?)> configList)
+        {
+            foreach ((string name, object? value) in configList)
+            {
+                PropertyGrid propertyGrid = new PropertyGrid();
+                propertyGrid.SelectedObject = value;
+                this.lstSettings.Items.Clear();
+                this.lstSettings.Items.Add(propertyGrid);
+            }
         }
 
         private void btnExit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -47,12 +59,10 @@ namespace EMCL.Pages
             this.mainWindow.WindowState = WindowState.Minimized;
         }
 
-        private void ShowConfig(List<ValueTuple<string,object?>> values)
+        private void ShowConfig(List<(string, object?)> values)
         {
-            foreach (ValueTuple<string, object?> value in values)
+            foreach ((string name, object? obj) in values)
             {
-                string name = value.Item1;
-                object? obj = value.Item2;
                 if (obj != null)
                 {
                     SettingItem item = new SettingItem();

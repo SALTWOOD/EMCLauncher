@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SaltLib.Modules
+namespace EMCL.Modules
 {
     internal class ModTime
     {

@@ -10,7 +10,7 @@ using static EMCL.Constants;
 using System.Threading;
 using System.Windows;
 
-namespace SaltLib.Modules
+namespace EMCL.Modules
 {
     internal static class ModLogger
     {

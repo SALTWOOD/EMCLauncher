@@ -7,9 +7,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static SaltLib.Modules.ModLogger;
+using static EMCL.Modules.ModLogger;
 
-namespace SaltLib.Modules
+namespace EMCL.Modules
 {
     public static class ModRun
     {

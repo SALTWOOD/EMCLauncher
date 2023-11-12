@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace SaltLib.Modules
+namespace EMCL.Modules
 {
     //public static byte[] GetResources(string ResourceName)
     //{

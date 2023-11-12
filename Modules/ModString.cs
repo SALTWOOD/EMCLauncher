@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EMCL;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Windows.Forms.Design.AxImporter;
 
-namespace SaltLib.Modules
+namespace EMCL.Modules
 {
     internal static class ModString
     {

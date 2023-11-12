@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using NAudio.SoundFont;
 using Newtonsoft.Json;
-using static SaltLib.Modules.MinecraftJson;
+using static EMCL.Modules.MinecraftJson;
 
-namespace SaltLib.Modules
+namespace EMCL.Modules
 {
     public static class ModDownload
     {

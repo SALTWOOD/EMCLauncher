@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static EMCL.Constants;
-using static SaltLib.Modules.ModLogger;
+using static EMCL.Modules.ModLogger;
 using System.Threading;
 
-namespace SaltLib.Modules
+namespace EMCL.Modules
 {
     internal static class ModThread
     {
