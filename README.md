@@ -42,9 +42,6 @@
 **@Xceed** - 使用了 Extended.Wpf.Toolkit 补全部分WPF控件。
 - [GitHub](https://github.com/xceedsoftware/wpftoolkit)
 
-**Castle Project Contributors** - 使用了 Castle.Core 生成深度调试日志。
-- [官网](http://www.castleproject.org/about/mission/)
-
 
 # 附加信息
 ## 开源许可证

@@ -23,6 +23,7 @@ using Microsoft.VisualBasic.Devices;
 using System.Windows.Threading;
 using EMCL.Pages;
 using NAudio;
+using EMCL;
 
 namespace EMCL
 {

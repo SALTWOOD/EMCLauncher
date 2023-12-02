@@ -531,7 +531,3 @@ This Agreement shall be governed by the laws of the Province of Quebec (Canada).
 Xceed reserves the right to modify this Agreement at all times without notice.
 
 (C) Copyright: Xceed Software, Inc. - 2021. All rights reserved.
-
-# Castle.Core
-
-Copyright © 2004-2017 Castle Project | Licensed under the Apache License Version 2.0.
