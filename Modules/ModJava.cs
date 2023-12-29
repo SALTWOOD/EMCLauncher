@@ -18,7 +18,7 @@ namespace EMCL.Modules
             try
             {
                 //确定Java类型及可用性
-                if (!(File.Exists($"{javaPath}javaw.exe") && File.Exists($"{javaPath}java.exe")))
+                if (!(File.Exists($"{javaPath}java.exe") && File.Exists($"{javaPath}java.exe")))
                 {
                     throw new FileNotFoundException($"在 \"{javaPath}\" 中未找到 Java 可执行文件或 Java 可执行文件缺失/损坏！");
                 }
@@ -68,7 +68,7 @@ namespace EMCL.Modules
                 if (pathInEnv == "") { continue; }
                 if (!pathInEnv.EndsWith("/")) { pathInEnv += "/"; }
                 //粗略检查有效性
-                if (File.Exists($"{pathInEnv}javaw.exe")) { javaDic[pathInEnv] = false; }
+                if (File.Exists($"{pathInEnv}java.exe")) { javaDic[pathInEnv] = false; }
             }
             //查找磁盘中的 Java
             foreach (DriveInfo disk in DriveInfo.GetDrives())
@@ -88,7 +88,7 @@ namespace EMCL.Modules
             foreach (KeyValuePair<string, bool> pair in javaDic)
             {
                 string folder = ModString.SlashReplace(pair.Key);
-                FileSystemInfo? info = new FileInfo($"{folder}javaw.exe");
+                FileSystemInfo? info = new FileInfo($"{folder}java.exe");
                 ModLogger.Log($"[Java] 发现 Java {pair.Key}");
                 do
                 {
@@ -144,7 +144,7 @@ namespace EMCL.Modules
                 {
                     string path = ModString.SlashReplace(originPath.FullName);
                     if (!path.EndsWith("/")) path += "/";
-                    if (File.Exists($"{path}javaw.exe")) { result[path] = source; ModLogger.Log($"[Java] 找到一个 Java: {path}"); }
+                    if (File.Exists($"{path}java.exe")) { result[path] = source; ModLogger.Log($"[Java] 找到一个 Java: {path}"); }
                     foreach (DirectoryInfo folder in originPath.EnumerateDirectories())
                     {
                         if (!folder.Exists) continue;

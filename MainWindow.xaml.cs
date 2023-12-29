@@ -24,6 +24,7 @@ using System.Windows.Threading;
 using EMCL.Pages;
 using NAudio;
 using EMCL;
+using Newtonsoft.Json;
 
 namespace EMCL
 {
@@ -147,7 +148,7 @@ namespace EMCL
                 {
                     FileName = javaPath,//使用传入的Java Path
                     Arguments = launchArgs,//使用传入的参数
-                    UseShellExecute = false,//不使用命令行启动
+                    UseShellExecute = true,//不使用命令行启动
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     RedirectStandardInput = true,
@@ -158,7 +159,7 @@ namespace EMCL
                 ModLogger.Log($"[Main] Minecraft 启动成功！");
                 mc.WaitForExit(-1);
                 string file = $"{ModPath.path}EMCL/CrashReports/crash-{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}.log";
-                if (mc.ExitCode != 0)
+                //if (mc.ExitCode != 0)
                 {
                     MessageBox.Show($"Minecraft 异常退出！\r\n" +
                         $"程序退出代码：{mc.ExitCode}\r\n" +
@@ -295,10 +296,20 @@ namespace EMCL
         {
             try
             {
+                string version = "1.20.1";
+
+                MinecraftLauncherJson? json;
+                using (StreamReader sr = new StreamReader($"{ModPath.pathMCFolder}versions/{version}/{version}.json"))
+                {
+                    json = JsonConvert.DeserializeObject<MinecraftLauncherJson>(sr.ReadToEnd());
+                }
+
+                ArgumentNullException.ThrowIfNull(json, $"{version}.json");
+
                 //生成且传入参数
-                string args = ModLaunch.GetLaunchArgs();
+                string args = ModLaunch.GetLaunchArgs(version, json.libraries.Select(f => $"{ModPath.pathMCFolder}libraries/{f.downloads.artifact.path}"));
                 //现在可以自己选择 Java 了
-                string java = $"{cmbJavaList.Text}javaw.exe";
+                string java = $"{cmbJavaList.Text}java.exe";
                 Thread t = ModThread.RunThread(() => LaunchGame(java, args), "MinecraftLaunchThread", ThreadPriority.AboveNormal);//创建MC启动线程
                 ModThread.threads.Add(t);
                 ModLogger.Log("[Launcher] 启动 Minecraft 成功！");
@@ -391,7 +402,7 @@ namespace EMCL
             VistaOpenFileDialog dialog = new VistaOpenFileDialog();
             dialog.Multiselect = false;//该值确定是否可以选择多个文件
             dialog.Title = "请选择 Java";
-            dialog.Filter = "Java Executable File (javaw.exe)|javaw.exe";
+            dialog.Filter = "Java Executable File (java.exe)|java.exe";
             if (dialog.ShowDialog() == true)
             {
                 string selected = ModString.SlashReplace(new FileInfo(dialog.FileName).DirectoryName!);
