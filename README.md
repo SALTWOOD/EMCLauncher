@@ -3,10 +3,9 @@
 
 一个简洁、轻量、免安装的新生代Minecraft启动器
 
-**EDIT: 此项目目前被用于练习，EMCL从未计划真！正！发！布！**
+**EDIT: EMCL 已暂停维护，新项目在 [HCLauncher](https://github.com/SALTWOOD/HCLauncher)**
 
 # 获取 EMCL
-**提示：此项目目前被用于练习，EMCL从未计划真！正！发！布！**
 
 ## 测试版
 打开 [Actions 页面](https://github.com/SALTWOOD/EMCLauncher/actions)，点击左侧的".NET Build & Test"，在右侧的条目中选择一个带有蓝色或绿色对勾的条目，然后在下方的 Artifacts 中下载"app-debug"
